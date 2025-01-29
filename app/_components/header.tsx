@@ -1,11 +1,10 @@
 import Link from "next/link";
-import { House, LayoutPanelTop, LucideIcon, Ruler } from "lucide-react";
+import { House, LayoutPanelTop, LucideIcon } from "lucide-react";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 
 const links: { name: string; href: string; icon: LucideIcon }[] = [
   { name: "Home", href: "/", icon: House },
-  { name: "Build", href: "/build", icon: Ruler },
 ];
 
 export const Header = () => {
