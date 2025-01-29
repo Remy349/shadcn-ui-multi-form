@@ -5,7 +5,10 @@ import { nunitoSans } from "@/lib/fonts";
 import { Footer } from "./_components/footer";
 
 export const metadata: Metadata = {
-  title: "ShadcnUI Multi Form",
+  title: {
+    default: "ShadcnUI Multi Form",
+    template: "%s | ShadcnUI Multi Form",
+  },
 };
 
 export default function RootLayout({
