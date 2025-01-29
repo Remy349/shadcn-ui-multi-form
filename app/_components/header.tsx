@@ -1,7 +1,12 @@
 import Link from "next/link";
-import { LayoutPanelTop } from "lucide-react";
+import { House, LayoutPanelTop, LucideIcon, Ruler } from "lucide-react";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
+
+const links: { name: string; href: string; icon: LucideIcon }[] = [
+  { name: "Home", href: "/", icon: House },
+  { name: "Build", href: "/build", icon: Ruler },
+];
 
 export const Header = () => {
   return (
@@ -11,7 +16,27 @@ export const Header = () => {
           <LayoutPanelTop className="size-6" />
           <span className="font-bold text-base">Multi Form</span>
         </Link>
-        <div>
+        <div className="flex items-center gap-x-2">
+          <ul className="flex items-center gap-x-2">
+            {links.map((item) => {
+              const Icon = item.icon;
+
+              return (
+                <li key={item.name}>
+                  <Button
+                    size="icon"
+                    className="size-8"
+                    variant="outline"
+                    asChild
+                  >
+                    <Link href={item.href}>
+                      <Icon className="size-4" />
+                    </Link>
+                  </Button>
+                </li>
+              );
+            })}
+          </ul>
           <Button size="icon" className="size-8" variant="outline" asChild>
             <Link
               href="https://github.com/Remy349/shadcn-ui-multi-form-component"
