@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 export const Header = () => {
   return (
     <header className="fixed top-0 left-0 z-50 bg-background border-b w-full">
-      <nav className="px-6 mx-auto flex items-center justify-between h-16">
+      <nav className="px-6 mx-auto flex items-center justify-between h-16 md:max-w-3xl lg:max-w-5xl xl:max-w-7xl">
         <Link href="/" className="flex items-center space-x-2">
           <LayoutPanelTop className="size-6" />
           <span className="font-bold text-base">Multi Form</span>
