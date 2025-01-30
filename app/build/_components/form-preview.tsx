@@ -26,7 +26,7 @@ export const FormPreview = () => {
 
   const { handleSubmit, control, reset } = form;
 
-  const onSubmit = async (formData: any) => {
+  const onSubmit = async (formData: unknown) => {
     if (currentStep < forms.length - 1) {
       setCurrentStep(currentStep + 1);
       reset();
