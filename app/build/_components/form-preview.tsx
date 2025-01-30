@@ -89,12 +89,14 @@ export const FormPreview = () => {
               <div className="flex justify-between">
                 <Button
                   type="button"
+                  className="font-medium"
+                  size="sm"
                   onClick={handleBack}
                   disabled={currentStep === 0}
                 >
                   Back
                 </Button>
-                <Button type="submit">
+                <Button type="submit" size="sm" className="font-medium">
                   {currentStep === forms.length - 1 ? "Submit" : "Next"}
                 </Button>
               </div>

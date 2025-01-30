@@ -64,6 +64,7 @@ export const InputField = ({ formId, input, inputs }: TProps) => {
       {inputs.length > 1 && (
         <div>
           <Button
+            size="sm"
             variant="destructive"
             onClick={() => removeInput(formId, input.id)}
           >

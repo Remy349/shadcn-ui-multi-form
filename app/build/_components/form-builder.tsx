@@ -27,7 +27,7 @@ export const FormBuilder = () => {
               </CardContent>
             </Card>
           ))}
-          <Button className="font-medium" onClick={addForm}>
+          <Button size="sm" className="font-medium" onClick={addForm}>
             Add form step
           </Button>
         </div>

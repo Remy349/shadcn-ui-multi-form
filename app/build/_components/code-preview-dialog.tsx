@@ -11,7 +11,9 @@ export const CodePreviewDialog = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="font-medium">Show code preview</Button>
+        <Button size="sm" className="font-medium">
+          Show code preview
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
