@@ -1,5 +1,5 @@
 import "./globals.css";
-import { Header } from "./_components/header";
+import { Header } from "./_components/header/header";
 import type { Metadata } from "next";
 import { nunitoSans } from "@/lib/fonts";
 import { Footer } from "./_components/footer";
