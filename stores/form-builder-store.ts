@@ -1,3 +1,4 @@
+import { generateCode } from "@/lib/utils";
 import { create } from "zustand";
 
 type InputType = "text" | "email" | "password";
@@ -44,7 +45,7 @@ export const useFormBuilderStore = create<State & Action>((set) => ({
       forms: [
         ...state.forms,
         {
-          id: String(state.forms.length + 1),
+          id: generateCode(),
           inputs: [
             {
               id: "1",
@@ -71,7 +72,7 @@ export const useFormBuilderStore = create<State & Action>((set) => ({
               inputs: [
                 ...form.inputs,
                 {
-                  id: String(form.inputs.length + 1),
+                  id: generateCode(),
                   label: `Input ${form.inputs.length + 1}`,
                   type: "text",
                 },
