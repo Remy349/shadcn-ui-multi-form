@@ -32,6 +32,8 @@ export const FormPreview = () => {
       reset();
     } else {
       console.log(formData);
+      setCurrentStep(0);
+      reset();
     }
   };
 
@@ -87,16 +89,15 @@ export const FormPreview = () => {
                 />
               ))}
               <div className="flex justify-between">
-                {forms.length > 1 && currentStep === 1 && (
-                  <Button
-                    type="button"
-                    className="font-medium"
-                    size="sm"
-                    onClick={handleBack}
-                  >
-                    Back
-                  </Button>
-                )}
+                <Button
+                  type="button"
+                  className="font-medium"
+                  size="sm"
+                  onClick={handleBack}
+                  disabled={currentStep === 0}
+                >
+                  Back
+                </Button>
                 <Button type="submit" size="sm" className="font-medium">
                   {currentStep === forms.length - 1 ? "Submit" : "Next"}
                 </Button>
