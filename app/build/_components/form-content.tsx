@@ -23,11 +23,16 @@ export const FormContent = ({ formId }: TProps) => {
         />
       ))}
       <div className="flex space-x-2">
-        <Button className="font-medium" onClick={() => addInput(formId)}>
+        <Button
+          className="font-medium"
+          size="sm"
+          onClick={() => addInput(formId)}
+        >
           Add input
         </Button>
         {forms.length > 1 && (
           <Button
+            size="sm"
             className="font-medium"
             variant="destructive"
             onClick={() => removeForm(formId)}
