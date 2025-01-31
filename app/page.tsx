@@ -16,7 +16,7 @@ export default function Page() {
             today!
           </p>
           <div className="mt-12 flex justify-center">
-            <Button className="font-medium" asChild>
+            <Button size="sm" className="font-medium" asChild>
               <Link href="/build">Get started now</Link>
             </Button>
           </div>
