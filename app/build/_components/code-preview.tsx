@@ -117,13 +117,13 @@ export const GeneratedForm = () => {
           <div key={index} className="flex items-center">
             <div
               className={\`w-4 h-4 rounded-full \${
-                index === step ? 'bg-primary' : 'bg-gray-300'
+                index <= step ? 'bg-primary' : 'bg-primary/30'
               } \${
                 index < step ? 'bg-primary' : ''
               } transition-all duration-300 ease-in-out\`}
             />
             {index < totalSteps - 1 && (
-              <div className={\`w-8 h-0.5 \${index < step ? 'bg-primary' : 'bg-gray-300'}\`} />
+              <div className={\`w-8 h-0.5 \${index < step ? 'bg-primary' : 'bg-primary/30'}\`} />
             )}
           </div>
         ))}

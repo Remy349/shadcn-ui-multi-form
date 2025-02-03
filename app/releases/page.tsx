@@ -33,7 +33,7 @@ export default function Page() {
             </p>
             <div>
               <h3 className="text-lg font-semibold">Features</h3>
-              <ul className="list-disc list-inside space-y-2 text-gray-700">
+              <ul className="list-disc list-inside space-y-2 text-muted-foreground">
                 <li>Supports Shadcn UI components (Simple Input only)</li>
                 <li>Built with React Hook Form for easy form handling</li>
                 <li>Live Form Preview to see changes instantly</li>
@@ -48,9 +48,9 @@ export default function Page() {
             </div>
             <div>
               <h3 className="text-lg font-semibold">
-                Known Issues & Limitations:
+                Known Issues & Limitations
               </h3>
-              <ul className="list-disc list-inside space-y-2 text-gray-700">
+              <ul className="list-disc list-inside space-y-2 text-muted-foreground">
                 <li>No Zod Validation Support (Coming Soon!)</li>
                 <li>Only Simple Input Component is Available</li>
                 <li>
