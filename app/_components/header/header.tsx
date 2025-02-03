@@ -4,6 +4,7 @@ import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { DesktopMenu } from "./desktop-menu";
 import { MobileMenu } from "./mobile-menu";
+import { ToggleDarkMode } from "./toggle-dark-mode";
 
 export const Header = () => {
   return (
@@ -18,14 +19,17 @@ export const Header = () => {
         </div>
         <div className="flex items-center gap-x-4">
           <DesktopMenu />
-          <Button size="icon" className="size-8" variant="outline" asChild>
-            <Link
-              href="https://github.com/Remy349/shadcn-ui-multi-form-component"
-              target="_blank"
-            >
-              <GitHubLogoIcon className="size-4" />
-            </Link>
-          </Button>
+          <div className="flex items-center gap-x-2">
+            <Button size="icon" className="size-8" variant="outline" asChild>
+              <Link
+                href="https://github.com/Remy349/shadcn-ui-multi-form-component"
+                target="_blank"
+              >
+                <GitHubLogoIcon className="size-4" />
+              </Link>
+            </Button>
+            <ToggleDarkMode />
+          </div>
         </div>
       </nav>
     </header>
