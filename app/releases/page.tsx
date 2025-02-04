@@ -44,6 +44,7 @@ export default function Page() {
                   Supports Three Input Types: <code>text</code>,{" "}
                   <code>email</code>, and <code>password</code>
                 </li>
+                <li>Dark Mode Available</li>
               </ul>
             </div>
             <div>
@@ -53,10 +54,6 @@ export default function Page() {
               <ul className="list-disc list-inside space-y-2 text-muted-foreground">
                 <li>No Zod Validation Support (Coming Soon!)</li>
                 <li>Only Simple Input Component is Available</li>
-                <li>
-                  Dark Mode Not Available Yet (UI is currently only optimized
-                  for light mode)
-                </li>
               </ul>
             </div>
           </CardContent>
