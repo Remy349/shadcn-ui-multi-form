@@ -30,10 +30,10 @@ type Action = {
 export const useFormBuilderStore = create<State & Action>((set) => ({
   forms: [
     {
-      id: "1",
+      id: generateCode(),
       inputs: [
         {
-          id: "1",
+          id: generateCode(),
           label: "Input 1",
           type: "text",
         },
@@ -48,7 +48,7 @@ export const useFormBuilderStore = create<State & Action>((set) => ({
           id: generateCode(),
           inputs: [
             {
-              id: "1",
+              id: generateCode(),
               label: "Input 1",
               type: "text",
             },

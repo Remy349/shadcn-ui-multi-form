@@ -49,13 +49,13 @@ export const FormPreview = () => {
         {forms.map((_, index) => (
           <div key={index} className="flex items-center">
             <div
-              className={`w-4 h-4 rounded-full ${index === currentStep ? "bg-primary" : "bg-gray-300"} ${
+              className={`w-4 h-4 rounded-full ${index <= currentStep ? "bg-primary" : "bg-primary/30"} ${
                 index < currentStep ? "bg-primary" : ""
               } transition-all duration-300 ease-in-out`}
             />
             {index < forms.length - 1 && (
               <div
-                className={`w-8 h-0.5 ${index < currentStep ? "bg-primary" : "bg-gray-300"}`}
+                className={`w-8 h-0.5 ${index < currentStep ? "bg-primary" : "bg-primary/30"}`}
               />
             )}
           </div>
