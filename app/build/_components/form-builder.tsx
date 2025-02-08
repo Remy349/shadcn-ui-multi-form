@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useFormBuilderStore } from "@/stores/form-builder-store";
 import { FormPreview } from "./form-preview";
 import { FormContent } from "./form-content";
-import { CodePreviewDialog } from "./code-preview-dialog";
+import { CodePreviewDialog } from "./code-preview/code-preview-dialog";
 
 export const FormBuilder = () => {
   const { forms, addForm } = useFormBuilderStore();
