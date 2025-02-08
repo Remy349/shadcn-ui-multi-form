@@ -2,11 +2,11 @@ import { Button } from "@/components/ui/button";
 import { useFormBuilderStore } from "@/stores/form-builder-store";
 import { InputField } from "./input-field";
 
-type TProps = {
+interface IProps {
   formId: string;
-};
+}
 
-export const FormContent = ({ formId }: TProps) => {
+export const FormContent = ({ formId }: IProps) => {
   const { forms, addInput, removeForm } = useFormBuilderStore();
   const form = forms.find((f) => f.id === formId);
 

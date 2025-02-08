@@ -9,22 +9,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { TInput, TInputType } from "@/types/types";
 
-type TProps = {
+interface IProps {
   formId: string;
-  inputs: {
-    id: string;
-    label: string;
-    type: string;
-  }[];
-  input: {
-    id: string;
-    label: string;
-    type: string;
-  };
-};
+  inputs: TInput[];
+  input: TInput;
+}
 
-export const InputField = ({ formId, input, inputs }: TProps) => {
+export const InputField = ({ formId, input, inputs }: IProps) => {
   const { updateInputLabel, updateInputType, removeInput } =
     useFormBuilderStore();
 
@@ -44,11 +37,7 @@ export const InputField = ({ formId, input, inputs }: TProps) => {
         <Select
           value={input.type}
           onValueChange={(value) =>
-            updateInputType(
-              formId,
-              input.id,
-              value as "text" | "email" | "password",
-            )
+            updateInputType(formId, input.id, value as TInputType)
           }
         >
           <SelectTrigger id={`type-${input.id}`}>

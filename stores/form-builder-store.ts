@@ -1,21 +1,9 @@
 import { generateCode } from "@/lib/utils";
+import { TForm, TInputType } from "@/types/types";
 import { create } from "zustand";
 
-type InputType = "text" | "email" | "password";
-
-type Input = {
-  id: string;
-  label: string;
-  type: InputType;
-};
-
-type Form = {
-  id: string;
-  inputs: Input[];
-};
-
 type State = {
-  forms: Form[];
+  forms: TForm[];
 };
 
 type Action = {
@@ -24,7 +12,7 @@ type Action = {
   addInput: (formId: string) => void;
   removeInput: (formId: string, inputId: string) => void;
   updateInputLabel: (formId: string, inputId: string, label: string) => void;
-  updateInputType: (formId: string, inputId: string, type: InputType) => void;
+  updateInputType: (formId: string, inputId: string, type: TInputType) => void;
 };
 
 export const useFormBuilderStore = create<State & Action>((set) => ({
