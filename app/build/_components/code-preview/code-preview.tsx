@@ -1,20 +1,10 @@
-import { Button } from "@/components/ui/button";
-import { useState, useRef, useEffect } from "react";
-import { Highlight, themes } from "prism-react-renderer";
+import { useState, useEffect } from "react";
 import { useFormBuilderStore } from "@/stores/form-builder-store";
+import { Code } from "./code";
 
 export const CodePreview = () => {
   const { forms } = useFormBuilderStore();
-  const [copied, setCopied] = useState(false);
   const [code, setCode] = useState("");
-
-  const preRef = useRef<HTMLPreElement>(null);
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   useEffect(() => {
     const generateCode = () => {
@@ -145,35 +135,5 @@ export const GeneratedForm = () => {
     setCode(generateCode());
   }, [forms]);
 
-  return (
-    <div className="h-full flex flex-col">
-      <div className="flex justify-end mb-2">
-        <Button onClick={copyToClipboard}>
-          {copied ? "Copied!" : "Copy Code"}
-        </Button>
-      </div>
-      <div className="relative flex-grow overflow-auto">
-        <Highlight theme={themes.nightOwl} code={code} language="tsx">
-          {({ className, style, tokens, getLineProps, getTokenProps }) => (
-            <pre
-              ref={preRef}
-              className={`${className} p-4 rounded-md`}
-              style={{ ...style, backgroundColor: "#2d2d2d" }}
-            >
-              {tokens.map((line, i) => (
-                <div key={i} {...getLineProps({ line, key: i })}>
-                  <span className="inline-block w-8 text-right mr-4 text-gray-500 select-none">
-                    {i + 1}
-                  </span>
-                  {line.map((token, key) => (
-                    <span key={key} {...getTokenProps({ token, key })} />
-                  ))}
-                </div>
-              ))}
-            </pre>
-          )}
-        </Highlight>
-      </div>
-    </div>
-  );
+  return <Code code={code} />;
 };
