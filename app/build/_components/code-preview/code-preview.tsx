@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useFormBuilderStore } from "@/stores/form-builder-store";
 import { Code } from "./code";
+import { formatJSXCode } from "@/lib/utils";
 
 export const CodePreview = () => {
   const { forms } = useFormBuilderStore();
@@ -135,5 +136,7 @@ export const GeneratedForm = () => {
     setCode(generateCode());
   }, [forms]);
 
-  return <Code code={code} />;
+  const formattedCode = formatJSXCode(code);
+
+  return <Code code={formattedCode} />;
 };
