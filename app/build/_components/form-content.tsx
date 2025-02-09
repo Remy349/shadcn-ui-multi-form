@@ -8,7 +8,8 @@ interface IProps {
 }
 
 export const FormContent = ({ formId }: IProps) => {
-  const { forms, addInput, removeForm } = useFormBuilderStore();
+  const { forms, addInput } = useFormBuilderStore();
+
   const form = forms.find((f) => f.id === formId);
 
   if (!form) return null;
@@ -24,25 +25,13 @@ export const FormContent = ({ formId }: IProps) => {
           input={input}
         />
       ))}
-      <div className="flex space-x-2">
-        <Button
-          className="font-medium"
-          size="sm"
-          onClick={() => addInput(formId)}
-        >
-          Add input
-        </Button>
-        {forms.length > 1 && (
-          <Button
-            size="sm"
-            className="font-medium"
-            variant="destructive"
-            onClick={() => removeForm(formId)}
-          >
-            Remove form step
-          </Button>
-        )}
-      </div>
+      <Button
+        className="font-medium"
+        size="sm"
+        onClick={() => addInput(formId)}
+      >
+        Add input
+      </Button>
     </div>
   );
 };
