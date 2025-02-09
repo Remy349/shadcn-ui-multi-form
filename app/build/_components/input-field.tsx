@@ -22,7 +22,7 @@ export const InputField = ({ formId, input, inputs }: IProps) => {
     useFormBuilderStore();
 
   return (
-    <div className="mb-4 grid gap-y-4 border rounded-md p-4">
+    <div className="grid gap-y-4 border rounded-md p-4">
       <div className="space-x-2 flex items-center">
         <Label htmlFor={`label-${input.id}`}>Label:</Label>
         <Input
