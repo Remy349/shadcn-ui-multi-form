@@ -19,13 +19,7 @@ export const useFormBuilderStore = create<State & Action>((set) => ({
   forms: [
     {
       id: generateCode(),
-      inputs: [
-        {
-          id: generateCode(),
-          label: "Input 1",
-          type: "text",
-        },
-      ],
+      inputs: [],
     },
   ],
   addForm: () =>
@@ -34,13 +28,7 @@ export const useFormBuilderStore = create<State & Action>((set) => ({
         ...state.forms,
         {
           id: generateCode(),
-          inputs: [
-            {
-              id: generateCode(),
-              label: "Input 1",
-              type: "text",
-            },
-          ],
+          inputs: [],
         },
       ],
     })),
