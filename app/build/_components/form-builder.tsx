@@ -1,15 +1,15 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useFormBuilderStore } from "@/stores/form-builder-store";
 import { FormPreview } from "./form-preview";
 import { FormContent } from "./form-content";
 import { CodePreviewDialog } from "./code-preview/code-preview-dialog";
 import { RemoveForm } from "./remove-form";
+import { AddForm } from "./add-form";
 
 export const FormBuilder = () => {
-  const { forms, addForm } = useFormBuilderStore();
+  const { forms } = useFormBuilderStore();
 
   return (
     <div>
@@ -29,9 +29,7 @@ export const FormBuilder = () => {
               </CardContent>
             </Card>
           ))}
-          <Button size="sm" className="font-medium" onClick={addForm}>
-            Add form step
-          </Button>
+          <AddForm />
         </div>
         <div>
           <FormPreview />
