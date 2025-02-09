@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { useFormBuilderStore } from "@/stores/form-builder-store";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { EmptyState } from "./empty-state";
 
 export const FormPreview = () => {
   const { forms } = useFormBuilderStore();
@@ -69,6 +70,7 @@ export const FormPreview = () => {
         <CardContent>
           <Form {...form}>
             <form onSubmit={handleSubmit(onSubmit)} className="grid gap-y-4">
+              {forms[currentStep].inputs.length === 0 && <EmptyState />}
               {forms[currentStep].inputs.map((input) => (
                 <FormField
                   key={input.id}
