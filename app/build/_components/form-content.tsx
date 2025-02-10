@@ -1,14 +1,14 @@
-import { Button } from "@/components/ui/button";
 import { useFormBuilderStore } from "@/stores/form-builder-store";
 import { InputField } from "./input-field";
 import { EmptyState } from "./empty-state";
+import { FormFieldsMenu } from "./form-fields-menu";
 
 interface IProps {
   formId: string;
 }
 
 export const FormContent = ({ formId }: IProps) => {
-  const { forms, addInput } = useFormBuilderStore();
+  const { forms } = useFormBuilderStore();
 
   const form = forms.find((f) => f.id === formId);
 
@@ -25,13 +25,7 @@ export const FormContent = ({ formId }: IProps) => {
           input={input}
         />
       ))}
-      <Button
-        className="font-medium"
-        size="sm"
-        onClick={() => addInput(formId)}
-      >
-        Add input
-      </Button>
+      <FormFieldsMenu />
     </div>
   );
 };
