@@ -1,9 +1,9 @@
-export type TInputType = "text" | "email" | "password";
+export type TInputType = "input" | "textarea";
 
 export type TInput = {
   id: string;
-  label: string;
   type: TInputType;
+  label: string;
 };
 
 export type TForm = {
