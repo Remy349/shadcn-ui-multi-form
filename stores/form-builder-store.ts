@@ -9,10 +9,9 @@ type State = {
 type Action = {
   addForm: () => void;
   removeForm: (id: string) => void;
-  addInput: (formId: string) => void;
+  addInput: (formId: string, type: TInputType) => void;
   removeInput: (formId: string, inputId: string) => void;
   updateInputLabel: (formId: string, inputId: string, label: string) => void;
-  updateInputType: (formId: string, inputId: string, type: TInputType) => void;
 };
 
 export const useFormBuilderStore = create<State & Action>((set) => ({
@@ -39,7 +38,7 @@ export const useFormBuilderStore = create<State & Action>((set) => ({
           ? state.forms.filter((form) => form.id !== id)
           : state.forms,
     })),
-  addInput: (formId) =>
+  addInput: (formId, type) =>
     set((state) => ({
       forms: state.forms.map((form) =>
         form.id === formId
@@ -50,7 +49,7 @@ export const useFormBuilderStore = create<State & Action>((set) => ({
                 {
                   id: generateCode(),
                   label: `Input ${form.inputs.length + 1}`,
-                  type: "text",
+                  type,
                 },
               ],
             }
@@ -79,19 +78,6 @@ export const useFormBuilderStore = create<State & Action>((set) => ({
               ...form,
               inputs: form.inputs.map((input) =>
                 input.id === inputId ? { ...input, label } : input,
-              ),
-            }
-          : form,
-      ),
-    })),
-  updateInputType: (formId, inputId, type) =>
-    set((state) => ({
-      forms: state.forms.map((form) =>
-        form.id === formId
-          ? {
-              ...form,
-              inputs: form.inputs.map((input) =>
-                input.id === inputId ? { ...input, type } : input,
               ),
             }
           : form,
