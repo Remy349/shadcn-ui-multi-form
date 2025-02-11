@@ -12,6 +12,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { EmptyState } from "./empty-state";
 import { RenderFormInput } from "./render-form-input";
+import { toast } from "sonner";
 
 export const FormPreview = () => {
   const { forms } = useFormBuilderStore();
@@ -24,11 +25,12 @@ export const FormPreview = () => {
   const onSubmit = async (formData: unknown) => {
     if (currentStep < forms.length - 1) {
       setCurrentStep(currentStep + 1);
-      reset();
     } else {
       console.log(formData);
       setCurrentStep(0);
       reset();
+
+      toast.success("Form successfully submitted");
     }
   };
 

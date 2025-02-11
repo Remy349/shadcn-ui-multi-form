@@ -16,7 +16,7 @@ export const FormBuilder = () => {
       <div className="mb-4">
         <CodePreviewDialog />
       </div>
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-4 lg:items-start lg:grid-cols-2">
         <div className="grid gap-y-4">
           {forms.map((form, index) => (
             <Card key={form.id} className="shadow-sm">

@@ -18,12 +18,7 @@ export const FormContent = ({ formId }: IProps) => {
     <div className="space-y-4">
       {form.inputs.length === 0 && <EmptyState />}
       {form.inputs.map((input) => (
-        <InputField
-          key={input.id}
-          formId={formId}
-          inputs={form.inputs}
-          input={input}
-        />
+        <InputField key={input.id} formId={formId} input={input} />
       ))}
       <InputFieldsMenu formId={form.id} />
     </div>
