@@ -62,10 +62,7 @@ export const useFormBuilderStore = create<State & Action>((set) => ({
         form.id === formId
           ? {
               ...form,
-              inputs:
-                form.inputs.length > 1
-                  ? form.inputs.filter((input) => input.id !== inputId)
-                  : form.inputs,
+              inputs: form.inputs.filter((input) => input.id !== inputId),
             }
           : form,
       ),
