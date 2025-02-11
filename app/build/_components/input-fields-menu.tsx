@@ -7,22 +7,35 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useFormBuilderStore } from "@/stores/form-builder-store";
+import { TInputType } from "@/types/types";
 import { Component } from "lucide-react";
 import { useState } from "react";
 
-export const FormFieldsMenu = () => {
+interface IProps {
+  formId: string;
+}
+
+export const InputFieldsMenu = ({ formId }: IProps) => {
+  const { addInput } = useFormBuilderStore();
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleAddInput = (type: TInputType) => {
+    addInput(formId, type);
+
+    setIsOpen(false);
+  };
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
         <Button className="font-medium" size="sm">
-          Add form field
+          Add input
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="w-[300px]">
         <SheetHeader>
-          <SheetTitle>Available Form Fields</SheetTitle>
+          <SheetTitle>Available Input Fields</SheetTitle>
           <SheetDescription>
             Choose from a variety of input fields to build your form. Simply
             select and add them to get started!
@@ -33,7 +46,7 @@ export const FormFieldsMenu = () => {
             variant="outline"
             className="font-medium justify-start"
             size="sm"
-            onClick={() => setIsOpen(false)}
+            onClick={() => handleAddInput("input")}
           >
             <Component className="size-4 mr-2" />
             Input
@@ -42,7 +55,7 @@ export const FormFieldsMenu = () => {
             variant="outline"
             className="font-medium justify-start"
             size="sm"
-            onClick={() => setIsOpen(false)}
+            onClick={() => handleAddInput("textarea")}
           >
             <Component className="size-4 mr-2" />
             Textarea
