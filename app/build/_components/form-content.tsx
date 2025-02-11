@@ -1,7 +1,7 @@
 import { useFormBuilderStore } from "@/stores/form-builder-store";
 import { InputField } from "./input-field";
 import { EmptyState } from "./empty-state";
-import { FormFieldsMenu } from "./form-fields-menu";
+import { InputFieldsMenu } from "./input-fields-menu";
 
 interface IProps {
   formId: string;
@@ -25,7 +25,7 @@ export const FormContent = ({ formId }: IProps) => {
           input={input}
         />
       ))}
-      <FormFieldsMenu />
+      <InputFieldsMenu formId={form.id} />
     </div>
   );
 };

@@ -6,18 +6,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form, FormField } from "@/components/ui/form";
 import { useFormBuilderStore } from "@/stores/form-builder-store";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { EmptyState } from "./empty-state";
+import { RenderFormInput } from "./render-form-input";
 
 export const FormPreview = () => {
   const { forms } = useFormBuilderStore();
@@ -77,16 +71,7 @@ export const FormPreview = () => {
                   control={control}
                   name={input.id}
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{input.label}</FormLabel>
-                      <FormControl>
-                        <Input
-                          type={input.type}
-                          {...field}
-                          autoComplete="off"
-                        />
-                      </FormControl>
-                    </FormItem>
+                    <RenderFormInput input={input} field={field} />
                   )}
                 />
               ))}
