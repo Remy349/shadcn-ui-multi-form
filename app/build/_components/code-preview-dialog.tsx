@@ -24,7 +24,7 @@ export const CodePreviewDialog = () => {
             This is the code for your generated multi-step form component.
           </DialogDescription>
         </DialogHeader>
-        <div className="flex-grow overflow-hidden">
+        <div className="overflow-hidden">
           <CodePreview />
         </div>
       </DialogContent>
