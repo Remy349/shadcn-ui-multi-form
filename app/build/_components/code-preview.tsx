@@ -14,7 +14,7 @@ export const CodePreview = () => {
         form.inputs.map((input) => input.type),
       );
 
-      return generateFormCode(inputsType);
+      return generateFormCode(inputsType, forms);
     };
 
     setCode(generateCode());
