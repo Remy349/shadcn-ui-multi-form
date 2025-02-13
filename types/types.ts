@@ -1,4 +1,4 @@
-export type TInputType = "input" | "textarea";
+export type TInputType = "input" | "textarea" | "password";
 
 export type TInput = {
   id: string;
