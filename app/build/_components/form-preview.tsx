@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { EmptyState } from "./empty-state";
 import { RenderFormInput } from "./render-form-input";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 export const FormPreview = () => {
   const { forms } = useFormBuilderStore();
@@ -46,13 +47,18 @@ export const FormPreview = () => {
         {forms.map((_, index) => (
           <div key={index} className="flex items-center">
             <div
-              className={`w-4 h-4 rounded-full ${index <= currentStep ? "bg-primary" : "bg-primary/30"} ${
-                index < currentStep ? "bg-primary" : ""
-              } transition-all duration-300 ease-in-out`}
+              className={cn(
+                "w-4 h-4 rounded-full transition-all duration-300 ease-in-out",
+                index <= currentStep ? "bg-primary" : "bg-primary/30",
+                index < currentStep && "bg-primary",
+              )}
             />
             {index < forms.length - 1 && (
               <div
-                className={`w-8 h-0.5 ${index < currentStep ? "bg-primary" : "bg-primary/30"}`}
+                className={cn(
+                  "w-8 h-0.5",
+                  index < currentStep ? "bg-primary" : "bg-primary/30",
+                )}
               />
             )}
           </div>
