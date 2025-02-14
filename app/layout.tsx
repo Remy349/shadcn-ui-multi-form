@@ -5,6 +5,7 @@ import { nunitoSans } from "@/lib/fonts";
 import { Footer } from "./_components/footer";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/providers/theme-provider";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: {
@@ -34,6 +35,7 @@ export default function RootLayout({
           </div>
         </ThemeProvider>
         <Analytics />
+        <Toaster position="bottom-right" richColors />
       </body>
     </html>
   );

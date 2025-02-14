@@ -6,17 +6,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form, FormField } from "@/components/ui/form";
 import { useFormBuilderStore } from "@/stores/form-builder-store";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { EmptyState } from "./empty-state";
+import { RenderFormInput } from "./render-form-input";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 export const FormPreview = () => {
   const { forms } = useFormBuilderStore();
@@ -29,11 +26,12 @@ export const FormPreview = () => {
   const onSubmit = async (formData: unknown) => {
     if (currentStep < forms.length - 1) {
       setCurrentStep(currentStep + 1);
-      reset();
     } else {
       console.log(formData);
       setCurrentStep(0);
       reset();
+
+      toast.success("Form successfully submitted");
     }
   };
 
@@ -49,13 +47,18 @@ export const FormPreview = () => {
         {forms.map((_, index) => (
           <div key={index} className="flex items-center">
             <div
-              className={`w-4 h-4 rounded-full ${index <= currentStep ? "bg-primary" : "bg-primary/30"} ${
-                index < currentStep ? "bg-primary" : ""
-              } transition-all duration-300 ease-in-out`}
+              className={cn(
+                "w-4 h-4 rounded-full transition-all duration-300 ease-in-out",
+                index <= currentStep ? "bg-primary" : "bg-primary/30",
+                index < currentStep && "bg-primary",
+              )}
             />
             {index < forms.length - 1 && (
               <div
-                className={`w-8 h-0.5 ${index < currentStep ? "bg-primary" : "bg-primary/30"}`}
+                className={cn(
+                  "w-8 h-0.5",
+                  index < currentStep ? "bg-primary" : "bg-primary/30",
+                )}
               />
             )}
           </div>
@@ -69,22 +72,14 @@ export const FormPreview = () => {
         <CardContent>
           <Form {...form}>
             <form onSubmit={handleSubmit(onSubmit)} className="grid gap-y-4">
+              {forms[currentStep].inputs.length === 0 && <EmptyState />}
               {forms[currentStep].inputs.map((input) => (
                 <FormField
                   key={input.id}
                   control={control}
                   name={input.id}
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{input.label}</FormLabel>
-                      <FormControl>
-                        <Input
-                          type={input.type}
-                          {...field}
-                          autoComplete="off"
-                        />
-                      </FormControl>
-                    </FormItem>
+                    <RenderFormInput input={input} field={field} />
                   )}
                 />
               ))}
