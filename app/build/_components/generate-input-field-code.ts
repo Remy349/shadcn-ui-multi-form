@@ -16,6 +16,21 @@ const inputComponents: Record<TInputType, (input: TInput) => string> = {
       )}
     />
   `,
+  password: (input) => `
+    <FormField
+      key="${input.id}"
+      control={control}
+      name="${input.id}"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>${input.label}</FormLabel>
+          <FormControl>
+            <Input {...field} type="password" autoComplete="off" />
+          </FormControl>
+        </FormItem>
+      )}
+    />
+  `,
   textarea: (input) => `
     <FormField
       key="${input.id}"
@@ -25,7 +40,7 @@ const inputComponents: Record<TInputType, (input: TInput) => string> = {
         <FormItem>
           <FormLabel>${input.label}</FormLabel>
           <FormControl>
-            <Textarea {...field} className="resize-none" rows={6} />
+            <Textarea {...field} className="resize-none" rows={5} />
           </FormControl>
         </FormItem>
       )}

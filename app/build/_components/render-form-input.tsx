@@ -26,12 +26,22 @@ const inputComponents: Record<
       </FormItem>
     );
   },
+  password: (input, field) => {
+    return (
+      <FormItem>
+        <FormLabel>{input.label}</FormLabel>
+        <FormControl>
+          <Input {...field} type="password" autoComplete="off" />
+        </FormControl>
+      </FormItem>
+    );
+  },
   textarea: (input, field) => {
     return (
       <FormItem>
         <FormLabel>{input.label}</FormLabel>
         <FormControl>
-          <Textarea {...field} className="resize-none" rows={6} />
+          <Textarea {...field} className="resize-none" rows={5} />
         </FormControl>
       </FormItem>
     );
