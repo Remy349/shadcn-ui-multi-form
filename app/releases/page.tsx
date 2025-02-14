@@ -27,14 +27,14 @@ export default function Page() {
             <CardContent className="space-y-4">
               <p>
                 The latest update for <strong>Shadcn UI Multi Form</strong> is
-                here! We've enhanced the user experience and introduced new
+                here! We`ve enhanced the user experience and introduced new
                 features to make form building even more intuitive and
                 efficient. Now, creating multi-step forms with{" "}
                 <strong>Shadcn UI</strong> and <strong>React Hook Form</strong>{" "}
                 is smoother than ever.
               </p>
               <div>
-                <h3 className="text-lg font-semibold">What's New?</h3>
+                <h3 className="text-lg font-semibold">What`s New?</h3>
                 <ul className="list-disc list-inside space-y-2 text-muted-foreground">
                   <li>
                     Improved user experience and cleaner, more minimalistic UI
