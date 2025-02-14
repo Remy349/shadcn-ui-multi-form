@@ -22,7 +22,7 @@ export const Header = () => {
           <div className="flex items-center gap-x-2">
             <Button size="icon" className="size-8" variant="outline" asChild>
               <Link
-                href="https://github.com/Remy349/shadcn-ui-multi-form-component"
+                href="https://github.com/Remy349/shadcn-ui-multi-form"
                 target="_blank"
               >
                 <GitHubLogoIcon className="size-4" />
