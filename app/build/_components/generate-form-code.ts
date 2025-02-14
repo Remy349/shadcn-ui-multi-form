@@ -12,10 +12,10 @@ const generateFormSteps = (forms: TForm[]) => {
                 form.inputs.length === 0
                   ? `<div className="border border-dashed rounded-md">
                       <div className="flex flex-col items-center justify-center h-[8rem]">
-                        <h3 className="text-base font-semibold">
+                        <h3 className="text-base font-semibold text-center">
                           No Inputs Added Yet!
                         </h3>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs text-muted-foreground text-center">
                           Start building your form by adding input fields.
                         </p>
                       </div>
@@ -61,6 +61,7 @@ const generateImports = (inputsType: TInputType[]) => {
 
   const inputComponents: Record<TInputType, string[]> = {
     input: ["import { Input } from '@/components/ui/input'"],
+    password: ["import { Input } from '@/components/ui/input'"],
     textarea: ["import { Textarea } from '@/components/ui/textarea'"],
   };
 
