@@ -16,6 +16,12 @@ interface IProps {
   formId: string;
 }
 
+const inputComponents: { name: string; type: TInputType }[] = [
+  { name: "Input", type: "input" },
+  { name: "Password", type: "password" },
+  { name: "Textarea", type: "textarea" },
+];
+
 export const InputFieldsMenu = ({ formId }: IProps) => {
   const { addInput } = useFormBuilderStore();
   const [isOpen, setIsOpen] = useState(false);
@@ -33,7 +39,7 @@ export const InputFieldsMenu = ({ formId }: IProps) => {
           Add input
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-[300px]">
+      <SheetContent side="left" className="w-[280px]">
         <SheetHeader>
           <SheetTitle>Available Input Fields</SheetTitle>
           <SheetDescription>
@@ -42,24 +48,25 @@ export const InputFieldsMenu = ({ formId }: IProps) => {
           </SheetDescription>
         </SheetHeader>
         <div className="mt-8 flex flex-col space-y-2">
-          <Button
-            variant="outline"
-            className="font-medium justify-start"
-            size="sm"
-            onClick={() => handleAddInput("input")}
-          >
-            <Component className="size-4 mr-2" />
-            Input
-          </Button>
-          <Button
-            variant="outline"
-            className="font-medium justify-start"
-            size="sm"
-            onClick={() => handleAddInput("textarea")}
-          >
-            <Component className="size-4 mr-2" />
-            Textarea
-          </Button>
+          {inputComponents.map((input) => (
+            <Button
+              key={input.name}
+              variant="outline"
+              className="font-medium justify-start"
+              size="sm"
+              onClick={() => handleAddInput(input.type)}
+            >
+              <Component className="size-4 mr-2" />
+              {input.name}
+            </Button>
+          ))}
+          <div className="border border-dashed rounded-md">
+            <div className="flex flex-col items-center justify-center h-[8rem]">
+              <h3 className="text-xs text-center font-semibold text-muted-foreground">
+                More Input Fields Coming Soon!
+              </h3>
+            </div>
+          </div>
         </div>
       </SheetContent>
     </Sheet>
