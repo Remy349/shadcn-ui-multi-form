@@ -25,7 +25,7 @@ const inputComponents: Record<TInputType, (input: TInput) => string> = {
         <FormItem>
           <FormLabel>${input.label}</FormLabel>
           <FormControl>
-            <Input {...field} type="password" autoComplete="off" />
+            <PasswordInput {...field} autoComplete="off" />
           </FormControl>
         </FormItem>
       )}

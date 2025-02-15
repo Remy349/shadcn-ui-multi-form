@@ -61,7 +61,7 @@ const generateImports = (inputsType: TInputType[]) => {
 
   const inputComponents: Record<TInputType, string[]> = {
     input: ["import { Input } from '@/components/ui/input'"],
-    password: ["import { Input } from '@/components/ui/input'"],
+    password: ["import { Input } from '@/components/ui/password-input'"],
     textarea: ["import { Textarea } from '@/components/ui/textarea'"],
   };
 

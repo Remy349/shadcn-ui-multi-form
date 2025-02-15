@@ -3,6 +3,7 @@ import { FormControl, FormItem, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ControllerRenderProps, FieldValues } from "react-hook-form";
+import { PasswordInput } from "@/components/ui/password-input";
 
 interface IProps {
   input: TInput;
@@ -31,7 +32,7 @@ const inputComponents: Record<
       <FormItem>
         <FormLabel>{input.label}</FormLabel>
         <FormControl>
-          <Input {...field} type="password" autoComplete="off" />
+          <PasswordInput {...field} autoComplete="off" />
         </FormControl>
       </FormItem>
     );
