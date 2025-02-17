@@ -1,36 +1,28 @@
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useFormBuilderStore } from "@/stores/form-builder-store";
-import { TInput } from "@/types/types";
-import { ChangeEvent } from "react";
+import { TInput, TInputType } from "@/types/types";
 import { RemoveInput } from "./remove-input";
+import { EditInputDialog } from "./edit-input-dialog";
+import { Component } from "lucide-react";
 
 interface IProps {
   formId: string;
   input: TInput;
 }
 
+const inputComponents: Record<TInputType, string> = {
+  input: "Input",
+  password: "Password",
+  textarea: "Textarea",
+};
+
 export const InputField = ({ formId, input }: IProps) => {
-  const { updateInputLabel } = useFormBuilderStore();
-
-  const handleUpdateInputLabel = (e: ChangeEvent<HTMLInputElement>) => {
-    const labelValue = e.target.value;
-
-    updateInputLabel(formId, input.id, labelValue);
-  };
-
   return (
-    <div className="flex items-center space-x-2 border rounded-md p-4">
-      <div className="space-x-2 flex items-center w-full">
-        <Label htmlFor={`label-${input.id}`}>Label:</Label>
-        <Input
-          id={`label-${input.id}`}
-          value={input.label}
-          onChange={handleUpdateInputLabel}
-          autoComplete="off"
-        />
+    <div className="flex items-center space-x-2">
+      <div className="flex items-center border rounded-md p-2 w-full">
+        <Component className="size-4 mr-2" />
+        <p className="text-sm">{inputComponents[input.type]}</p>
       </div>
-      <div>
+      <div className="flex items-center">
+        <EditInputDialog formId={formId} input={input} />
         <RemoveInput formId={formId} inputId={input.id} />
       </div>
     </div>
