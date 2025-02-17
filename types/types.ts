@@ -6,6 +6,8 @@ export type TInput = {
   label: string;
 };
 
+export type TUpdateInput = Pick<TInput, "label">;
+
 export type TForm = {
   id: string;
   inputs: TInput[];
