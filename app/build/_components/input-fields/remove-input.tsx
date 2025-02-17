@@ -15,7 +15,12 @@ export const RemoveInput = ({ formId, inputId }: IProps) => {
   };
 
   return (
-    <Button size="icon" variant="ghost" onClick={handleRemoveInput}>
+    <Button
+      className="size-8"
+      size="icon"
+      variant="ghost"
+      onClick={handleRemoveInput}
+    >
       <Trash className="size-4" />
     </Button>
   );
