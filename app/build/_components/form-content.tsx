@@ -1,7 +1,7 @@
 import { useFormBuilderStore } from "@/stores/form-builder-store";
-import { InputField } from "./input-field";
+import { InputField } from "./input-fields/input-field";
 import { EmptyState } from "./empty-state";
-import { InputFieldsMenu } from "./input-fields-menu";
+import { InputFieldsMenu } from "./input-fields/input-fields-menu";
 
 interface IProps {
   formId: string;
