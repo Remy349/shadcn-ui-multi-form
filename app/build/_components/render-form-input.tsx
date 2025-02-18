@@ -22,7 +22,11 @@ const inputComponents: Record<
       <FormItem>
         <FormLabel>{input.label}</FormLabel>
         <FormControl>
-          <Input {...field} autoComplete="off" />
+          <Input
+            {...field}
+            placeholder={input.placeholder || ""}
+            autoComplete="off"
+          />
         </FormControl>
       </FormItem>
     );
@@ -32,7 +36,11 @@ const inputComponents: Record<
       <FormItem>
         <FormLabel>{input.label}</FormLabel>
         <FormControl>
-          <PasswordInput {...field} autoComplete="off" />
+          <PasswordInput
+            {...field}
+            placeholder={input.placeholder || ""}
+            autoComplete="off"
+          />
         </FormControl>
       </FormItem>
     );
@@ -42,7 +50,12 @@ const inputComponents: Record<
       <FormItem>
         <FormLabel>{input.label}</FormLabel>
         <FormControl>
-          <Textarea {...field} className="resize-none" rows={5} />
+          <Textarea
+            {...field}
+            placeholder={input.placeholder || ""}
+            className="resize-none"
+            rows={5}
+          />
         </FormControl>
       </FormItem>
     );
