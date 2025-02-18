@@ -23,6 +23,7 @@ interface IProps {
 
 const FormSchema = z.object({
   label: z.string().min(1, "Label is required"),
+  placeholder: z.string(),
 });
 
 type TFormSchema = z.infer<typeof FormSchema>;
@@ -32,7 +33,7 @@ export const EditInput = ({ handleIsOpen, formId, input }: IProps) => {
 
   const form = useForm<TFormSchema>({
     resolver: zodResolver(FormSchema),
-    defaultValues: { label: input.label },
+    defaultValues: { label: input.label, placeholder: input.placeholder || "" },
   });
 
   const { control, handleSubmit } = form;
@@ -56,6 +57,18 @@ export const EditInput = ({ handleIsOpen, formId, input }: IProps) => {
                 <Input {...field} type="text" autoComplete="off" />
               </FormControl>
               <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="placeholder"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Placeholder (Optional)</FormLabel>
+              <FormControl>
+                <Input {...field} type="text" autoComplete="off" />
+              </FormControl>
             </FormItem>
           )}
         />
