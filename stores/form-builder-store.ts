@@ -49,6 +49,7 @@ export const useFormBuilderStore = create<State & Action>((set) => ({
                 {
                   id: generateCode(),
                   label: `Input ${form.inputs.length + 1}`,
+                  placeholder: "",
                   type,
                 },
               ],
