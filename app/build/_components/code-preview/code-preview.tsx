@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useFormBuilderStore } from "@/stores/form-builder-store";
 import { Code } from "./code";
 import { formatJSXCode } from "@/lib/utils";
-import { generateFormCode } from "./generate-form-code";
+import { generateFormCode } from "../generate-form-code";
 
 export const CodePreview = () => {
   const { forms } = useFormBuilderStore();

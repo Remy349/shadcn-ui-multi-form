@@ -1,6 +1,37 @@
 import { TForm, TInputType } from "@/types/types";
 import { generateInputFieldCode } from "./generate-input-field-code";
 
+const generateImports = (inputsType: TInputType[]) => {
+  const importsSet = new Set([
+    "'use client' \n",
+    "import { useState } from 'react'",
+    "import { useForm } from 'react-hook-form'",
+    "import { Button } from '@/components/ui/button'",
+    "import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form'",
+    "import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'",
+    "import { toast } from 'sonner'",
+    "import { cn } from '@/lib/utils'",
+  ]);
+
+  const inputComponents: Record<TInputType, string[]> = {
+    input: ["import { Input } from '@/components/ui/input'"],
+    password: [
+      "import { PasswordInput } from '@/components/ui/password-input'",
+    ],
+    textarea: ["import { Textarea } from '@/components/ui/textarea'"],
+  };
+
+  const proccessInput = (input: TInputType) => {
+    const newImports = inputComponents[input];
+
+    newImports.map((newImp) => importsSet.add(newImp));
+  };
+
+  inputsType.map(proccessInput);
+
+  return importsSet;
+};
+
 const generateFormSteps = (forms: TForm[]) => {
   const formSteps = forms
     .map(
@@ -45,35 +76,6 @@ const generateFormSteps = (forms: TForm[]) => {
     .join("\n");
 
   return formSteps;
-};
-
-const generateImports = (inputsType: TInputType[]) => {
-  const importsSet = new Set([
-    "'use client' \n",
-    "import { useState } from 'react'",
-    "import { useForm } from 'react-hook-form'",
-    "import { Button } from '@/components/ui/button'",
-    "import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'",
-    "import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'",
-    "import { toast } from 'sonner'",
-    "import { cn } from '@/lib/utils'",
-  ]);
-
-  const inputComponents: Record<TInputType, string[]> = {
-    input: ["import { Input } from '@/components/ui/input'"],
-    password: ["import { Input } from '@/components/ui/input'"],
-    textarea: ["import { Textarea } from '@/components/ui/textarea'"],
-  };
-
-  const proccessInput = (input: TInputType) => {
-    const newImports = inputComponents[input];
-
-    newImports.map((newImp) => importsSet.add(newImp));
-  };
-
-  inputsType.map(proccessInput);
-
-  return importsSet;
 };
 
 export const generateFormCode = (inputsType: TInputType[], forms: TForm[]) => {

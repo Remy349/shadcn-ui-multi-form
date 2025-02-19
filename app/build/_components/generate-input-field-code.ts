@@ -10,8 +10,13 @@ const inputComponents: Record<TInputType, (input: TInput) => string> = {
         <FormItem>
           <FormLabel>${input.label}</FormLabel>
           <FormControl>
-            <Input {...field} autoComplete="off" />
+            <Input
+              {...field}
+              placeholder="${input.placeholder}"
+              autoComplete="off"
+            />
           </FormControl>
+          <FormDescription>${input.description}</FormDescription>
         </FormItem>
       )}
     />
@@ -25,8 +30,13 @@ const inputComponents: Record<TInputType, (input: TInput) => string> = {
         <FormItem>
           <FormLabel>${input.label}</FormLabel>
           <FormControl>
-            <Input {...field} type="password" autoComplete="off" />
+            <PasswordInput
+              {...field}
+              placeholder="${input.placeholder}"
+              autoComplete="off"
+            />
           </FormControl>
+          <FormDescription>${input.description}</FormDescription>
         </FormItem>
       )}
     />
@@ -40,8 +50,14 @@ const inputComponents: Record<TInputType, (input: TInput) => string> = {
         <FormItem>
           <FormLabel>${input.label}</FormLabel>
           <FormControl>
-            <Textarea {...field} className="resize-none" rows={5} />
+            <Textarea
+              {...field}
+              placeholder="${input.placeholder}"
+              className="resize-none"
+              rows={5}
+            />
           </FormControl>
+          <FormDescription>${input.description}</FormDescription>
         </FormItem>
       )}
     />

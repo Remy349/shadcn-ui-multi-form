@@ -1,5 +1,5 @@
 import { generateCode } from "@/lib/utils";
-import { TForm, TInputType } from "@/types/types";
+import { TForm, TInputType, TUpdateInput } from "@/types/types";
 import { create } from "zustand";
 
 type State = {
@@ -11,7 +11,7 @@ type Action = {
   removeForm: (id: string) => void;
   addInput: (formId: string, type: TInputType) => void;
   removeInput: (formId: string, inputId: string) => void;
-  updateInputLabel: (formId: string, inputId: string, label: string) => void;
+  updateInput: (formId: string, inputId: string, data: TUpdateInput) => void;
 };
 
 export const useFormBuilderStore = create<State & Action>((set) => ({
@@ -49,6 +49,8 @@ export const useFormBuilderStore = create<State & Action>((set) => ({
                 {
                   id: generateCode(),
                   label: `Input ${form.inputs.length + 1}`,
+                  placeholder: "",
+                  description: "",
                   type,
                 },
               ],
@@ -67,14 +69,14 @@ export const useFormBuilderStore = create<State & Action>((set) => ({
           : form,
       ),
     })),
-  updateInputLabel: (formId, inputId, label) =>
+  updateInput: (formId, inputId, data) =>
     set((state) => ({
       forms: state.forms.map((form) =>
         form.id === formId
           ? {
               ...form,
               inputs: form.inputs.map((input) =>
-                input.id === inputId ? { ...input, label } : input,
+                input.id === inputId ? { ...input, ...data } : input,
               ),
             }
           : form,
