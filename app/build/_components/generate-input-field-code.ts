@@ -16,6 +16,7 @@ const inputComponents: Record<TInputType, (input: TInput) => string> = {
               autoComplete="off"
             />
           </FormControl>
+          <FormDescription>${input.description}</FormDescription>
         </FormItem>
       )}
     />
@@ -35,6 +36,7 @@ const inputComponents: Record<TInputType, (input: TInput) => string> = {
               autoComplete="off"
             />
           </FormControl>
+          <FormDescription>${input.description}</FormDescription>
         </FormItem>
       )}
     />
@@ -55,6 +57,7 @@ const inputComponents: Record<TInputType, (input: TInput) => string> = {
               rows={5}
             />
           </FormControl>
+          <FormDescription>${input.description}</FormDescription>
         </FormItem>
       )}
     />

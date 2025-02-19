@@ -1,5 +1,10 @@
 import { TInput, TInputType } from "@/types/types";
-import { FormControl, FormItem, FormLabel } from "@/components/ui/form";
+import {
+  FormControl,
+  FormDescription,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ControllerRenderProps, FieldValues } from "react-hook-form";
@@ -24,10 +29,11 @@ const inputComponents: Record<
         <FormControl>
           <Input
             {...field}
-            placeholder={input.placeholder || ""}
+            placeholder={input.placeholder}
             autoComplete="off"
           />
         </FormControl>
+        <FormDescription>{input.description}</FormDescription>
       </FormItem>
     );
   },
@@ -38,10 +44,11 @@ const inputComponents: Record<
         <FormControl>
           <PasswordInput
             {...field}
-            placeholder={input.placeholder || ""}
+            placeholder={input.placeholder}
             autoComplete="off"
           />
         </FormControl>
+        <FormDescription>{input.description}</FormDescription>
       </FormItem>
     );
   },
@@ -52,11 +59,12 @@ const inputComponents: Record<
         <FormControl>
           <Textarea
             {...field}
-            placeholder={input.placeholder || ""}
+            placeholder={input.placeholder}
             className="resize-none"
             rows={5}
           />
         </FormControl>
+        <FormDescription>{input.description}</FormDescription>
       </FormItem>
     );
   },

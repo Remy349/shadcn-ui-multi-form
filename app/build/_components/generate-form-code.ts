@@ -7,7 +7,7 @@ const generateImports = (inputsType: TInputType[]) => {
     "import { useState } from 'react'",
     "import { useForm } from 'react-hook-form'",
     "import { Button } from '@/components/ui/button'",
-    "import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'",
+    "import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form'",
     "import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'",
     "import { toast } from 'sonner'",
     "import { cn } from '@/lib/utils'",
