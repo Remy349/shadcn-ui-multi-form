@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ControllerRenderProps, FieldValues } from "react-hook-form";
 import { PasswordInput } from "@/components/ui/password-input";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface IProps {
   input: TInput;
@@ -65,6 +66,19 @@ const inputComponents: Record<
           />
         </FormControl>
         <FormDescription>{input.description}</FormDescription>
+      </FormItem>
+    );
+  },
+  checkbox: (input, field) => {
+    return (
+      <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+        <FormControl>
+          <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+        </FormControl>
+        <div className="space-y-1 leading-none">
+          <FormLabel>{input.label}</FormLabel>
+          <FormDescription>{input.description}</FormDescription>
+        </div>
       </FormItem>
     );
   },
