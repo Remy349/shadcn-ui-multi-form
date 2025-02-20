@@ -14,6 +14,7 @@ const inputComponents: Record<TInputType, string> = {
   textarea: "Textarea",
   checkbox: "Checkbox",
   switch: "Switch",
+  "file-input": "File Input",
 };
 
 export const InputField = ({ formId, input }: IProps) => {
