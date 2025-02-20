@@ -21,6 +21,7 @@ const inputComponents: { name: string; type: TInputType }[] = [
   { name: "Password", type: "password" },
   { name: "Textarea", type: "textarea" },
   { name: "Checkbox", type: "checkbox" },
+  { name: "Switch", type: "switch" },
 ];
 
 export const InputFieldsMenu = ({ formId }: IProps) => {

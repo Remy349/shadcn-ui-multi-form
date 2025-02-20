@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ControllerRenderProps, FieldValues } from "react-hook-form";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 
 interface IProps {
   input: TInput;
@@ -79,6 +80,19 @@ const inputComponents: Record<
           <FormLabel>{input.label}</FormLabel>
           <FormDescription>{input.description}</FormDescription>
         </div>
+      </FormItem>
+    );
+  },
+  switch: (input, field) => {
+    return (
+      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+        <div className="space-y-0.5">
+          <FormLabel className="text-base">{input.label}</FormLabel>
+          <FormDescription>{input.description}</FormDescription>
+        </div>
+        <FormControl>
+          <Switch checked={field.value} onCheckedChange={field.onChange} />
+        </FormControl>
       </FormItem>
     );
   },

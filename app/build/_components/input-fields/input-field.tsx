@@ -13,6 +13,7 @@ const inputComponents: Record<TInputType, string> = {
   password: "Password",
   textarea: "Textarea",
   checkbox: "Checkbox",
+  switch: "Switch",
 };
 
 export const InputField = ({ formId, input }: IProps) => {
