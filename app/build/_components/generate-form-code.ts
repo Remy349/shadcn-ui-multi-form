@@ -19,6 +19,8 @@ const generateImports = (inputsType: TInputType[]) => {
       "import { PasswordInput } from '@/components/ui/password-input'",
     ],
     textarea: ["import { Textarea } from '@/components/ui/textarea'"],
+    checkbox: ["import { Checkbox } from '@/components/ui/checkbox'"],
+    switch: ["import { Switch } from '@/components/ui/switch'"],
   };
 
   const proccessInput = (input: TInputType) => {

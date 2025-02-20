@@ -62,6 +62,48 @@ const inputComponents: Record<TInputType, (input: TInput) => string> = {
       )}
     />
   `,
+  checkbox: (input) => `
+    <FormField
+      key="${input.id}"
+      control={control}
+      name="${input.id}"
+      render={({ field }) => (
+        <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+          <FormControl>
+            <Checkbox
+              checked={field.value}
+              onCheckedChange={field.onChange}
+            />
+          </FormControl>
+          <div className="space-y-1 leading-none">
+            <FormLabel>${input.label}</FormLabel>
+            <FormDescription>${input.description}</FormDescription>
+          </div>
+        </FormItem>
+      )}
+    />
+  `,
+  switch: (input) => `
+    <FormField
+      key="${input.id}"
+      control={control}
+      name="${input.id}"
+      render={({ field }) => (
+        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+          <div className="space-y-0.5">
+            <FormLabel className="text-base">${input.label}</FormLabel>
+            <FormDescription>${input.description}</FormDescription>
+          </div>
+          <FormControl>
+            <Switch
+              checked={field.value}
+              onCheckedChange={field.onChange}
+            />
+          </FormControl>
+        </FormItem>
+      )}
+    />
+  `,
 };
 
 export const generateInputFieldCode = (input: TInput) => {
