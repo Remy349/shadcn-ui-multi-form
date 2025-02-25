@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card } from "@/components/ui/card";
-import { PasswordInput } from "@/components/ui/password-input";
-import { RenderExampleCode } from "./_components/example/render-code";
-import { Separator } from "@/components/ui/separator";
-import { RenderInstallCode } from "./_components/install/render-code";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Components",
@@ -22,57 +24,35 @@ export default function Page() {
           Form. These components are essential for building seamless multi-step
           forms with enhanced functionality and a smooth user experience.
         </p>
-        <div className="border rounded-md p-4 bg-primary/5 mb-8">
-          <p className="text-xs text-muted-foreground">
-            <strong>Note: </strong>Currently, only the{" "}
-            <strong>Password Input</strong> component is available. More
-            components will be added in future updates to expand form
-            customization and usability. Stay tuned!
-          </p>
-        </div>
-        <div className="lg:max-w-3xl lg:mx-auto">
-          <h2 className="text-left font-bold text-xl mb-2 md:text-2xl">
-            Password Input
-          </h2>
-          <p className="text-left text-sm text-muted-foreground mb-8">
-            The Password Input allows users to toggle password visibility,
-            making it easier to enter and verify their passwords securely.
-          </p>
-          <Tabs defaultValue="preview">
-            <TabsList>
-              <TabsTrigger value="preview">Preview</TabsTrigger>
-              <TabsTrigger value="code">Code</TabsTrigger>
-            </TabsList>
-            <TabsContent value="preview">
-              <Card className="shadow-sm">
-                <div className="h-[16rem] flex items-center justify-center p-4">
-                  <PasswordInput placeholder="Password" />
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <Link href="/components/password-input">
+            <Card className="shadow-sm ease-in-out duration-200 md:hover:-translate-y-2">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lg">Password Input</CardTitle>
+                  <ArrowRight className="size-4 text-muted-foreground" />
                 </div>
-              </Card>
-            </TabsContent>
-            <TabsContent value="code">
-              <Card className="shadow-sm">
-                <div className="p-4">
-                  <RenderExampleCode />
+                <CardDescription>
+                  Allows users to toggle password visibility for better
+                  usability.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </Link>
+          <Link href="/components/file-input">
+            <Card className="shadow-sm ease-in-out duration-200 md:hover:-translate-y-2">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lg">File Input</CardTitle>
+                  <ArrowRight className="size-4 text-muted-foreground" />
                 </div>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </div>
-        <Separator className="my-8" />
-        <div className="lg:max-w-3xl lg:mx-auto">
-          <h2 className="text-left font-bold text-xl mb-2 md:text-2xl">
-            Installation
-          </h2>
-          <p className="text-muted-foreground text-left text-sm mb-8">
-            Create the component inside the <strong>/components/ui/</strong>{" "}
-            folder to keep your project structure organized.
-          </p>
-          <Card className="shadow-sm">
-            <div className="p-4">
-              <RenderInstallCode />
-            </div>
-          </Card>
+                <CardDescription>
+                  Enables users to upload files with a clean and simple
+                  interface.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </Link>
         </div>
       </div>
     </section>
