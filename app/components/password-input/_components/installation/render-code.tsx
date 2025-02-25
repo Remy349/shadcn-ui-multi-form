@@ -1,6 +1,6 @@
-import { Code } from "../code";
+import { Code } from "@/app/components/_components/code";
 
-export const RenderInstallCode = () => {
+export const RenderInstallationCode = () => {
   const code = `"use client"
 
 import * as React from "react"

@@ -1,6 +1,6 @@
-import { Code } from "../code";
+import { Code } from "@/app/components/_components/code";
 
-export const RenderExampleCode = () => {
+export const RenderPreviewCode = () => {
   const code = `import { PasswordInput } from "@/components/ui/password-input"
 
 export default function Page() {

@@ -3,7 +3,8 @@ export type TInputType =
   | "textarea"
   | "password"
   | "checkbox"
-  | "switch";
+  | "switch"
+  | "file-input";
 
 export type TInput = {
   id: string;

@@ -22,6 +22,7 @@ const inputComponents: { name: string; type: TInputType }[] = [
   { name: "Textarea", type: "textarea" },
   { name: "Checkbox", type: "checkbox" },
   { name: "Switch", type: "switch" },
+  { name: "File Input", type: "file-input" },
 ];
 
 export const InputFieldsMenu = ({ formId }: IProps) => {

@@ -104,6 +104,26 @@ const inputComponents: Record<TInputType, (input: TInput) => string> = {
       )}
     />
   `,
+  "file-input": (input) => `
+    <FormField
+      key="${input.id}"
+      control={control}
+      name="${input.id}"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>${input.label}</FormLabel>
+          <FormControl>
+            <FileInput
+              value={field.value}
+              onChange={field.onChange}
+              accept="image/*, application/pdf"
+            />
+          </FormControl>
+          <FormDescription>${input.description}</FormDescription>
+        </FormItem>
+      )}
+    />
+  `,
 };
 
 export const generateInputFieldCode = (input: TInput) => {

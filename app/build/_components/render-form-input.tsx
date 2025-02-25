@@ -11,6 +11,7 @@ import { ControllerRenderProps, FieldValues } from "react-hook-form";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
+import { FileInput } from "@/components/ui/file-input";
 
 interface IProps {
   input: TInput;
@@ -93,6 +94,21 @@ const inputComponents: Record<
         <FormControl>
           <Switch checked={field.value} onCheckedChange={field.onChange} />
         </FormControl>
+      </FormItem>
+    );
+  },
+  "file-input": (input, field) => {
+    return (
+      <FormItem>
+        <FormLabel>{input.label}</FormLabel>
+        <FormControl>
+          <FileInput
+            value={field.value}
+            onChange={field.onChange}
+            accept="image/*, application/pdf"
+          />
+        </FormControl>
+        <FormDescription>{input.description}</FormDescription>
       </FormItem>
     );
   },
