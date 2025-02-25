@@ -79,8 +79,8 @@ const FileInput = ({
           onChange={handleChange}
           className="hidden"
         />
-        <div className="flex flex-col items-center gap-1">
-          <Upload className="h-8 w-8 text-muted-foreground" />
+        <div className="flex flex-col items-center gap-2">
+          <Upload className="h-6 w-6 text-muted-foreground" />
           <p className="text-sm text-muted-foreground">
             <span className="font-semibold text-primary">Click to upload</span>{" "}
             or drag and drop
