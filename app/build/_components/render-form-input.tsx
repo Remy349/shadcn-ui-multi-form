@@ -12,6 +12,7 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 import { FileInput } from "@/components/ui/file-input";
+import { Editor } from "@/components/ui/editor/editor";
 
 interface IProps {
   input: TInput;
@@ -59,6 +60,7 @@ const inputComponents: Record<
     return (
       <FormItem>
         <FormLabel>{input.label}</FormLabel>
+        <FormDescription>{input.description}</FormDescription>
         <FormControl>
           <Textarea
             {...field}
@@ -67,7 +69,6 @@ const inputComponents: Record<
             rows={5}
           />
         </FormControl>
-        <FormDescription>{input.description}</FormDescription>
       </FormItem>
     );
   },
@@ -109,6 +110,17 @@ const inputComponents: Record<
           />
         </FormControl>
         <FormDescription>{input.description}</FormDescription>
+      </FormItem>
+    );
+  },
+  "rich-text-editor": (input, field) => {
+    return (
+      <FormItem>
+        <FormLabel>{input.label}</FormLabel>
+        <FormDescription>{input.description}</FormDescription>
+        <FormControl>
+          <Editor content={field.value} onChange={field.onChange} />
+        </FormControl>
       </FormItem>
     );
   },

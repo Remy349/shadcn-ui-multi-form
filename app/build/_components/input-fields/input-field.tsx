@@ -15,6 +15,7 @@ const inputComponents: Record<TInputType, string> = {
   checkbox: "Checkbox",
   switch: "Switch",
   "file-input": "File Input",
+  "rich-text-editor": "Rich Text Editor",
 };
 
 export const InputField = ({ formId, input }: IProps) => {

@@ -23,6 +23,7 @@ const inputComponents: { name: string; type: TInputType }[] = [
   { name: "Checkbox", type: "checkbox" },
   { name: "Switch", type: "switch" },
   { name: "File Input", type: "file-input" },
+  { name: "Rich Text Editor", type: "rich-text-editor" },
 ];
 
 export const InputFieldsMenu = ({ formId }: IProps) => {
@@ -51,18 +52,20 @@ export const InputFieldsMenu = ({ formId }: IProps) => {
           </SheetDescription>
         </SheetHeader>
         <div className="mt-8 flex flex-col space-y-2">
-          {inputComponents.map((input) => (
-            <Button
-              key={input.name}
-              variant="outline"
-              className="font-medium justify-start"
-              size="sm"
-              onClick={() => handleAddInput(input.type)}
-            >
-              <Component className="size-4 mr-2" />
-              {input.name}
-            </Button>
-          ))}
+          {inputComponents
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((input) => (
+              <Button
+                key={input.name}
+                variant="outline"
+                className="font-medium justify-start"
+                size="sm"
+                onClick={() => handleAddInput(input.type)}
+              >
+                <Component className="size-4 mr-2" />
+                {input.name}
+              </Button>
+            ))}
           <div className="border border-dashed rounded-md">
             <div className="flex flex-col items-center justify-center h-[8rem]">
               <h3 className="text-xs text-center font-semibold text-muted-foreground">
