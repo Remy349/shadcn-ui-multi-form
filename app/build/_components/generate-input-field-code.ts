@@ -124,6 +124,22 @@ const inputComponents: Record<TInputType, (input: TInput) => string> = {
       )}
     />
   `,
+  "rich-text-editor": (input) => `
+    <FormField
+      key="${input.id}"
+      control={control}
+      name="${input.id}"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>${input.label}</FormLabel>
+          <FormDescription>${input.description}</FormDescription>
+          <FormControl>
+            <Editor content={field.value} onChange={field.onChange} />
+          </FormControl>
+        </FormItem>
+      )}
+    />
+  `,
 };
 
 export const generateInputFieldCode = (input: TInput) => {

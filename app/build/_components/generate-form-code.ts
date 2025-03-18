@@ -22,6 +22,9 @@ const generateImports = (inputsType: TInputType[]) => {
     checkbox: ["import { Checkbox } from '@/components/ui/checkbox'"],
     switch: ["import { Switch } from '@/components/ui/switch'"],
     "file-input": ["import { FileInput } from '@/components/ui/file-input'"],
+    "rich-text-editor": [
+      "import { Editor } from '@/components/ui/editor/editor'",
+    ],
   };
 
   const proccessInput = (input: TInputType) => {

@@ -4,7 +4,8 @@ export type TInputType =
   | "password"
   | "checkbox"
   | "switch"
-  | "file-input";
+  | "file-input"
+  | "rich-text-editor";
 
 export type TInput = {
   id: string;
