@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 
 export const metadata: Metadata = {
   title: "Components",
@@ -49,6 +50,22 @@ export default function Page() {
                 <CardDescription>
                   Enables users to upload files with a clean and simple
                   interface.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </Link>
+          <Link href="/components/rich-text-editor">
+            <Card className="shadow-sm ease-in-out duration-200 md:hover:-translate-y-2">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lg">Rich Text Editor</CardTitle>
+                  <Badge className="font-medium px-2 py-0 text-[0.65rem]">
+                    New
+                  </Badge>
+                </div>
+                <CardDescription>
+                  Enables easy text formatting with support for bold, italics,
+                  lists, and more.
                 </CardDescription>
               </CardHeader>
             </Card>
