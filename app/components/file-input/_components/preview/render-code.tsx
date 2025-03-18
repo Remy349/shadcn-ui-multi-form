@@ -15,7 +15,7 @@ export const Preview = () => {
       onChange={setFile}
       accept="image/*, application/pdf"
     />
-  );
+  )
 }`;
 
   return <Code code={code} />;
