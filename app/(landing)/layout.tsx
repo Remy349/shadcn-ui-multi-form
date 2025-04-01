@@ -1,4 +1,4 @@
-import "./globals.css";
+import "@/app/globals.css"
 import { Header } from "./_components/header/header";
 import type { Metadata } from "next";
 import { nunitoSans } from "@/lib/fonts";
