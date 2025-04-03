@@ -1,3 +1,4 @@
+import "@/app/globals.css";
 import type { Metadata } from "next";
 import { nunitoSans } from "@/lib/fonts";
 import { Analytics } from "@vercel/analytics/next";
@@ -25,9 +26,7 @@ export default function RootLayout({
           defaultTheme="light"
           disableTransitionOnChange
         >
-          <div>
-            <main className="mt-16 min-h-[calc(100vh-4rem)]">{children}</main>
-          </div>
+          {children}
         </ThemeProvider>
         <Analytics />
         <Toaster position="bottom-right" richColors />
