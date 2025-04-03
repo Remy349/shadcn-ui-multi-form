@@ -1,4 +1,4 @@
-import { Code } from "@/app/components/_components/code";
+import { Code } from "@/app/(landing)/components/_components/code";
 
 export const ToolbarRenderCode = () => {
   const code = `import type { Editor } from "@tiptap/react"

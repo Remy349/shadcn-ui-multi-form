@@ -1,4 +1,4 @@
-import { Code } from "@/app/components/_components/code";
+import { Code } from "@/app/(landing)/components/_components/code";
 
 export const EditorRenderCode = () => {
   const code = `"use client"
