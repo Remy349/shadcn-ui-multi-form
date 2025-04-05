@@ -8,13 +8,15 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { CodePreview } from "./code-preview";
+import { Copy } from "lucide-react";
 
 export const CodePreviewDialog = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size="sm" className="font-medium">
-          Show code preview
+        <Button size="sm" variant="outline" className="font-medium h-8">
+          <Copy />
+          Show code
         </Button>
       </DialogTrigger>
       <DialogContent className="md:max-w-[80vw] w-full max-h-[80vh] h-full flex flex-col">
