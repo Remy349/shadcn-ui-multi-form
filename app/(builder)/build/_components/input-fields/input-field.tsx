@@ -22,7 +22,9 @@ export const InputField = ({ formId, input }: IProps) => {
   return (
     <div className="flex items-center border rounded-md p-1 w-full">
       <div className="flex items-center">
-        <Component className="size-4 mr-2" />
+        <div className="flex items-center justify-center size-8">
+          <Component className="size-4 mr-2" />
+        </div>
         <p className="text-sm">{inputComponents[input.type]}</p>
       </div>
       <div className="flex items-center ml-auto">
