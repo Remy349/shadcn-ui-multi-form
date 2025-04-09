@@ -1,5 +1,4 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   SidebarContent,
   SidebarGroup,
@@ -9,20 +8,58 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
 import { TInputType } from "@/types/types";
+import { useDraggable } from "@dnd-kit/core";
 import { Component } from "lucide-react";
 
-const inputComponents: { name: string; type: TInputType; isNew?: boolean }[] = [
-  { name: "Input", type: "input" },
-  { name: "Password", type: "password" },
-  { name: "Textarea", type: "textarea" },
-  { name: "Checkbox", type: "checkbox" },
-  { name: "Switch", type: "switch" },
-  { name: "File Input", type: "file-input" },
-  { name: "Rich Text Editor", type: "rich-text-editor", isNew: true },
-];
+interface IProps {
+  inputComponents: {
+    name: string;
+    type: TInputType;
+    isNew?: boolean;
+  }[];
+}
 
-export const DashboardSidebarContent = () => {
+const DraggableItem = ({
+  name,
+  type,
+  isNew,
+}: {
+  name: string;
+  type: TInputType;
+  isNew?: boolean;
+}) => {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: `form-element-${type}`,
+    data: {
+      type: type,
+    },
+  });
+
+  return (
+    <SidebarMenuItem>
+      <div
+        ref={setNodeRef}
+        {...listeners}
+        {...attributes}
+        className={cn("cursor-grab", isDragging && "opacity-50")}
+      >
+        <SidebarMenuButton>
+          <Component className="size-4 mr-2" />
+          {name}
+          {isNew && (
+            <Badge className="ml-auto font-medium text-[0.65rem] px-2 py-0">
+              New
+            </Badge>
+          )}
+        </SidebarMenuButton>
+      </div>
+    </SidebarMenuItem>
+  );
+};
+
+export const DashboardSidebarContent = ({ inputComponents }: IProps) => {
   return (
     <SidebarContent>
       <SidebarGroup>
@@ -32,17 +69,7 @@ export const DashboardSidebarContent = () => {
             {inputComponents
               .sort((a, b) => a.name.localeCompare(b.name))
               .map((input) => (
-                <SidebarMenuItem key={input.name}>
-                  <SidebarMenuButton>
-                    <Component className="size-4 mr-2" />
-                    {input.name}
-                    {input.isNew && (
-                      <Badge className="ml-auto font-medium text-[0.65rem] px-2 py-0">
-                        New
-                      </Badge>
-                    )}
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                <DraggableItem key={input.type} {...input} />
               ))}
           </SidebarMenu>
         </SidebarGroupContent>
