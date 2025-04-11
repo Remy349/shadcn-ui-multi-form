@@ -1,8 +1,6 @@
-import "./globals.css";
-import { Header } from "./_components/header/header";
+import "@/app/globals.css";
 import type { Metadata } from "next";
 import { nunitoSans } from "@/lib/fonts";
-import { Footer } from "./_components/footer";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { Toaster } from "sonner";
@@ -28,11 +26,7 @@ export default function RootLayout({
           defaultTheme="light"
           disableTransitionOnChange
         >
-          <div>
-            <Header />
-            <main className="mt-16 min-h-[calc(100vh-4rem)]">{children}</main>
-            <Footer />
-          </div>
+          {children}
         </ThemeProvider>
         <Analytics />
         <Toaster position="bottom-right" richColors />

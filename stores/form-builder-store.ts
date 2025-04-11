@@ -4,17 +4,20 @@ import { create } from "zustand";
 
 type State = {
   forms: TForm[];
+  selectedForm: string;
 };
 
 type Action = {
   addForm: () => void;
   removeForm: (id: string) => void;
+  setSelectedForm: (id: string) => void;
   addInput: (formId: string, type: TInputType) => void;
   removeInput: (formId: string, inputId: string) => void;
   updateInput: (formId: string, inputId: string, data: TUpdateInput) => void;
 };
 
 export const useFormBuilderStore = create<State & Action>((set) => ({
+  selectedForm: "",
   forms: [
     {
       id: generateCode(),
@@ -38,6 +41,7 @@ export const useFormBuilderStore = create<State & Action>((set) => ({
           ? state.forms.filter((form) => form.id !== id)
           : state.forms,
     })),
+  setSelectedForm: (id) => set(() => ({ selectedForm: id })),
   addInput: (formId, type) =>
     set((state) => ({
       forms: state.forms.map((form) =>
