@@ -32,9 +32,6 @@ const DraggableItem = ({
 }) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: `form-element-${type}`,
-    data: {
-      type: type,
-    },
   });
 
   return (
