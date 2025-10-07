@@ -1,9 +1,9 @@
-import "@/app/globals.css";
+import "./globals.css";
 import type { Metadata } from "next";
 import { nunitoSans } from "@/lib/fonts";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/providers/theme-provider";
-import { Toaster } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: {
@@ -27,9 +27,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <Toaster position="bottom-right" richColors />
         </ThemeProvider>
-        <Analytics />
-        <Toaster position="bottom-right" richColors />
+        <Analytics mode="production" />
       </body>
     </html>
   );

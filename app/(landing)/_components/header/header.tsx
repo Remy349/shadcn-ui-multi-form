@@ -8,7 +8,7 @@ import { ToggleDarkMode } from "./toggle-dark-mode";
 
 export const Header = () => {
   return (
-    <header className="fixed top-0 left-0 z-50 bg-background border-b w-full">
+    <header className="sticky top-0 left-0 z-50 bg-background border-b w-full">
       <nav className="px-6 mx-auto flex items-center justify-between h-16 md:max-w-3xl lg:max-w-5xl xl:max-w-7xl">
         <div className="flex items-center gap-x-4">
           <MobileMenu />

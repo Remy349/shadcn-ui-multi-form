@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 
-export default function Page() {
+export default function Home() {
   return (
     <>
       <section className="pt-[4rem] pb-[2.5rem]">
