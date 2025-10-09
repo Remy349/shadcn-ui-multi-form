@@ -11,19 +11,23 @@ export const FormBuilder = () => {
     <SidebarProvider>
       <ElementsSidebar />
       <SidebarInset>
-        <header className="bg-background sticky top-0 shrink-0 w-full">
-          <div className="flex items-center justify-between h-16 px-4">
-            <div className="flex items-center gap-2">
-              <Button size="sm">Step 1</Button>
-              <Button variant="ghost" size="icon-sm">
-                <PlusIcon />
-              </Button>
+        <div className="relative">
+          <header className="bg-background fixed border-1 w-[512px] rounded-md shadow-xs z-10 bottom-6 left-1/2 -translate-x-1/2">
+            <div className="flex items-center justify-between h-14 px-3">
+              <div className="flex items-center gap-2">
+                <Button size="sm">Step 1</Button>
+                <Button variant="outline" size="icon-sm">
+                  <PlusIcon />
+                </Button>
+              </div>
+              <ActionsMenu />
             </div>
-            <ActionsMenu />
+          </header>
+          <div className="py-8">
+            <div className="max-w-2xl mx-auto">
+              <Canvas />
+            </div>
           </div>
-        </header>
-        <div className="px-4">
-          <Canvas />
         </div>
       </SidebarInset>
       <PropertiesSidebar />
