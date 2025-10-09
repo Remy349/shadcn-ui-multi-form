@@ -1,4 +1,11 @@
 import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
+import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
@@ -23,7 +30,19 @@ export const PropertiesSidebar = () => {
         </div>
       </SidebarHeader>
       <SidebarSeparator className="mx-0" />
-      <SidebarContent></SidebarContent>
+      <SidebarContent>
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <Settings2Icon />
+            </EmptyMedia>
+            <EmptyTitle>No element selected</EmptyTitle>
+            <EmptyDescription>
+              Select an element from the canvas to edit its properties
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      </SidebarContent>
     </Sidebar>
   );
 };
