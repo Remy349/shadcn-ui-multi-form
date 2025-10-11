@@ -2,16 +2,44 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
+import { generateId } from "@/lib/utils";
+import { FormElement, FormElementType } from "@/types/form-builder";
 import { ComponentIcon, LayoutPanelTopIcon, LogOutIcon } from "lucide-react";
 import Link from "next/link";
 
-export const ElementsSidebar = () => {
+interface ElementsSidebarProps {
+  addElement: (element: FormElement) => void;
+}
+
+const elements: {
+  type: FormElementType;
+  label: string;
+}[] = [
+  { type: "text", label: "Text" },
+  { type: "email", label: "Email" },
+];
+
+export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
+  const handleClick = (type: FormElementType) => {
+    const newElement: FormElement = {
+      id: generateId(),
+      type,
+      label: `${type.charAt(0).toUpperCase() + type.slice(1)} Field`,
+      placeholder: "",
+      description: "",
+    };
+
+    addElement(newElement);
+  };
+
   return (
     <Sidebar collapsible="none" className="border-r sticky top-0 h-svh">
       <SidebarHeader>
@@ -28,7 +56,26 @@ export const ElementsSidebar = () => {
         </div>
       </SidebarHeader>
       <SidebarSeparator className="mx-0" />
-      <SidebarContent></SidebarContent>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {elements.map((element) => (
+                <SidebarMenuItem
+                  className="border bg-background rounded-md"
+                  onClick={() => handleClick(element.type)}
+                  key={element.label}
+                >
+                  <SidebarMenuButton className="cursor-grab">
+                    <ComponentIcon />
+                    <span className="font-medium">{element.label}</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
