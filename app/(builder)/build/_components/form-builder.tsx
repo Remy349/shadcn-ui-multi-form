@@ -8,8 +8,17 @@ import { useFormBuilderStore } from "@/store/form-builder-store";
 import { Toolbar } from "./form-builder/toolbar/toolbar";
 
 export const FormBuilder = () => {
-  const { forms, currentFormIndex, addElement, deleteElement, updateForm } =
-    useFormBuilderStore();
+  const {
+    forms,
+    currentFormIndex,
+    addElement,
+    deleteElement,
+    setCurrentFormIndex,
+    addForm,
+    updateForm,
+    deleteForm,
+    clearAll,
+  } = useFormBuilderStore();
 
   const currentForm = forms[currentFormIndex];
 
@@ -20,7 +29,11 @@ export const FormBuilder = () => {
         <Toolbar
           currentForm={currentForm}
           forms={forms}
+          setCurrentFormIndex={setCurrentFormIndex}
+          addForm={addForm}
           updateForm={updateForm}
+          deleteForm={deleteForm}
+          clearAll={clearAll}
         />
         <div className="py-8">
           <div className="max-w-2xl mx-auto">
