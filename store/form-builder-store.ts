@@ -11,7 +11,11 @@ interface State {
 interface Actions {
   addElement: (element: FormElement) => void;
   deleteElement: (elementId: string) => void;
+  setCurrentFormIndex: (index: number) => void;
+  addForm: () => void;
   updateForm: (updatedForm: UpdateForm) => void;
+  deleteForm: (formId: string) => void;
+  clearAll: () => void;
 }
 
 export const useFormBuilderStore = create<State & Actions>((set, get) => ({
@@ -43,6 +47,20 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
 
     set({ forms: updatedForms });
   },
+  setCurrentFormIndex: (index) => {
+    set({ currentFormIndex: index });
+  },
+  addForm: () => {
+    const { forms } = get();
+    const newForm: Form = {
+      id: generateId(),
+      title: `Step ${forms.length + 1}`,
+      description: "",
+      elements: [],
+    };
+
+    set({ forms: [...forms, newForm], currentFormIndex: forms.length });
+  },
   updateForm: (updatedForm) => {
     const { forms, currentFormIndex } = get();
     const updatedForms = forms.map((form, index) =>
@@ -50,5 +68,27 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
     );
 
     set({ forms: updatedForms });
+  },
+  deleteForm: (formId) => {
+    const { forms, currentFormIndex } = get();
+
+    if (forms.length === 1) return;
+
+    const updatedForms = forms.filter((form) => form.id !== formId);
+
+    const newCurrentFormIndex =
+      currentFormIndex >= updatedForms.length
+        ? currentFormIndex - 1
+        : currentFormIndex;
+
+    set({ forms: updatedForms, currentFormIndex: newCurrentFormIndex });
+  },
+  clearAll: () => {
+    set({
+      forms: [
+        { id: generateId(), title: "Step 1", description: "", elements: [] },
+      ],
+      currentFormIndex: 0,
+    });
   },
 }));
