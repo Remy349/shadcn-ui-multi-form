@@ -1,5 +1,5 @@
 import { generateId } from "@/lib/utils";
-import { Form, FormElement } from "@/types/form-builder";
+import { Form, FormElement, UpdateForm } from "@/types/form-builder";
 import { create } from "zustand";
 
 interface State {
@@ -11,10 +11,11 @@ interface State {
 interface Actions {
   addElement: (element: FormElement) => void;
   deleteElement: (elementId: string) => void;
+  updateForm: (updatedForm: UpdateForm) => void;
 }
 
 export const useFormBuilderStore = create<State & Actions>((set, get) => ({
-  forms: [{ id: generateId(), title: "Step 1", elements: [] }],
+  forms: [{ id: generateId(), title: "Step 1", description: "", elements: [] }],
   currentFormIndex: 0,
   selectedElement: null,
   addElement: (element) => {
@@ -27,7 +28,7 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
 
     set({ forms: updatedForms });
   },
-  deleteElement: (elementId: string) => {
+  deleteElement: (elementId) => {
     const { forms, currentFormIndex } = get();
     const updatedForms = forms.map((form, index) =>
       index === currentFormIndex
@@ -38,6 +39,14 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
             ),
           }
         : form,
+    );
+
+    set({ forms: updatedForms });
+  },
+  updateForm: (updatedForm) => {
+    const { forms, currentFormIndex } = get();
+    const updatedForms = forms.map((form, index) =>
+      index === currentFormIndex ? { ...form, ...updatedForm } : form,
     );
 
     set({ forms: updatedForms });

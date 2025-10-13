@@ -1,4 +1,10 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Empty,
   EmptyDescription,
@@ -13,7 +19,7 @@ import { EmailInputElement } from "./form-elements/email-input-element";
 import { Button } from "@/components/ui/button";
 
 interface CanvasProps {
-  form: Form;
+  currentForm: Form;
   deleteElement: (elementId: string) => void;
 }
 
@@ -27,7 +33,7 @@ const renderFormElement = (
   };
 
   return (
-    <div className="relative">
+    <div className="relative" key={element.id}>
       <div className="border rounded-md p-4" key={element.id}>
         <div className="absolute top-2 right-2 flex items-center space-x-0.5">
           <Button variant="ghost" size="icon-sm">
@@ -47,10 +53,10 @@ const renderFormElement = (
   );
 };
 
-export const Canvas = ({ form, deleteElement }: CanvasProps) => {
+export const Canvas = ({ currentForm, deleteElement }: CanvasProps) => {
   return (
     <div className="rounded-md min-h-[calc(100vh-9rem)] border-2 border-dashed bg-sidebar">
-      {form.elements.length === 0 ? (
+      {currentForm.elements.length === 0 ? (
         <Empty className="h-[calc(100vh-9rem)]">
           <EmptyHeader>
             <EmptyMedia variant="icon">
@@ -66,11 +72,12 @@ export const Canvas = ({ form, deleteElement }: CanvasProps) => {
         <div className="p-8">
           <Card>
             <CardHeader>
-              <CardTitle>{form.title}</CardTitle>
+              <CardTitle>{currentForm.title}</CardTitle>
+              <CardDescription>{currentForm.description}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {form.elements.map((element) =>
+                {currentForm.elements.map((element) =>
                   renderFormElement(element, deleteElement),
                 )}
               </div>
