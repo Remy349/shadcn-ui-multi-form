@@ -11,5 +11,8 @@ export interface FormElement {
 export interface Form {
   id: string;
   title: string;
+  description?: string;
   elements: FormElement[];
 }
+
+export type UpdateForm = Pick<Form, "title" | "description">;
