@@ -21,39 +21,47 @@ import { Button } from "@/components/ui/button";
 interface CanvasProps {
   currentForm: Form;
   deleteElement: (elementId: string) => void;
+  setSelectedElement: (element: FormElement | null) => void;
 }
 
-const renderFormElement = (
-  element: FormElement,
-  deleteElement: (elementId: string) => void,
-) => {
-  const elementComponent: Record<FormElementType, React.ReactElement> = {
-    text: <TextInputElement element={element} />,
-    email: <EmailInputElement element={element} />,
+export const Canvas = ({
+  currentForm,
+  deleteElement,
+  setSelectedElement,
+}: CanvasProps) => {
+  const renderFormElement = (element: FormElement) => {
+    const elementComponent: Record<FormElementType, React.ReactElement> = {
+      text: <TextInputElement element={element} />,
+      email: <EmailInputElement element={element} />,
+    };
+
+    return (
+      <div className="relative" key={element.id}>
+        <div className="border rounded-md p-4" key={element.id}>
+          <div className="absolute top-2 right-2 flex items-center space-x-0.5">
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={() => {
+                setSelectedElement(element);
+              }}
+            >
+              <PencilIcon />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={() => deleteElement(element.id)}
+            >
+              <Trash2Icon className="text-red-500" />
+            </Button>
+          </div>
+          {elementComponent[element.type]}
+        </div>
+      </div>
+    );
   };
 
-  return (
-    <div className="relative" key={element.id}>
-      <div className="border rounded-md p-4" key={element.id}>
-        <div className="absolute top-2 right-2 flex items-center space-x-0.5">
-          <Button variant="ghost" size="icon-sm">
-            <PencilIcon />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            onClick={() => deleteElement(element.id)}
-          >
-            <Trash2Icon className="text-red-500" />
-          </Button>
-        </div>
-        {elementComponent[element.type]}
-      </div>
-    </div>
-  );
-};
-
-export const Canvas = ({ currentForm, deleteElement }: CanvasProps) => {
   return (
     <div className="rounded-md min-h-[calc(100vh-9rem)] border-2 border-dashed bg-sidebar">
       {currentForm.elements.length === 0 ? (
@@ -78,7 +86,7 @@ export const Canvas = ({ currentForm, deleteElement }: CanvasProps) => {
             <CardContent>
               <div className="space-y-4">
                 {currentForm.elements.map((element) =>
-                  renderFormElement(element, deleteElement),
+                  renderFormElement(element),
                 )}
               </div>
             </CardContent>
