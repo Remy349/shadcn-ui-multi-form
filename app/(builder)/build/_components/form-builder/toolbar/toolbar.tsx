@@ -40,7 +40,7 @@ export const Toolbar = ({
   deleteForm,
   clearAll,
 }: ToolbarProps) => {
-  const handleSelectChange = (value: string) => {
+  const handleSelectForm = (value: string) => {
     const index = forms.findIndex((form) => form.title === value);
 
     if (index !== -1) {
@@ -59,11 +59,8 @@ export const Toolbar = ({
             orientation="vertical"
             className="data-[orientation=vertical]:h-4"
           />
-          <div className="flex items-center space-x-2 border-1 p-1 rounded-md">
-            <Select
-              value={currentForm.title}
-              onValueChange={handleSelectChange}
-            >
+          <div className="flex items-center space-x-2">
+            <Select value={currentForm.title} onValueChange={handleSelectForm}>
               <SelectTrigger>
                 <SelectValue placeholder="Select a form" />
               </SelectTrigger>
@@ -103,10 +100,10 @@ export const Toolbar = ({
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <CodeIcon /> Export code
+                <CodeIcon /> Export Code
               </DropdownMenuItem>
               <DropdownMenuItem variant="destructive" onClick={clearAll}>
-                <Trash2Icon /> Clear all
+                <Trash2Icon /> Clear All
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
