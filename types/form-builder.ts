@@ -1,4 +1,4 @@
-export type FormElementType = "text" | "email";
+export type FormElementType = "text" | "email" | "textarea";
 
 export interface FormElement {
   id: string;

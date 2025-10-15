@@ -36,6 +36,7 @@ export const PropertiesSidebar = ({
     const labels: Record<FormElementType, string> = {
       text: "Text Input",
       email: "Email Input",
+      textarea: "Textarea Input",
     };
 
     return labels[type];

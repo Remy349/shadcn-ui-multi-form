@@ -27,6 +27,7 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
   }[] = [
     { type: "text", label: "Text" },
     { type: "email", label: "Email" },
+    { type: "textarea", label: "Textarea" },
   ];
 
   const handleAddElement = (type: FormElementType) => {
@@ -64,7 +65,6 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
             <SidebarMenu>
               {elements.map((element) => (
                 <SidebarMenuItem
-                  className="border bg-background rounded-md"
                   onClick={() => handleAddElement(element.type)}
                   key={element.label}
                 >

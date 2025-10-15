@@ -18,6 +18,7 @@ import { TextInputElement } from "./form-elements/text-input-element";
 import { EmailInputElement } from "./form-elements/email-input-element";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { TextareaInputElement } from "./form-elements/textarea-input-element";
 
 interface CanvasProps {
   currentForm: Form;
@@ -38,6 +39,7 @@ export const Canvas = ({
     const elementComponent: Record<FormElementType, React.ReactElement> = {
       text: <TextInputElement element={element} />,
       email: <EmailInputElement element={element} />,
+      textarea: <TextareaInputElement element={element} />,
     };
 
     return (
