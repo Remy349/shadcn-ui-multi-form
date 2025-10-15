@@ -15,4 +15,6 @@ export interface Form {
   elements: FormElement[];
 }
 
+export type UpdateFormElement = Partial<FormElement>;
+
 export type UpdateForm = Pick<Form, "title" | "description">;
