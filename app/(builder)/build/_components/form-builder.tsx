@@ -12,12 +12,15 @@ export const FormBuilder = () => {
     forms,
     currentFormIndex,
     addElement,
+    updateElement,
     deleteElement,
     setCurrentFormIndex,
     addForm,
     updateForm,
     deleteForm,
     clearAll,
+    setSelectedElement,
+    selectedElement,
   } = useFormBuilderStore();
 
   const currentForm = forms[currentFormIndex];
@@ -37,11 +40,18 @@ export const FormBuilder = () => {
         />
         <div className="py-8">
           <div className="max-w-2xl mx-auto">
-            <Canvas currentForm={currentForm} deleteElement={deleteElement} />
+            <Canvas
+              currentForm={currentForm}
+              deleteElement={deleteElement}
+              setSelectedElement={setSelectedElement}
+            />
           </div>
         </div>
       </SidebarInset>
-      <PropertiesSidebar />
+      <PropertiesSidebar
+        selectedElement={selectedElement}
+        updateElement={updateElement}
+      />
     </SidebarProvider>
   );
 };

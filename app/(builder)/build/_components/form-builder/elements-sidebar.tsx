@@ -4,6 +4,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -19,16 +20,16 @@ interface ElementsSidebarProps {
   addElement: (element: FormElement) => void;
 }
 
-const elements: {
-  type: FormElementType;
-  label: string;
-}[] = [
-  { type: "text", label: "Text" },
-  { type: "email", label: "Email" },
-];
-
 export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
-  const handleClick = (type: FormElementType) => {
+  const elements: {
+    type: FormElementType;
+    label: string;
+  }[] = [
+    { type: "text", label: "Text" },
+    { type: "email", label: "Email" },
+  ];
+
+  const handleAddElement = (type: FormElementType) => {
     const newElement: FormElement = {
       id: generateId(),
       type,
@@ -58,12 +59,13 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
       <SidebarSeparator className="mx-0" />
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupContent>
+          <SidebarGroupLabel>Input Fields</SidebarGroupLabel>
+          <SidebarGroupContent className="px-2">
             <SidebarMenu>
               {elements.map((element) => (
                 <SidebarMenuItem
                   className="border bg-background rounded-md"
-                  onClick={() => handleClick(element.type)}
+                  onClick={() => handleAddElement(element.type)}
                   key={element.label}
                 >
                   <SidebarMenuButton className="cursor-grab">

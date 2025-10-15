@@ -1,5 +1,10 @@
 import { generateId } from "@/lib/utils";
-import { Form, FormElement, UpdateForm } from "@/types/form-builder";
+import {
+  Form,
+  FormElement,
+  UpdateForm,
+  UpdateFormElement,
+} from "@/types/form-builder";
 import { create } from "zustand";
 
 interface State {
@@ -9,7 +14,9 @@ interface State {
 }
 
 interface Actions {
+  setSelectedElement: (element: FormElement | null) => void;
   addElement: (element: FormElement) => void;
+  updateElement: (elementId: string, updatedElement: UpdateFormElement) => void;
   deleteElement: (elementId: string) => void;
   setCurrentFormIndex: (index: number) => void;
   addForm: () => void;
@@ -22,6 +29,9 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
   forms: [{ id: generateId(), title: "Step 1", description: "", elements: [] }],
   currentFormIndex: 0,
   selectedElement: null,
+  setSelectedElement: (element) => {
+    set({ selectedElement: element });
+  },
   addElement: (element) => {
     const { forms, currentFormIndex } = get();
     const updatedForms = forms.map((form, index) =>
@@ -31,6 +41,29 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
     );
 
     set({ forms: updatedForms });
+  },
+  updateElement: (elementId, updatedElement) => {
+    const { forms, currentFormIndex, selectedElement } = get();
+    const updatedForms = forms.map((form, index) =>
+      index === currentFormIndex
+        ? {
+            ...form,
+            elements: form.elements.map((element) =>
+              element.id === elementId
+                ? { ...element, ...updatedElement }
+                : element,
+            ),
+          }
+        : form,
+    );
+
+    set({
+      forms: updatedForms,
+      selectedElement:
+        selectedElement?.id === elementId
+          ? { ...selectedElement, ...updatedElement }
+          : selectedElement,
+    });
   },
   deleteElement: (elementId) => {
     const { forms, currentFormIndex } = get();
