@@ -130,6 +130,7 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
         { id: generateId(), title: "Step 1", description: "", elements: [] },
       ],
       currentFormIndex: 0,
+      selectedElement: null,
     });
   },
 }));
