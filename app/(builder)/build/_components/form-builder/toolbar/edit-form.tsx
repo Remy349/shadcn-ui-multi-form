@@ -21,7 +21,6 @@ import { Form, UpdateForm } from "@/types/form-builder";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PencilIcon } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
 
 interface EditFormProps {
@@ -47,8 +46,6 @@ export const EditForm = ({ currentForm, updateForm }: EditFormProps) => {
 
   const onSubmit = (data: FormSchema) => {
     updateForm(data);
-
-    toast.success("Form updated successfully");
   };
 
   return (
@@ -61,7 +58,7 @@ export const EditForm = ({ currentForm, updateForm }: EditFormProps) => {
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Edit form details</DialogTitle>
+            <DialogTitle>Edit Form Details</DialogTitle>
             <DialogDescription>
               Update the title and description of your form to better reflect
               its purpose.
