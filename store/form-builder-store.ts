@@ -66,7 +66,7 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
     });
   },
   deleteElement: (elementId) => {
-    const { forms, currentFormIndex } = get();
+    const { forms, currentFormIndex, selectedElement } = get();
     const updatedForms = forms.map((form, index) =>
       index === currentFormIndex
         ? {
@@ -78,10 +78,14 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
         : form,
     );
 
-    set({ forms: updatedForms });
+    set({
+      forms: updatedForms,
+      selectedElement:
+        selectedElement?.id === elementId ? null : selectedElement,
+    });
   },
   setCurrentFormIndex: (index) => {
-    set({ currentFormIndex: index });
+    set({ currentFormIndex: index, selectedElement: null });
   },
   addForm: () => {
     const { forms } = get();
@@ -92,7 +96,11 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
       elements: [],
     };
 
-    set({ forms: [...forms, newForm], currentFormIndex: forms.length });
+    set({
+      forms: [...forms, newForm],
+      currentFormIndex: forms.length,
+      selectedElement: null,
+    });
   },
   updateForm: (updatedForm) => {
     const { forms, currentFormIndex } = get();

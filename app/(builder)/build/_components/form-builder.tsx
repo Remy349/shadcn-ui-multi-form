@@ -43,6 +43,7 @@ export const FormBuilder = () => {
             <Canvas
               currentForm={currentForm}
               deleteElement={deleteElement}
+              selectedElement={selectedElement}
               setSelectedElement={setSelectedElement}
             />
           </div>

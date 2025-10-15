@@ -31,7 +31,7 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
 
   const handleAddElement = (type: FormElementType) => {
     const newElement: FormElement = {
-      id: generateId(),
+      id: `${type}-${generateId()}`,
       type,
       label: `${type.charAt(0).toUpperCase() + type.slice(1)} Field`,
       placeholder: "",

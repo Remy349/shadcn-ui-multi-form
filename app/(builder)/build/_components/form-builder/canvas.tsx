@@ -17,19 +17,24 @@ import { GripIcon, PencilIcon, Trash2Icon } from "lucide-react";
 import { TextInputElement } from "./form-elements/text-input-element";
 import { EmailInputElement } from "./form-elements/email-input-element";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface CanvasProps {
   currentForm: Form;
   deleteElement: (elementId: string) => void;
   setSelectedElement: (element: FormElement | null) => void;
+  selectedElement: FormElement | null;
 }
 
 export const Canvas = ({
   currentForm,
   deleteElement,
   setSelectedElement,
+  selectedElement,
 }: CanvasProps) => {
   const renderFormElement = (element: FormElement) => {
+    const isSelected = selectedElement?.id === element.id;
+
     const elementComponent: Record<FormElementType, React.ReactElement> = {
       text: <TextInputElement element={element} />,
       email: <EmailInputElement element={element} />,
@@ -37,17 +42,25 @@ export const Canvas = ({
 
     return (
       <div className="relative" key={element.id}>
-        <div className="border rounded-md p-4" key={element.id}>
+        <div
+          className={cn(
+            "border-1 rounded-md p-4",
+            isSelected ? "bg-accent/30 border-primary/50" : "",
+          )}
+          key={element.id}
+        >
           <div className="absolute top-2 right-2 flex items-center space-x-0.5">
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              onClick={() => {
-                setSelectedElement(element);
-              }}
-            >
-              <PencilIcon />
-            </Button>
+            {!isSelected && (
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={() => {
+                  setSelectedElement(element);
+                }}
+              >
+                <PencilIcon />
+              </Button>
+            )}
             <Button
               variant="ghost"
               size="icon-sm"
