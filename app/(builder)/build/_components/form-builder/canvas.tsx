@@ -19,6 +19,7 @@ import { EmailInputElement } from "./form-elements/email-input-element";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { TextareaInputElement } from "./form-elements/textarea-input-element";
+import { useDroppable } from "@dnd-kit/core";
 
 interface CanvasProps {
   currentForm: Form;
@@ -33,6 +34,10 @@ export const Canvas = ({
   setSelectedElement,
   selectedElement,
 }: CanvasProps) => {
+  const { setNodeRef, isOver } = useDroppable({
+    id: "canvas",
+  });
+
   const renderFormElement = (element: FormElement) => {
     const isSelected = selectedElement?.id === element.id;
 
@@ -78,7 +83,13 @@ export const Canvas = ({
   };
 
   return (
-    <div className="rounded-md min-h-[calc(100vh-9rem)] border-2 border-dashed bg-sidebar">
+    <div
+      ref={setNodeRef}
+      className={cn(
+        "rounded-md min-h-[calc(100vh-9rem)] border-2 border-dashed bg-sidebar",
+        isOver && "border-primary bg-primary/5",
+      )}
+    >
       {currentForm.elements.length === 0 ? (
         <Empty className="h-[calc(100vh-9rem)]">
           <EmptyHeader>
@@ -87,7 +98,7 @@ export const Canvas = ({
             </EmptyMedia>
             <EmptyTitle>Start building your form</EmptyTitle>
             <EmptyDescription>
-              Drag elements from the left sidebar or click to add them
+              Drag elements from the left sidebar to add them
             </EmptyDescription>
           </EmptyHeader>
         </Empty>

@@ -11,16 +11,34 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import { generateId } from "@/lib/utils";
-import { FormElement, FormElementType } from "@/types/form-builder";
+import { FormElementType } from "@/types/form-builder";
+import { useDraggable } from "@dnd-kit/core";
 import { ComponentIcon, LayoutPanelTopIcon, LogOutIcon } from "lucide-react";
 import Link from "next/link";
 
-interface ElementsSidebarProps {
-  addElement: (element: FormElement) => void;
+interface DraggableFormElementProps {
+  element: { type: FormElementType; label: string };
 }
 
-export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
+const DraggableFormElement = ({ element }: DraggableFormElementProps) => {
+  const { attributes, listeners, setNodeRef } = useDraggable({
+    id: element.type,
+    data: { type: element.type },
+  });
+
+  return (
+    <div ref={setNodeRef} {...listeners} {...attributes}>
+      <SidebarMenuItem>
+        <SidebarMenuButton>
+          <ComponentIcon />
+          <span className="font-medium">{element.label}</span>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+    </div>
+  );
+};
+
+export const ElementsSidebar = () => {
   const elements: {
     type: FormElementType;
     label: string;
@@ -29,18 +47,6 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
     { type: "email", label: "Email" },
     { type: "textarea", label: "Textarea" },
   ];
-
-  const handleAddElement = (type: FormElementType) => {
-    const newElement: FormElement = {
-      id: `${type}-${generateId()}`,
-      type,
-      label: `${type.charAt(0).toUpperCase() + type.slice(1)} Field`,
-      placeholder: "",
-      description: "",
-    };
-
-    addElement(newElement);
-  };
 
   return (
     <Sidebar collapsible="none" className="border-r sticky top-0 h-svh">
@@ -52,9 +58,7 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
               Elements
             </h2>
           </div>
-          <p className="text-xs text-muted-foreground">
-            Drag or click to add to canvas
-          </p>
+          <p className="text-xs text-muted-foreground">Drag to add to canvas</p>
         </div>
       </SidebarHeader>
       <SidebarSeparator className="mx-0" />
@@ -64,15 +68,7 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
           <SidebarGroupContent className="px-2">
             <SidebarMenu>
               {elements.map((element) => (
-                <SidebarMenuItem
-                  onClick={() => handleAddElement(element.type)}
-                  key={element.label}
-                >
-                  <SidebarMenuButton className="cursor-grab">
-                    <ComponentIcon />
-                    <span className="font-medium">{element.label}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                <DraggableFormElement element={element} key={element.type} />
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
