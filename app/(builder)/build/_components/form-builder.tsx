@@ -48,7 +48,9 @@ export const FormBuilder = () => {
     const { active, over } = event;
     const type: FormElementType = active.data.current?.type;
 
-    if (over && over.id === "canvas") {
+    if (!over) return;
+
+    if (over.id === "canvas") {
       const newElement: FormElement = {
         id: `${type}-${generateId()}`,
         label: `${type.charAt(0).toUpperCase() + type.slice(1)} Field`,

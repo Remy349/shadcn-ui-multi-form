@@ -48,36 +48,33 @@ export const Canvas = ({
     };
 
     return (
-      <div className="relative" key={element.id}>
-        <div
-          className={cn(
-            "border-1 rounded-md p-4",
-            isSelected ? "bg-accent/30 border-primary/50" : "",
-          )}
-          key={element.id}
-        >
-          <div className="absolute top-2 right-2 flex items-center space-x-0.5">
-            {!isSelected && (
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                onClick={() => {
-                  setSelectedElement(element);
-                }}
-              >
-                <PencilIcon />
-              </Button>
-            )}
+      <div
+        className={cn(
+          "border-1 rounded-md p-4 relative",
+          isSelected ? "bg-accent/30 border-primary/50" : "",
+        )}
+      >
+        <div className="absolute top-2 right-2 flex items-center space-x-0.5">
+          {!isSelected && (
             <Button
               variant="ghost"
               size="icon-sm"
-              onClick={() => deleteElement(element.id)}
+              onClick={() => {
+                setSelectedElement(element);
+              }}
             >
-              <Trash2Icon className="text-red-500" />
+              <PencilIcon />
             </Button>
-          </div>
-          {elementComponent[element.type]}
+          )}
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={() => deleteElement(element.id)}
+          >
+            <Trash2Icon className="text-red-500" />
+          </Button>
         </div>
+        {elementComponent[element.type]}
       </div>
     );
   };
@@ -111,9 +108,9 @@ export const Canvas = ({
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {currentForm.elements.map((element) =>
-                  renderFormElement(element),
-                )}
+                {currentForm.elements.map((element) => (
+                  <div key={element.id}>{renderFormElement(element)}</div>
+                ))}
               </div>
             </CardContent>
           </Card>
