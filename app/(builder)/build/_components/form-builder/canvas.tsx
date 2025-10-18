@@ -52,26 +52,29 @@ export const Canvas = ({
     };
 
     return (
-      <button
-        type="button"
+      <div
         onClick={() => setSelectedElement(element)}
         className={cn(
-          "border w-full rounded-md p-4 text-left outline-none relative hover:border-primary",
+          "border rounded-md p-4 outline-none relative hover:border-primary",
           isSelected && "bg-accent/30 border-primary",
         )}
       >
         {isSelected && (
-          <Button
-            size="icon-sm"
-            variant="ghost"
-            className="absolute z-10 rounded-md top-0 right-0"
-            onClick={() => deleteElement(element.id)}
-          >
-            <Trash2Icon />
-          </Button>
+          <div className="absolute z-10 top-0 right-0">
+            <Button
+              size="icon-sm"
+              variant="ghost"
+              onClick={(e) => {
+                e.stopPropagation();
+                deleteElement(element.id);
+              }}
+            >
+              <Trash2Icon />
+            </Button>
+          </div>
         )}
         {elementComponent[element.type]}
-      </button>
+      </div>
     );
   };
 

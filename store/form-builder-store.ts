@@ -122,7 +122,11 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
         ? currentFormIndex - 1
         : currentFormIndex;
 
-    set({ forms: updatedForms, currentFormIndex: newCurrentFormIndex });
+    set({
+      forms: updatedForms,
+      currentFormIndex: newCurrentFormIndex,
+      selectedElement: null,
+    });
   },
   clearAll: () => {
     set({
