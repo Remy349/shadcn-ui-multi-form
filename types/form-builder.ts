@@ -1,4 +1,9 @@
-export type FormElementType = "text" | "email" | "textarea";
+export type FormElementType =
+  | "text"
+  | "email"
+  | "textarea"
+  | "checkbox"
+  | "switch";
 
 export interface FormElement {
   id: string;

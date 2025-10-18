@@ -13,13 +13,15 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { Form, FormElement, FormElementType } from "@/types/form-builder";
-import { GripIcon, PencilIcon, Trash2Icon } from "lucide-react";
+import { GripIcon, Trash2Icon } from "lucide-react";
 import { TextInputElement } from "./form-elements/text-input-element";
 import { EmailInputElement } from "./form-elements/email-input-element";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { TextareaInputElement } from "./form-elements/textarea-input-element";
 import { useDroppable } from "@dnd-kit/core";
+import { CheckboxInputElement } from "./form-elements/checkbox-input-element";
+import { SwitchInputElement } from "./form-elements/switch-input-element";
+import { Button } from "@/components/ui/button";
 
 interface CanvasProps {
   currentForm: Form;
@@ -45,37 +47,31 @@ export const Canvas = ({
       text: <TextInputElement element={element} />,
       email: <EmailInputElement element={element} />,
       textarea: <TextareaInputElement element={element} />,
+      checkbox: <CheckboxInputElement element={element} />,
+      switch: <SwitchInputElement element={element} />,
     };
 
     return (
-      <div
+      <button
+        type="button"
+        onClick={() => setSelectedElement(element)}
         className={cn(
-          "border-1 rounded-md p-4 relative",
-          isSelected ? "bg-accent/30 border-primary/50" : "",
+          "border w-full rounded-md p-4 text-left outline-none relative hover:border-primary",
+          isSelected && "bg-accent/30 border-primary",
         )}
       >
-        <div className="absolute top-2 right-2 flex items-center space-x-0.5">
-          {!isSelected && (
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              onClick={() => {
-                setSelectedElement(element);
-              }}
-            >
-              <PencilIcon />
-            </Button>
-          )}
+        {isSelected && (
           <Button
-            variant="ghost"
             size="icon-sm"
+            variant="ghost"
+            className="absolute z-10 rounded-md top-0 right-0"
             onClick={() => deleteElement(element.id)}
           >
-            <Trash2Icon className="text-red-500" />
+            <Trash2Icon />
           </Button>
-        </div>
+        )}
         {elementComponent[element.type]}
-      </div>
+      </button>
     );
   };
 

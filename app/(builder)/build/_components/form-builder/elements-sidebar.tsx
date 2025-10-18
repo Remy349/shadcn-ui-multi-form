@@ -29,7 +29,7 @@ const DraggableFormElement = ({ element }: DraggableFormElementProps) => {
   return (
     <div ref={setNodeRef} {...listeners} {...attributes}>
       <SidebarMenuItem>
-        <SidebarMenuButton>
+        <SidebarMenuButton className="cursor-grab">
           <ComponentIcon />
           <span className="font-medium">{element.label}</span>
         </SidebarMenuButton>
@@ -46,6 +46,8 @@ export const ElementsSidebar = () => {
     { type: "text", label: "Text" },
     { type: "email", label: "Email" },
     { type: "textarea", label: "Textarea" },
+    { type: "checkbox", label: "Checkbox" },
+    { type: "switch", label: "Switch" },
   ];
 
   return (

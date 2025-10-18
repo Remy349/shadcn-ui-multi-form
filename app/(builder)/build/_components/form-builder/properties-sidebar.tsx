@@ -34,9 +34,11 @@ export const PropertiesSidebar = ({
 }: PropertiesSidebarProps) => {
   const elementTypeLabel = (type: FormElementType) => {
     const labels: Record<FormElementType, string> = {
-      text: "Text Input",
-      email: "Email Input",
-      textarea: "Textarea Input",
+      text: "Text",
+      email: "Email",
+      textarea: "Textarea",
+      checkbox: "Checkbox",
+      switch: "Switch",
     };
 
     return labels[type];
