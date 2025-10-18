@@ -1,6 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Form, UpdateForm } from "@/types/form-builder";
-import { CodeIcon, PlusIcon, Settings2Icon, Trash2Icon } from "lucide-react";
+import {
+  CodeIcon,
+  PlayIcon,
+  PlusIcon,
+  Settings2Icon,
+  Trash2Icon,
+} from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -49,7 +55,7 @@ export const Toolbar = ({
   };
 
   return (
-    <header className="sticky border-b w-full z-10 top-0 left-0 bg-background">
+    <header className="sticky border-b w-full z-50 top-0 left-0 bg-background">
       <div className="flex items-center justify-between h-[70px] px-4">
         <div className="flex items-center space-x-4">
           <Button variant="outline" size="icon-sm" onClick={addForm}>
@@ -107,6 +113,9 @@ export const Toolbar = ({
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          <Button size="sm">
+            <PlayIcon /> Preview
+          </Button>
         </div>
       </div>
     </header>
