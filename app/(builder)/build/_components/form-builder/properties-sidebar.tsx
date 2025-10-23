@@ -39,6 +39,7 @@ export const PropertiesSidebar = ({
       textarea: "Textarea",
       checkbox: "Checkbox",
       switch: "Switch",
+      password: "Password",
     };
 
     return labels[type];

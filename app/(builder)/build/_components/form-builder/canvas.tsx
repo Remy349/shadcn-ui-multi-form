@@ -22,6 +22,7 @@ import { useDroppable } from "@dnd-kit/core";
 import { CheckboxInputElement } from "./form-elements/checkbox-input-element";
 import { SwitchInputElement } from "./form-elements/switch-input-element";
 import { Button } from "@/components/ui/button";
+import { PasswordInputElement } from "./form-elements/password-input-element";
 
 interface CanvasProps {
   currentForm: Form;
@@ -49,6 +50,7 @@ export const Canvas = ({
       textarea: <TextareaInputElement element={element} />,
       checkbox: <CheckboxInputElement element={element} />,
       switch: <SwitchInputElement element={element} />,
+      password: <PasswordInputElement element={element} />,
     };
 
     return (

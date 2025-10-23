@@ -3,7 +3,8 @@ export type FormElementType =
   | "email"
   | "textarea"
   | "checkbox"
-  | "switch";
+  | "switch"
+  | "password";
 
 export interface FormElement {
   id: string;

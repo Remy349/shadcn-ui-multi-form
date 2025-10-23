@@ -48,6 +48,7 @@ export const ElementsSidebar = () => {
     { type: "textarea", label: "Textarea" },
     { type: "checkbox", label: "Checkbox" },
     { type: "switch", label: "Switch" },
+    { type: "password", label: "Password" },
   ];
 
   return (
