@@ -52,7 +52,7 @@ export const EditForm = ({ currentForm, updateForm }: EditFormProps) => {
     <Dialog>
       <form id="form-edit-form" onSubmit={form.handleSubmit(onSubmit)}>
         <DialogTrigger asChild>
-          <Button variant="ghost" size="icon-sm">
+          <Button variant="secondary" size="icon-sm">
             <PencilIcon />
           </Button>
         </DialogTrigger>

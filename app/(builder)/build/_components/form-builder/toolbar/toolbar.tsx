@@ -58,7 +58,7 @@ export const Toolbar = ({
     <header className="sticky border-b w-full z-50 top-0 left-0 bg-background">
       <div className="flex items-center justify-between h-[70px] px-4">
         <div className="flex items-center space-x-4">
-          <Button variant="outline" size="icon-sm" onClick={addForm}>
+          <Button variant="secondary" size="icon-sm" onClick={addForm}>
             <PlusIcon />
           </Button>
           <Separator
@@ -81,11 +81,11 @@ export const Toolbar = ({
                 </SelectGroup>
               </SelectContent>
             </Select>
-            <div className="flex items-center spaca-x-0.5">
+            <div className="flex items-center space-x-1.5">
               <EditForm currentForm={currentForm} updateForm={updateForm} />
               {forms.length > 1 && (
                 <Button
-                  variant="ghost"
+                  variant="secondary"
                   size="icon-sm"
                   onClick={() => deleteForm(currentForm.id)}
                 >
