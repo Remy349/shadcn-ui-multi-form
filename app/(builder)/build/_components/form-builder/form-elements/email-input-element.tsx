@@ -14,7 +14,7 @@ export const EmailInputElement = ({ element }: TextInputElementProps) => {
         id={element.id}
         autoComplete="off"
         placeholder={element.placeholder}
-        disabled
+        disabled={element.disabled}
       />
       <FieldDescription>{element.description}</FieldDescription>
     </Field>

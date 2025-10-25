@@ -16,7 +16,7 @@ export const CheckboxInputElement = ({
 }: CheckboxInputElementProps) => {
   return (
     <Field orientation="horizontal">
-      <Checkbox id={element.id} disabled checked />
+      <Checkbox id={element.id} disabled={element.disabled} checked />
       <FieldContent>
         <FieldLabel htmlFor={element.id}>{element.label}</FieldLabel>
         <FieldDescription>{element.description}</FieldDescription>

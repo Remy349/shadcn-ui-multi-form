@@ -12,6 +12,7 @@ export interface FormElement {
   label: string;
   placeholder?: string;
   description?: string;
+  disabled?: boolean;
 }
 
 export interface Form {

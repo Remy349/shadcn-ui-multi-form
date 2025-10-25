@@ -18,7 +18,7 @@ export const SwitchInputElement = ({ element }: SwitchInputElementProps) => {
         <FieldLabel htmlFor={element.id}>{element.label}</FieldLabel>
         <FieldDescription>{element.description}</FieldDescription>
       </FieldContent>
-      <Switch id={element.id} disabled checked />
+      <Switch id={element.id} disabled={element.disabled} checked />
     </Field>
   );
 };

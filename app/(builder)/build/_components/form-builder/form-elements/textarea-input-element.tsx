@@ -16,7 +16,7 @@ export const TextareaInputElement = ({
         id={element.id}
         autoComplete="off"
         placeholder={element.placeholder}
-        disabled
+        disabled={element.disabled}
       />
       <FieldDescription>{element.description}</FieldDescription>
     </Field>

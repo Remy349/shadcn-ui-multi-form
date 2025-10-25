@@ -16,7 +16,7 @@ export const PasswordInputElement = ({
         id={element.id}
         placeholder={element.placeholder}
         autoComplete="off"
-        disabled
+        disabled={element.disabled}
       />
       <FieldDescription>{element.description}</FieldDescription>
     </Field>

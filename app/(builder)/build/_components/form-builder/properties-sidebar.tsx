@@ -16,6 +16,7 @@ import {
   SidebarHeader,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
+import { Switch } from "@/components/ui/switch";
 import {
   FormElement,
   FormElementType,
@@ -128,6 +129,33 @@ export const PropertiesSidebar = ({
                       }
                       autoComplete="off"
                       placeholder="Add a helpful description"
+                    />
+                  </div>
+                </div>
+              </SidebarGroupContent>
+            </SidebarGroup>
+            <SidebarSeparator className="mx-0" />
+            <SidebarGroup>
+              <SidebarGroupLabel>Validation</SidebarGroupLabel>
+              <SidebarGroupContent className="px-2">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label className="text-xs" htmlFor="disabled">
+                        Disabled Field
+                      </Label>
+                      <p className="text-muted-foreground text-xs">
+                        Prevent user interaction with this field
+                      </p>
+                    </div>
+                    <Switch
+                      id="disabled"
+                      checked={selectedElement.disabled}
+                      onCheckedChange={(checked) =>
+                        updateElement(selectedElement.id, {
+                          disabled: checked,
+                        })
+                      }
                     />
                   </div>
                 </div>

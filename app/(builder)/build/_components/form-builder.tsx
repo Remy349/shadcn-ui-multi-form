@@ -57,6 +57,7 @@ export const FormBuilder = () => {
         type,
         description: "",
         placeholder: "",
+        disabled: false,
       };
 
       addElement(newElement);
