@@ -16,6 +16,7 @@ import { useState } from "react";
 import { ComponentIcon } from "lucide-react";
 import { FormElement, FormElementType } from "@/types/form-builder";
 import { generateId } from "@/lib/utils";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export const FormBuilder = () => {
   const [activeElementType, setActiveElementType] =
@@ -80,7 +81,7 @@ export const FormBuilder = () => {
             deleteForm={deleteForm}
             clearAll={clearAll}
           />
-          <div className="py-8">
+          <ScrollArea className="py-8 h-[calc(100vh-71px)]">
             <div className="max-w-2xl mx-auto">
               <Canvas
                 currentForm={currentForm}
@@ -89,7 +90,7 @@ export const FormBuilder = () => {
                 setSelectedElement={setSelectedElement}
               />
             </div>
-          </div>
+          </ScrollArea>
         </SidebarInset>
         <PropertiesSidebar
           selectedElement={selectedElement}
