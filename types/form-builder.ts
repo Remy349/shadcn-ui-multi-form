@@ -4,7 +4,8 @@ export type FormElementType =
   | "textarea"
   | "checkbox"
   | "switch"
-  | "password";
+  | "password"
+  | "select";
 
 export interface FormElement {
   id: string;
@@ -13,6 +14,10 @@ export interface FormElement {
   placeholder?: string;
   description?: string;
   disabled?: boolean;
+  options?: {
+    selectLabel: string;
+    selectItems: { label: string; value: string }[];
+  };
 }
 
 export interface Form {

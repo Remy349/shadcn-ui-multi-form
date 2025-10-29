@@ -49,6 +49,7 @@ export const ElementsSidebar = () => {
     { type: "checkbox", label: "Checkbox" },
     { type: "switch", label: "Switch" },
     { type: "password", label: "Password" },
+    { type: "select", label: "Select" },
   ];
 
   return (

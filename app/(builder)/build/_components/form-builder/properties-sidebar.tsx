@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Empty,
   EmptyDescription,
@@ -22,7 +23,7 @@ import {
   FormElementType,
   UpdateFormElement,
 } from "@/types/form-builder";
-import { Settings2Icon } from "lucide-react";
+import { PlusIcon, Settings2Icon, Trash2Icon } from "lucide-react";
 
 interface PropertiesSidebarProps {
   selectedElement: FormElement | null;
@@ -41,6 +42,7 @@ export const PropertiesSidebar = ({
       checkbox: "Checkbox",
       switch: "Switch",
       password: "Password",
+      select: "Select",
     };
 
     return labels[type];
@@ -97,23 +99,29 @@ export const PropertiesSidebar = ({
                       placeholder="Enter field label"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label className="text-xs" htmlFor="placeholder">
-                      Placeholder (Optional)
-                    </Label>
-                    <Input
-                      id="placeholder"
-                      value={selectedElement.placeholder}
-                      className="bg-background"
-                      onChange={(e) =>
-                        updateElement(selectedElement.id, {
-                          placeholder: e.target.value,
-                        })
-                      }
-                      autoComplete="off"
-                      placeholder="Enter placeholder text"
-                    />
-                  </div>
+                  {(selectedElement.type === "text" ||
+                    selectedElement.type === "email" ||
+                    selectedElement.type === "textarea" ||
+                    selectedElement.type === "password" ||
+                    selectedElement.type === "select") && (
+                    <div className="space-y-2">
+                      <Label className="text-xs" htmlFor="placeholder">
+                        Placeholder (Optional)
+                      </Label>
+                      <Input
+                        id="placeholder"
+                        value={selectedElement.placeholder}
+                        className="bg-background"
+                        onChange={(e) =>
+                          updateElement(selectedElement.id, {
+                            placeholder: e.target.value,
+                          })
+                        }
+                        autoComplete="off"
+                        placeholder="Enter placeholder text"
+                      />
+                    </div>
+                  )}
                   <div className="space-y-2">
                     <Label className="text-xs" htmlFor="description">
                       Description (Optional)
@@ -161,6 +169,131 @@ export const PropertiesSidebar = ({
                 </div>
               </SidebarGroupContent>
             </SidebarGroup>
+            {selectedElement.type === "select" && (
+              <>
+                <SidebarSeparator className="mx-0" />
+                <SidebarGroup>
+                  <SidebarGroupLabel>Options</SidebarGroupLabel>
+                  <SidebarGroupContent className="px-2">
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label className="text-xs" htmlFor="select-label">
+                          Select Label
+                        </Label>
+                        <Input
+                          id="select-label"
+                          value={selectedElement.options?.selectLabel}
+                          className="bg-background"
+                          onChange={(e) =>
+                            updateElement(selectedElement.id, {
+                              options: {
+                                selectLabel: e.target.value,
+                                selectItems:
+                                  selectedElement.options?.selectItems || [],
+                              },
+                            })
+                          }
+                          autoComplete="off"
+                          placeholder="Enter select label"
+                        />
+                      </div>
+                      <div className="grid space-y-2">
+                        <div className="flex items-center justify-between">
+                          <Label className="text-xs">Select Items</Label>
+                          <p className="text-xs text-muted-foreground">
+                            {selectedElement.options?.selectItems.length} Items
+                          </p>
+                        </div>
+                        <div className="space-y-2">
+                          {selectedElement.options?.selectItems.map(
+                            (item, index) => (
+                              <div
+                                className="flex items-center space-x-1"
+                                key={index}
+                              >
+                                <Input
+                                  value={item.label}
+                                  className="bg-background"
+                                  autoComplete="off"
+                                  placeholder={`Option ${index + 1}`}
+                                  onChange={(e) => {
+                                    const updatedItems = [
+                                      ...(selectedElement.options
+                                        ?.selectItems || []),
+                                    ];
+
+                                    updatedItems[index] = {
+                                      label: e.target.value,
+                                      value: e.target.value
+                                        .toLowerCase()
+                                        .replace(/\s+/g, "_"),
+                                    };
+
+                                    updateElement(selectedElement.id, {
+                                      options: {
+                                        selectLabel:
+                                          selectedElement.options
+                                            ?.selectLabel || "",
+                                        selectItems: updatedItems,
+                                      },
+                                    });
+                                  }}
+                                />
+                                <Button
+                                  variant="secondary"
+                                  size="icon-sm"
+                                  onClick={() => {
+                                    const updatedItems =
+                                      selectedElement.options?.selectItems.filter(
+                                        (_, i) => i !== index,
+                                      ) || [];
+
+                                    updateElement(selectedElement.id, {
+                                      options: {
+                                        selectLabel:
+                                          selectedElement.options
+                                            ?.selectLabel || "",
+                                        selectItems: updatedItems,
+                                      },
+                                    });
+                                  }}
+                                >
+                                  <Trash2Icon />
+                                </Button>
+                              </div>
+                            ),
+                          )}
+                        </div>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            const currentItems =
+                              selectedElement.options?.selectItems || [];
+
+                            updateElement(selectedElement.id, {
+                              options: {
+                                selectLabel:
+                                  selectedElement.options?.selectLabel || "",
+                                selectItems: [
+                                  ...currentItems,
+                                  {
+                                    label: `Option ${currentItems.length + 1}`,
+                                    value: `option_${currentItems.length + 1}`,
+                                  },
+                                ],
+                              },
+                            });
+                          }}
+                        >
+                          <PlusIcon />
+                        </Button>
+                      </div>
+                    </div>
+                  </SidebarGroupContent>
+                </SidebarGroup>
+              </>
+            )}
             <SidebarSeparator className="mx-0" />
             <SidebarGroup>
               <SidebarGroupLabel>Advanced</SidebarGroupLabel>

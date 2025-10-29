@@ -59,6 +59,13 @@ export const FormBuilder = () => {
         description: "",
         placeholder: "",
         disabled: false,
+        options: {
+          selectLabel: "Select an option",
+          selectItems: [
+            { label: "Option 1", value: "option_1" },
+            { label: "Option 2", value: "option_2" },
+          ],
+        },
       };
 
       addElement(newElement);
