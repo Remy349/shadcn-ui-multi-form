@@ -26,7 +26,14 @@ interface Actions {
 }
 
 export const useFormBuilderStore = create<State & Actions>((set, get) => ({
-  forms: [{ id: generateId(), title: "Step 1", description: "", elements: [] }],
+  forms: [
+    {
+      id: generateId(),
+      title: "Step 1",
+      description: "",
+      elements: [],
+    },
+  ],
   currentFormIndex: 0,
   selectedElement: null,
   setSelectedElement: (element) => {
