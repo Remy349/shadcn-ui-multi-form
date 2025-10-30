@@ -59,6 +59,9 @@ export const FormBuilder = () => {
         description: "",
         placeholder: "",
         disabled: false,
+        required: false,
+        minLength: 0,
+        maxLength: 255,
         options: {
           selectLabel: "Select an option",
           selectItems: [

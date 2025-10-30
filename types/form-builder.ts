@@ -14,6 +14,9 @@ export interface FormElement {
   placeholder?: string;
   description?: string;
   disabled?: boolean;
+  required?: boolean;
+  minLength?: number;
+  maxLength?: number;
   options?: {
     selectLabel: string;
     selectItems: { label: string; value: string }[];

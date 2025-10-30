@@ -99,29 +99,26 @@ export const PropertiesSidebar = ({
                       placeholder="Enter field label"
                     />
                   </div>
-                  {(selectedElement.type === "text" ||
-                    selectedElement.type === "email" ||
-                    selectedElement.type === "textarea" ||
-                    selectedElement.type === "password" ||
-                    selectedElement.type === "select") && (
-                    <div className="space-y-2">
-                      <Label className="text-xs" htmlFor="placeholder">
-                        Placeholder (Optional)
-                      </Label>
-                      <Input
-                        id="placeholder"
-                        value={selectedElement.placeholder}
-                        className="bg-background"
-                        onChange={(e) =>
-                          updateElement(selectedElement.id, {
-                            placeholder: e.target.value,
-                          })
-                        }
-                        autoComplete="off"
-                        placeholder="Enter placeholder text"
-                      />
-                    </div>
-                  )}
+                  {selectedElement.type !== "switch" &&
+                    selectedElement.type !== "checkbox" && (
+                      <div className="space-y-2">
+                        <Label className="text-xs" htmlFor="placeholder">
+                          Placeholder (Optional)
+                        </Label>
+                        <Input
+                          id="placeholder"
+                          value={selectedElement.placeholder}
+                          className="bg-background"
+                          onChange={(e) =>
+                            updateElement(selectedElement.id, {
+                              placeholder: e.target.value,
+                            })
+                          }
+                          autoComplete="off"
+                          placeholder="Enter placeholder text"
+                        />
+                      </div>
+                    )}
                   <div className="space-y-2">
                     <Label className="text-xs" htmlFor="description">
                       Description (Optional)
@@ -147,6 +144,69 @@ export const PropertiesSidebar = ({
               <SidebarGroupLabel>Validation</SidebarGroupLabel>
               <SidebarGroupContent className="px-2">
                 <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label className="text-xs" htmlFor="required">
+                        Required Field
+                      </Label>
+                      <p className="text-muted-foreground text-xs">
+                        User must fill this field
+                      </p>
+                    </div>
+                    <Switch
+                      id="required"
+                      checked={selectedElement.required}
+                      onCheckedChange={(checked) =>
+                        updateElement(selectedElement.id, {
+                          required: checked,
+                        })
+                      }
+                    />
+                  </div>
+                  {selectedElement.type !== "select" &&
+                    selectedElement.type !== "checkbox" &&
+                    selectedElement.type !== "switch" && (
+                      <>
+                        <div className="space-y-2">
+                          <Label className="text-xs" htmlFor="min-length">
+                            Minimum Length
+                          </Label>
+                          <Input
+                            id="min-length"
+                            type="number"
+                            min={0}
+                            value={selectedElement.minLength}
+                            className="bg-background"
+                            onChange={(e) =>
+                              updateElement(selectedElement.id, {
+                                minLength: Number(e.target.value),
+                              })
+                            }
+                            autoComplete="off"
+                            placeholder="Enter minimum length"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-xs" htmlFor="max-length">
+                            Maximum Length
+                          </Label>
+                          <Input
+                            id="max-length"
+                            type="number"
+                            min={0}
+                            value={selectedElement.maxLength}
+                            className="bg-background"
+                            onChange={(e) =>
+                              updateElement(selectedElement.id, {
+                                maxLength: Number(e.target.value),
+                              })
+                            }
+                            autoComplete="off"
+                            placeholder="Enter maximum length"
+                          />
+                        </div>
+                      </>
+                    )}
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
                       <Label className="text-xs" htmlFor="disabled">
