@@ -7,11 +7,11 @@ import {
 import { FormElement } from "@/types/form-builder";
 import { MailIcon } from "lucide-react";
 
-interface TextInputElementProps {
+interface EmailInputElementProps {
   element: FormElement;
 }
 
-export const EmailInputElement = ({ element }: TextInputElementProps) => {
+export const EmailInputElement = ({ element }: EmailInputElementProps) => {
   return (
     <Field>
       <FieldLabel htmlFor={element.id}>{element.label}</FieldLabel>
