@@ -19,6 +19,7 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { Switch } from "@/components/ui/switch";
+import { toCamelCase } from "@/lib/utils";
 import {
   FormElement,
   FormElementType,
@@ -73,7 +74,7 @@ export const PropertiesSidebar = ({
                 <SidebarGroupLabel>Element Type</SidebarGroupLabel>
                 <SidebarGroupContent className="px-2">
                   <Input
-                    className="text-sm bg-background"
+                    className="bg-background"
                     value={elementTypeLabel(selectedElement.type)}
                     disabled
                   />
@@ -95,6 +96,7 @@ export const PropertiesSidebar = ({
                         onChange={(e) =>
                           updateElement(selectedElement.id, {
                             label: e.target.value,
+                            name: toCamelCase(e.target.value),
                           })
                         }
                         autoComplete="off"
@@ -286,9 +288,7 @@ export const PropertiesSidebar = ({
 
                                       updatedItems[index] = {
                                         label: e.target.value,
-                                        value: e.target.value
-                                          .toLowerCase()
-                                          .replace(/\s+/g, "_"),
+                                        value: toCamelCase(e.target.value),
                                       };
 
                                       updateElement(selectedElement.id, {
@@ -341,7 +341,7 @@ export const PropertiesSidebar = ({
                                     ...currentItems,
                                     {
                                       label: `Option ${currentItems.length + 1}`,
-                                      value: `option_${currentItems.length + 1}`,
+                                      value: `option${currentItems.length + 1}`,
                                     },
                                   ],
                                 },
@@ -360,16 +360,31 @@ export const PropertiesSidebar = ({
               <SidebarGroup>
                 <SidebarGroupLabel>Advanced</SidebarGroupLabel>
                 <SidebarGroupContent className="px-2">
-                  <div className="space-y-2">
-                    <Label className="text-xs">Field ID</Label>
-                    <Input
-                      value={selectedElement.id}
-                      className="bg-background text-sm"
-                      disabled
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Unique identifier for this field
-                    </p>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label id="field-name" className="text-xs">
+                        Name
+                      </Label>
+                      <Input
+                        value={selectedElement.name}
+                        className="bg-background"
+                        disabled
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Used as the variable name in the generated schema
+                      </p>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-xs">Field ID</Label>
+                      <Input
+                        value={selectedElement.id}
+                        className="bg-background"
+                        disabled
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Unique identifier for this field
+                      </p>
+                    </div>
                   </div>
                 </SidebarGroupContent>
               </SidebarGroup>
