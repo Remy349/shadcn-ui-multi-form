@@ -11,6 +11,7 @@ export interface FormElement {
   id: string;
   type: FormElementType;
   label: string;
+  name: string;
   placeholder?: string;
   description?: string;
   disabled?: boolean;
