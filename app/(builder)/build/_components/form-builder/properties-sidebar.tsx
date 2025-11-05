@@ -375,17 +375,19 @@ export const PropertiesSidebar = ({
               </SidebarGroup>
             </>
           ) : (
-            <Empty>
-              <EmptyHeader>
-                <EmptyMedia variant="icon">
-                  <Settings2Icon />
-                </EmptyMedia>
-                <EmptyTitle>No element selected</EmptyTitle>
-                <EmptyDescription>
-                  Select an element from the canvas to edit its properties
-                </EmptyDescription>
-              </EmptyHeader>
-            </Empty>
+            <div className="min-h-[calc(100vh-71px)] flex items-center justify-center">
+              <Empty>
+                <EmptyHeader>
+                  <EmptyMedia variant="icon">
+                    <Settings2Icon />
+                  </EmptyMedia>
+                  <EmptyTitle>No element selected</EmptyTitle>
+                  <EmptyDescription>
+                    Select an element from the canvas to edit its properties
+                  </EmptyDescription>
+                </EmptyHeader>
+              </Empty>
+            </div>
           )}
         </SidebarContent>
       </ScrollArea>
