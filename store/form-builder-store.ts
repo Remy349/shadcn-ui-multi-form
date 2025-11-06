@@ -11,6 +11,7 @@ interface State {
   forms: Form[];
   currentFormIndex: number;
   selectedElement: FormElement | null;
+  isPreviewMode: boolean;
 }
 
 interface Actions {
@@ -23,6 +24,7 @@ interface Actions {
   updateForm: (updatedForm: UpdateForm) => void;
   deleteForm: (formId: string) => void;
   clearAll: () => void;
+  togglePreviewMode: () => void;
 }
 
 export const useFormBuilderStore = create<State & Actions>((set, get) => ({
@@ -36,6 +38,7 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
   ],
   currentFormIndex: 0,
   selectedElement: null,
+  isPreviewMode: false,
   setSelectedElement: (element) => {
     set({ selectedElement: element });
   },
@@ -143,5 +146,10 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
       currentFormIndex: 0,
       selectedElement: null,
     });
+  },
+  togglePreviewMode: () => {
+    const { isPreviewMode } = get();
+
+    set({ isPreviewMode: !isPreviewMode });
   },
 }));

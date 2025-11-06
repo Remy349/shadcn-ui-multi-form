@@ -15,8 +15,9 @@ import {
 import { useState } from "react";
 import { ComponentIcon } from "lucide-react";
 import { FormElement, FormElementType } from "@/types/form-builder";
-import { generateId } from "@/lib/utils";
+import { cn, generateId, toCamelCase } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Preview } from "./form-builder/preview";
 
 export const FormBuilder = () => {
   const [activeElementType, setActiveElementType] =
@@ -34,6 +35,8 @@ export const FormBuilder = () => {
     clearAll,
     setSelectedElement,
     selectedElement,
+    isPreviewMode,
+    togglePreviewMode,
   } = useFormBuilderStore();
 
   const currentForm = forms[currentFormIndex];
@@ -55,6 +58,7 @@ export const FormBuilder = () => {
       const newElement: FormElement = {
         id: `${type}-${generateId()}`,
         label: `${type.charAt(0).toUpperCase() + type.slice(1)} Field`,
+        name: toCamelCase(`${type} field ${generateId()}`),
         type,
         description: "",
         placeholder: "",
@@ -65,8 +69,8 @@ export const FormBuilder = () => {
         options: {
           selectLabel: "Select an option",
           selectItems: [
-            { label: "Option 1", value: "option_1" },
-            { label: "Option 2", value: "option_2" },
+            { label: "Option 1", value: "option1" },
+            { label: "Option 2", value: "option2" },
           ],
         },
       };
@@ -80,7 +84,7 @@ export const FormBuilder = () => {
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <SidebarProvider>
-        <ElementsSidebar />
+        {!isPreviewMode && <ElementsSidebar />}
         <SidebarInset>
           <Toolbar
             currentForm={currentForm}
@@ -90,22 +94,37 @@ export const FormBuilder = () => {
             updateForm={updateForm}
             deleteForm={deleteForm}
             clearAll={clearAll}
+            isPreviewMode={isPreviewMode}
+            togglePreviewMode={togglePreviewMode}
           />
-          <ScrollArea className="py-8 h-[calc(100vh-71px)]">
-            <div className="max-w-2xl mx-auto">
-              <Canvas
-                currentForm={currentForm}
-                deleteElement={deleteElement}
-                selectedElement={selectedElement}
-                setSelectedElement={setSelectedElement}
-              />
+          <ScrollArea
+            className={cn(
+              "py-8 h-[calc(100vh-71px)]",
+              isPreviewMode && "bg-muted/50",
+            )}
+          >
+            <div
+              className={cn("max-w-2xl mx-auto", isPreviewMode && "max-w-lg")}
+            >
+              {!isPreviewMode ? (
+                <Canvas
+                  currentForm={currentForm}
+                  deleteElement={deleteElement}
+                  selectedElement={selectedElement}
+                  setSelectedElement={setSelectedElement}
+                />
+              ) : (
+                <Preview forms={forms} />
+              )}
             </div>
           </ScrollArea>
         </SidebarInset>
-        <PropertiesSidebar
-          selectedElement={selectedElement}
-          updateElement={updateElement}
-        />
+        {!isPreviewMode && (
+          <PropertiesSidebar
+            selectedElement={selectedElement}
+            updateElement={updateElement}
+          />
+        )}
       </SidebarProvider>
       <DragOverlay>
         {activeElementType && (
