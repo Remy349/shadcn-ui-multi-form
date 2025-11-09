@@ -8,8 +8,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Field, FieldGroup } from "@/components/ui/field";
-import { Spinner } from "@/components/ui/spinner";
+import { Progress } from "@/components/ui/progress";
 import { Form, FormElement, FormElementType } from "@/types/form-builder";
+import { useEffect, useState } from "react";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
+import { ChevronLeft, ChevronRight, GripIcon } from "lucide-react";
 import {
   Controller,
   ControllerFieldState,
@@ -18,42 +27,81 @@ import {
   useForm,
 } from "react-hook-form";
 import { toast } from "sonner";
-import { TextInputElement } from "./form-elements/text-input-element";
-import { EmailInputElement } from "./form-elements/email-input-element";
 import { generateZodSchema } from "@/lib/schema-generator";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { TextInputElement } from "./form-elements/text-input-element";
+import { EmailInputElement } from "./form-elements/email-input-element";
 import { PasswordInputElement } from "./form-elements/password-input-element";
 import { TextareaInputElement } from "./form-elements/textarea-input-element";
 import { SwitchInputElement } from "./form-elements/switch-input-element";
 import { CheckboxInputElement } from "./form-elements/checkbox-input-element";
 import { SelectInputElement } from "./form-elements/select-input-element";
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@/components/ui/empty";
-import { GripIcon } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 
-interface SingleFormPreviewProps {
-  currentForm: Form;
+interface MultiFormPreviewProps {
+  forms: Form[];
 }
 
-export const SingleFormPreview = ({ currentForm }: SingleFormPreviewProps) => {
-  const { schema, defaultValues } = generateZodSchema(currentForm.elements);
+export const MultiFormPreview = ({ forms }: MultiFormPreviewProps) => {
+  const schemas = forms.map((form) => {
+    const { schema, defaultValues } = generateZodSchema(form.elements);
 
-  const form = useForm({
-    resolver: zodResolver(schema),
-    defaultValues,
+    return { schema, defaultValues };
   });
 
+  const [currentStep, setCurrentStep] = useState(0);
+  const [formData, setFormData] = useState<Record<string, any>>({});
+
+  const currentForm = forms[currentStep];
+  const currentSchema = schemas[currentStep];
+
+  const isLastStep = currentStep === forms.length - 1;
+  const progress = ((currentStep + 1) / forms.length) * 100;
+
+  const form = useForm({
+    resolver: zodResolver(currentSchema.schema),
+    defaultValues: { ...currentSchema.defaultValues, ...formData },
+    mode: "onChange",
+  });
+
+  useEffect(() => {
+    const stepDefaults = { ...currentSchema.defaultValues, ...formData };
+
+    form.reset(stepDefaults);
+  }, [currentStep]);
+
+  const handleNextButton = async () => {
+    const isValid = await form.trigger();
+
+    if (isValid) {
+      const currentValues = form.getValues();
+
+      setFormData((prev) => ({ ...prev, ...currentValues }));
+
+      if (!isLastStep) {
+        setCurrentStep((prev) => prev + 1);
+      }
+    }
+  };
+
+  const handleBackButton = () => {
+    const currentValues = form.getValues();
+
+    setFormData((prev) => ({ ...prev, ...currentValues }));
+
+    if (currentStep > 0) {
+      setCurrentStep((prev) => prev - 1);
+    }
+  };
+
   const onSubmit = async (values: any) => {
+    const finalData = { ...formData, ...values };
+
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
     toast.success("Form successfully submitted");
 
-    console.log(values);
+    console.log(finalData);
   };
 
   const renderFormElement = (
@@ -118,9 +166,17 @@ export const SingleFormPreview = ({ currentForm }: SingleFormPreviewProps) => {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>{currentForm.title}</CardTitle>
-        <CardDescription>{currentForm.description}</CardDescription>
+      <CardHeader className="space-y-4">
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <CardTitle>{currentForm.title}</CardTitle>
+            <p className="text-muted-foreground text-xs">
+              Step {currentStep + 1} of {forms.length}
+            </p>
+          </div>
+          <CardDescription>{currentForm.description}</CardDescription>
+        </div>
+        <Progress value={progress} />
       </CardHeader>
       <CardContent>
         {currentForm.elements.length === 0 ? (
@@ -154,14 +210,31 @@ export const SingleFormPreview = ({ currentForm }: SingleFormPreviewProps) => {
         )}
       </CardContent>
       <CardFooter>
-        <Field>
-          <Button
-            type="submit"
-            form="form-preview"
-            disabled={form.formState.isSubmitting}
-          >
-            {form.formState.isSubmitting ? <Spinner /> : "Submit"}
-          </Button>
+        <Field className="justify-between" orientation="horizontal">
+          {currentStep > 0 && (
+            <Button type="button" variant="ghost" onClick={handleBackButton}>
+              <ChevronLeft /> Back
+            </Button>
+          )}
+          {!isLastStep && (
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={handleNextButton}
+            >
+              Next
+              <ChevronRight />
+            </Button>
+          )}
+          {isLastStep && (
+            <Button
+              type="submit"
+              form="form-preview"
+              disabled={form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting ? <Spinner /> : "Submit"}
+            </Button>
+          )}
         </Field>
       </CardFooter>
     </Card>
