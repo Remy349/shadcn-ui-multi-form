@@ -10,7 +10,6 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field";
 import { Progress } from "@/components/ui/progress";
 import { Form, FormElement, FormElementType } from "@/types/form-builder";
-import { useEffect, useState } from "react";
 import {
   Empty,
   EmptyDescription,
@@ -24,11 +23,8 @@ import {
   ControllerFieldState,
   ControllerRenderProps,
   FieldValues,
-  useForm,
 } from "react-hook-form";
 import { toast } from "sonner";
-import { generateZodSchema } from "@/lib/schema-generator";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { TextInputElement } from "./form-elements/text-input-element";
 import { EmailInputElement } from "./form-elements/email-input-element";
 import { PasswordInputElement } from "./form-elements/password-input-element";
@@ -37,71 +33,29 @@ import { SwitchInputElement } from "./form-elements/switch-input-element";
 import { CheckboxInputElement } from "./form-elements/checkbox-input-element";
 import { SelectInputElement } from "./form-elements/select-input-element";
 import { Spinner } from "@/components/ui/spinner";
+import { useMultiStepForm } from "@/hooks/use-multi-step-form";
 
 interface MultiFormPreviewProps {
   forms: Form[];
 }
 
 export const MultiFormPreview = ({ forms }: MultiFormPreviewProps) => {
-  const schemas = forms.map((form) => {
-    const { schema, defaultValues } = generateZodSchema(form.elements);
-
-    return { schema, defaultValues };
-  });
-
-  const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState<Record<string, any>>({});
-
-  const currentForm = forms[currentStep];
-  const currentSchema = schemas[currentStep];
-
-  const isLastStep = currentStep === forms.length - 1;
-  const progress = ((currentStep + 1) / forms.length) * 100;
-
-  const form = useForm({
-    resolver: zodResolver(currentSchema.schema),
-    defaultValues: { ...currentSchema.defaultValues, ...formData },
-    mode: "onChange",
-  });
-
-  useEffect(() => {
-    const stepDefaults = { ...currentSchema.defaultValues, ...formData };
-
-    form.reset(stepDefaults);
-  }, [currentStep]);
-
-  const handleNextButton = async () => {
-    const isValid = await form.trigger();
-
-    if (isValid) {
-      const currentValues = form.getValues();
-
-      setFormData((prev) => ({ ...prev, ...currentValues }));
-
-      if (!isLastStep) {
-        setCurrentStep((prev) => prev + 1);
-      }
-    }
-  };
-
-  const handleBackButton = () => {
-    const currentValues = form.getValues();
-
-    setFormData((prev) => ({ ...prev, ...currentValues }));
-
-    if (currentStep > 0) {
-      setCurrentStep((prev) => prev - 1);
-    }
-  };
+  const {
+    isLastStep,
+    handleBackButton,
+    handleNextButton,
+    progress,
+    form,
+    currentStep,
+    currentForm,
+  } = useMultiStepForm(forms);
 
   const onSubmit = async (values: any) => {
-    const finalData = { ...formData, ...values };
-
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
     toast.success("Form successfully submitted");
 
-    console.log(finalData);
+    console.log(values);
   };
 
   const renderFormElement = (
