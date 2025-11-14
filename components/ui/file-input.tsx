@@ -16,8 +16,6 @@ export interface FileInputProps {
   value?: File[];
   onChange?: (files: File[]) => void;
   onError?: (error: string) => void;
-  placeholder?: string;
-  description?: string;
   showPreview?: boolean;
   previewSize?: "sm" | "md" | "lg";
   variant?: "default" | "compact" | "minimal";
@@ -101,8 +99,6 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
       value = [],
       onChange,
       onError,
-      placeholder = "Drag and drop your files here",
-      description = "or click to browse",
       showPreview = true,
       previewSize = "md",
       variant = "default",
@@ -214,9 +210,9 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
                 isDragActive && "text-primary",
               )}
             >
-              {placeholder}
+              Drag and drop your files here
             </p>
-            <p className="text-xs text-muted-foreground">{description}</p>
+            <p className="text-xs text-muted-foreground">or click to browse</p>
 
             <div className="flex items-center space-x-2">
               {maxSize && (
