@@ -7,6 +7,7 @@ import { AlertCircleIcon, UploadIcon, XIcon, FileIcon } from "lucide-react";
 export interface FileInputProps {
   id?: string;
   className?: string;
+  name?: string;
   disabled?: boolean;
   accept?: string;
   multiple?: boolean;
@@ -33,11 +34,65 @@ const formatFileSize = (bytes: number): string => {
   return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i];
 };
 
+const validateFileType = (file: File, accept?: string): boolean => {
+  if (!accept) return true;
+
+  const accepted = accept.split(",").map((t) => t.trim());
+
+  return accepted.some((type) => {
+    if (type.endsWith("/*")) {
+      return file.type.startsWith(type.replace("/*", ""));
+    }
+    return file.type === type || file.name.endsWith(type);
+  });
+};
+
+const validateFiles = ({
+  files,
+  newFiles,
+  accept,
+  maxFiles,
+  maxSize,
+}: {
+  files: File[];
+  newFiles: File[];
+  accept?: string;
+  maxFiles?: number;
+  maxSize?: number;
+}) => {
+  const valid: File[] = [];
+  const errors: string[] = [];
+
+  for (const file of newFiles) {
+    if (maxSize && file.size > maxSize) {
+      errors.push(
+        `${file.name} exceeds ${formatFileSize(maxSize)} maximum size`,
+      );
+      continue;
+    }
+
+    if (!validateFileType(file, accept)) {
+      errors.push(`${file.name} is not an accepted file type (${accept})`);
+      continue;
+    }
+
+    valid.push(file);
+  }
+
+  if (maxFiles && files.length + valid.length > maxFiles) {
+    errors.push(`Maximum ${maxFiles} files allowed`);
+    return { valid: [], errors };
+  }
+
+  return { valid, errors };
+};
+
 export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
   (
     {
       id,
       className,
+      name,
       disabled = false,
       accept,
       multiple = true,
@@ -56,319 +111,204 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
     },
     ref,
   ) => {
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
-    const [isDragActive, setIsDragActive] = useState(false);
     const [files, setFiles] = useState<File[]>(value);
+    const [isDragActive, setDragActive] = useState(false);
     const [errors, setErrors] = useState<string[]>([]);
 
-    const validateFiles = useCallback(
-      (filesToValidate: File[]): { valid: File[]; errors: string[] } => {
-        const validFiles: File[] = [];
-        const newErrors: string[] = [];
-
-        filesToValidate.forEach((file) => {
-          if (maxSize && file.size > maxSize) {
-            newErrors.push(
-              `${file.name} exceeds maximum size of ${formatFileSize(maxSize)}`,
-            );
-
-            return;
-          }
-
-          if (accept) {
-            const acceptedTypes = accept.split(",").map((type) => type.trim());
-            const isAccepted = acceptedTypes.some((type) => {
-              if (type.endsWith("/*")) {
-                return file.type.startsWith(type.replace("/*", ""));
-              }
-
-              return file.type === type || file.name.endsWith(type);
-            });
-
-            if (!isAccepted) {
-              newErrors.push(
-                `${file.name} is not an accepted file type. Accepted: ${accept}`,
-              );
-
-              return;
-            }
-          }
-
-          validFiles.push(file);
-        });
-
-        const totalFiles = files.length + validFiles.length;
-
-        if (maxFiles && totalFiles > maxFiles) {
-          newErrors.push(
-            `Maximum ${maxFiles} files allowed. You have ${files.length} and trying to add ${validFiles.length}.`,
-          );
-
-          return { valid: [], errors: newErrors };
-        }
-
-        return { valid: validFiles, errors: newErrors };
-      },
-      [files.length, maxSize, accept, maxFiles],
-    );
+    const triggerInput = () => !disabled && inputRef.current?.click();
 
     const handleFiles = useCallback(
-      (filesToProcess: File[]) => {
-        const { valid, errors } = validateFiles(filesToProcess);
+      (incoming: File[]) => {
+        const { valid, errors } = validateFiles({
+          files,
+          newFiles: incoming,
+          accept,
+          maxSize,
+          maxFiles,
+        });
 
-        if (errors.length > 0) {
-          setErrors(errors);
-          onError?.(errors.join("; "));
-        } else {
-          setErrors([]);
-        }
+        setErrors(errors);
+        if (errors.length) onError?.(errors.join("; "));
 
-        if (valid.length > 0) {
-          const newFiles = multiple ? [...files, ...valid] : valid;
-
-          setFiles(newFiles);
-          onChange?.(newFiles);
+        if (valid.length) {
+          const updated = multiple ? [...files, ...valid] : valid;
+          setFiles(updated);
+          onChange?.(updated);
         }
       },
-      [validateFiles, multiple, files, onChange, onError],
+      [files, accept, maxFiles, maxSize, multiple, onChange, onError],
     );
 
-    const handleDrag = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    const handleDrop = (e: React.DragEvent) => {
       e.preventDefault();
-      e.stopPropagation();
-    }, []);
-
-    const handleDragIn = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
-        setIsDragActive(true);
-      }
-    }, []);
-
-    const handleDragOut = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      setIsDragActive(false);
-    }, []);
-
-    const handleDrop = useCallback(
-      (e: React.DragEvent<HTMLDivElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        setIsDragActive(false);
-
-        if (disabled) return;
-
-        const droppedFiles = Array.from(e.dataTransfer.files);
-
-        handleFiles(droppedFiles);
-      },
-      [disabled, handleFiles],
-    );
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const selectedFiles = e.currentTarget.files
-        ? Array.from(e.currentTarget.files)
-        : [];
-
-      handleFiles(selectedFiles);
-
-      e.currentTarget.value = "";
+      setDragActive(false);
+      if (!disabled) handleFiles(Array.from(e.dataTransfer.files));
     };
 
-    const removeFile = (indexToRemove: number) => {
-      const newFiles = files.filter((_, index) => index !== indexToRemove);
-
-      setFiles(newFiles);
-      onChange?.(newFiles);
+    const removeFile = (index: number) => {
+      const updated = files.filter((_, i) => i !== index);
+      setFiles(updated);
+      onChange?.(updated);
     };
 
-    const triggerFileInput = () => {
-      fileInputRef.current?.click();
-    };
+    const previewSizeClass = {
+      sm: "w-12 h-12",
+      md: "w-16 h-16",
+      lg: "w-20 h-20",
+    }[previewSize];
 
-    const getPreviewImageSize = () => {
-      const sizes = {
-        sm: "w-12 h-12",
-        md: "w-16 h-16",
-        lg: "w-20 h-20",
-      };
-      return sizes[previewSize];
-    };
-
-    const variantStyles = {
-      default: "border-2 border-dashed border-border",
-      compact: "border border-border rounded-lg",
-      minimal: "border-0 bg-secondary/50",
-    };
-
-    const variantPadding = {
-      default: "p-8",
-      compact: "p-4",
-      minimal: "p-4",
-    };
+    const containerStyles = {
+      default: "border-2 border-dashed border-border p-8",
+      compact: "border border-border rounded-lg p-4",
+      minimal: "border-0 bg-secondary/50 p-4",
+    }[variant];
 
     return (
       <div className={cn("w-full", className)}>
         <div
           ref={ref}
-          onDrag={handleDrag}
-          onDragIn={handleDragIn}
-          onDragOut={handleDragOut}
+          onDragOver={(e) => e.preventDefault()}
+          onDragEnter={() => setDragActive(true)}
+          onDragLeave={() => setDragActive(false)}
           onDrop={handleDrop}
-          onClick={!disabled ? triggerFileInput : undefined}
+          onClick={triggerInput}
           className={cn(
-            "relative rounded-lg transition-all duration-200 cursor-pointer",
-            variantStyles[variant],
-            variantPadding[variant],
+            "relative rounded-lg transition-all cursor-pointer",
+            containerStyles,
+            disabled && "opacity-50 cursor-not-allowed",
             isDragActive &&
               (dragActiveClassName ||
-                "border-primary bg-primary/5 scale-[1.02]"),
-            disabled && "cursor-not-allowed opacity-50",
-            !isDragActive &&
-              !disabled &&
+                "scale-[1.02] border-primary bg-primary/5"),
+            !disabled &&
+              !isDragActive &&
               "hover:border-primary/50 hover:bg-secondary/30",
           )}
         >
           <input
-            ref={fileInputRef}
+            ref={inputRef}
             id={id}
+            name={name}
             type="file"
             multiple={multiple}
             accept={accept}
             disabled={disabled}
-            onChange={handleChange}
+            onChange={(e) => {
+              handleFiles(Array.from(e.target.files || []));
+              e.target.value = "";
+            }}
             className="hidden"
             {...props}
           />
-
-          <div className="flex flex-col items-center justify-center gap-2 pointer-events-none">
+          <div className="flex flex-col items-center gap-2 pointer-events-none">
             <UploadIcon
               className={cn(
-                "transition-colors duration-200",
-                isDragActive
-                  ? "text-primary w-8 h-8"
-                  : "text-muted-foreground w-6 h-6",
+                "w-6 h-6 text-muted-foreground transition",
+                isDragActive && "text-primary w-8 h-8",
               )}
             />
-            <div className="text-center">
-              <p
-                className={cn(
-                  "font-semibold text-sm text-foreground",
-                  isDragActive && "text-primary",
-                )}
-              >
-                {placeholder}
-              </p>
-              <p className="text-xs text-muted-foreground">{description}</p>
+            <p
+              className={cn(
+                "font-semibold text-sm",
+                isDragActive && "text-primary",
+              )}
+            >
+              {placeholder}
+            </p>
+            <p className="text-xs text-muted-foreground">{description}</p>
+
+            <div className="flex items-center space-x-2">
+              {maxSize && (
+                <p className="text-xs text-muted-foreground">
+                  Max size: {formatFileSize(maxSize)}
+                </p>
+              )}
+              {maxFiles && (
+                <p className="text-xs text-muted-foreground">
+                  Max files: {maxFiles}
+                </p>
+              )}
             </div>
-            {maxSize && (
-              <p className="text-xs text-muted-foreground mt-2">
-                Max file size: {formatFileSize(maxSize)}
-              </p>
-            )}
-            {maxFiles && (
-              <p className="text-xs text-muted-foreground">
-                Max files: {maxFiles}
-              </p>
-            )}
           </div>
         </div>
-
         {errors.length > 0 && (
           <div className="mt-4 space-y-2">
-            {errors.map((error, index) => (
+            {errors.map((err, i) => (
               <div
-                key={index}
+                key={i}
                 className="flex items-start gap-2 p-3 bg-destructive/10 border border-destructive/20 rounded-lg"
               >
-                <AlertCircleIcon className="w-4 h-4 text-destructive mt-0.5 flex-shrink-0" />
-                <p className="text-sm text-destructive">{error}</p>
+                <AlertCircleIcon className="w-4 h-4 text-destructive mt-0.5" />
+                <p className="text-sm text-destructive">{err}</p>
               </div>
             ))}
           </div>
         )}
-
         {showPreview && files.length > 0 && (
           <div className="mt-6">
-            <h3 className="text-sm font-semibold mb-3 text-foreground">
-              {files.length} file{files.length !== 1 ? "s" : ""} selected
+            <h3 className="text-sm font-semibold mb-3">
+              {files.length} file{files.length > 1 ? "s" : ""} selected
             </h3>
+
             <div
               className={cn(
                 "space-y-2",
                 previewSize === "lg" &&
-                  "grid grid-cols-2 gap-4 space-y-0 md:grid-cols-3 lg:grid-cols-4",
+                  "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 space-y-0",
               )}
             >
-              {files.map((file, index) => (
-                <div
-                  key={`${file.name}-${index}`}
-                  className={cn(
-                    "flex items-center justify-between p-3 bg-secondary/50 border border-border rounded-lg",
-                    previewSize === "lg" &&
-                      "flex-col items-start justify-start",
-                  )}
-                >
-                  {previewSize !== "lg" && file.type.startsWith("image/") ? (
-                    <img
-                      src={URL.createObjectURL(file) || "/placeholder.svg"}
-                      alt={file.name}
-                      className={cn(
-                        "rounded object-cover",
-                        getPreviewImageSize(),
-                      )}
-                    />
-                  ) : (
-                    <div
-                      className={cn(
-                        "bg-primary/10 rounded flex items-center justify-center",
-                        getPreviewImageSize(),
-                      )}
-                    >
-                      <FileIcon className="w-6 h-6 text-primary" />
-                    </div>
-                  )}
+              {files.map((file, index) => {
+                const isImage = file.type.startsWith("image/");
 
+                return (
                   <div
+                    key={index}
                     className={cn(
-                      "flex-1 min-w-0",
-                      previewSize !== "lg" && "ml-3",
+                      "flex items-center space-x-4 justify-between p-3 bg-secondary/50 border border-border rounded-lg",
+                      previewSize === "lg" && "flex-col items-start gap-2",
                     )}
                   >
-                    <p className="text-sm font-medium text-foreground truncate">
-                      {file.name}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {formatFileSize(file.size)}
-                    </p>
+                    {isImage ? (
+                      <img
+                        src={URL.createObjectURL(file)}
+                        alt={file.name}
+                        className={cn("rounded object-cover", previewSizeClass)}
+                      />
+                    ) : (
+                      <div
+                        className={cn(
+                          "rounded bg-primary/10 flex items-center justify-center",
+                          previewSizeClass,
+                        )}
+                      >
+                        <FileIcon className="w-6 h-6 text-primary" />
+                      </div>
+                    )}
+
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">
+                        {file.name}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {formatFileSize(file.size)}
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeFile(index);
+                      }}
+                      disabled={disabled}
+                      className="ml-2 p-1 hover:bg-destructive/10 rounded transition disabled:opacity-50"
+                    >
+                      <XIcon className="w-4 h-4 text-destructive" />
+                    </button>
                   </div>
-
-                  {previewSize === "lg" && (
-                    <p className="text-xs text-muted-foreground mt-2 w-full">
-                      {formatFileSize(file.size)}
-                    </p>
-                  )}
-
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      removeFile(index);
-                    }}
-                    disabled={disabled}
-                    className="ml-2 p-1 hover:bg-destructive/10 rounded transition-colors disabled:opacity-50"
-                    aria-label={`Remove ${file.name}`}
-                  >
-                    <XIcon className="w-4 h-4 text-destructive" />
-                  </button>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
