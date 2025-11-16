@@ -24,6 +24,7 @@ import { SwitchInputElement } from "./form-elements/switch-input-element";
 import { Button } from "@/components/ui/button";
 import { PasswordInputElement } from "./form-elements/password-input-element";
 import { SelectInputElement } from "./form-elements/select-input-element";
+import { FileInputElement } from "./form-elements/file-input-element";
 
 interface CanvasProps {
   currentForm: Form;
@@ -53,6 +54,7 @@ export const Canvas = ({
       switch: <SwitchInputElement element={element} />,
       password: <PasswordInputElement element={element} />,
       select: <SelectInputElement element={element} />,
+      file: <FileInputElement element={element} />,
     };
 
     return (

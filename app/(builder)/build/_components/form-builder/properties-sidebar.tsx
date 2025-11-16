@@ -26,6 +26,13 @@ import {
   UpdateFormElement,
 } from "@/types/form-builder";
 import { PlusIcon, Settings2Icon, Trash2Icon } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface PropertiesSidebarProps {
   selectedElement: FormElement | null;
@@ -45,6 +52,7 @@ export const PropertiesSidebar = ({
       switch: "Switch",
       password: "Password",
       select: "Select",
+      file: "File",
     };
 
     return labels[type];
@@ -103,7 +111,9 @@ export const PropertiesSidebar = ({
                         placeholder="Enter field label"
                       />
                     </div>
-                    {!["switch", "checkbox"].includes(selectedElement.type) && (
+                    {!["switch", "checkbox", "file"].includes(
+                      selectedElement.type,
+                    ) && (
                       <div className="space-y-2">
                         <Label className="text-xs" htmlFor="placeholder">
                           Placeholder (Optional)
@@ -166,7 +176,7 @@ export const PropertiesSidebar = ({
                         }
                       />
                     </div>
-                    {!["select", "checkbox", "switch"].includes(
+                    {!["select", "checkbox", "switch", "file"].includes(
                       selectedElement.type,
                     ) && (
                       <>
@@ -232,6 +242,203 @@ export const PropertiesSidebar = ({
                   </div>
                 </SidebarGroupContent>
               </SidebarGroup>
+              {selectedElement.type === "file" && (
+                <>
+                  <SidebarSeparator className="mx-0" />
+                  <SidebarGroup>
+                    <SidebarGroupLabel>File Config</SidebarGroupLabel>
+                    <SidebarGroupContent className="px-2">
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <Label className="text-xs" htmlFor="accept">
+                            Accepted file types
+                          </Label>
+                          <Select
+                            value={selectedElement.fileConfig?.accept}
+                            onValueChange={(value) =>
+                              updateElement(selectedElement.id, {
+                                fileConfig: {
+                                  ...selectedElement.fileConfig,
+                                  accept: value,
+                                },
+                              })
+                            }
+                          >
+                            <SelectTrigger
+                              id="accept"
+                              className="bg-background w-full"
+                            >
+                              <SelectValue placeholder="Select types" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="image/*">Images</SelectItem>
+                              <SelectItem value="video/*">Videos</SelectItem>
+                              <SelectItem value="application/pdf">
+                                PDF
+                              </SelectItem>
+                              <SelectItem value=".zip,.rar">
+                                ZIP / RAR
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-xs" htmlFor="max-size">
+                            Max file size (MB)
+                          </Label>
+                          <Input
+                            id="max-size"
+                            type="number"
+                            className="bg-background"
+                            min={1}
+                            max={1024}
+                            value={
+                              selectedElement.fileConfig?.maxSize
+                                ? selectedElement.fileConfig.maxSize /
+                                  (1024 * 1024)
+                                : 5
+                            }
+                            onChange={(e) =>
+                              updateElement(selectedElement.id, {
+                                fileConfig: {
+                                  ...selectedElement.fileConfig,
+                                  maxSize: Number(e.target.value) * 1024 * 1024,
+                                },
+                              })
+                            }
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="max-files" className="text-xs">
+                            Max number of files
+                          </Label>
+                          <Input
+                            id="max-files"
+                            type="number"
+                            className="bg-background"
+                            disabled={!selectedElement.fileConfig?.multiple}
+                            min={1}
+                            max={10}
+                            value={selectedElement.fileConfig?.maxFiles}
+                            onChange={(e) =>
+                              updateElement(selectedElement.id, {
+                                fileConfig: {
+                                  ...selectedElement.fileConfig,
+                                  maxFiles: Number(e.target.value),
+                                },
+                              })
+                            }
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="preview-size" className="text-xs">
+                            Preview size
+                          </Label>
+                          <Select
+                            value={selectedElement.fileConfig?.previewSize}
+                            onValueChange={(value) =>
+                              updateElement(selectedElement.id, {
+                                fileConfig: {
+                                  ...selectedElement.fileConfig,
+                                  previewSize: value as "sm" | "md" | "lg",
+                                },
+                              })
+                            }
+                          >
+                            <SelectTrigger
+                              id="preview-size"
+                              className="bg-background w-full"
+                            >
+                              <SelectValue placeholder="Size" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="sm">Small</SelectItem>
+                              <SelectItem value="md">Medium</SelectItem>
+                              <SelectItem value="lg">Large</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-xs" htmlFor="variant">
+                            Variant
+                          </Label>
+                          <Select
+                            value={selectedElement.fileConfig?.variant}
+                            onValueChange={(value) =>
+                              updateElement(selectedElement.id, {
+                                fileConfig: {
+                                  ...selectedElement.fileConfig,
+                                  variant: value as
+                                    | "default"
+                                    | "compact"
+                                    | "minimal",
+                                },
+                              })
+                            }
+                          >
+                            <SelectTrigger
+                              id="variant"
+                              className="bg-background w-full"
+                            >
+                              <SelectValue placeholder="Select variant" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="default">Default</SelectItem>
+                              <SelectItem value="compact">Compact</SelectItem>
+                              <SelectItem value="minimal">Minimal</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div className="space-y-0.5">
+                            <Label className="text-xs" htmlFor="multiple">
+                              Allow Multiple Files
+                            </Label>
+                            <p className="text-xs text-muted-foreground">
+                              Upload more than one file
+                            </p>
+                          </div>
+                          <Switch
+                            id="multiple"
+                            checked={selectedElement.fileConfig?.multiple}
+                            onCheckedChange={(checked) =>
+                              updateElement(selectedElement.id, {
+                                fileConfig: {
+                                  ...selectedElement.fileConfig,
+                                  multiple: checked,
+                                  maxFiles: 1,
+                                },
+                              })
+                            }
+                          />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div className="space-y-0.5">
+                            <Label className="text-xs" htmlFor="show-preview">
+                              Show Preview
+                            </Label>
+                            <p className="text-muted-foreground text-xs">
+                              Displays a small preview of the selected files
+                            </p>
+                          </div>
+                          <Switch
+                            id="show-preview"
+                            checked={selectedElement.fileConfig?.showPreview}
+                            onCheckedChange={(checked) =>
+                              updateElement(selectedElement.id, {
+                                fileConfig: {
+                                  ...selectedElement.fileConfig,
+                                  showPreview: checked,
+                                },
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+                    </SidebarGroupContent>
+                  </SidebarGroup>
+                </>
+              )}
               {selectedElement.type === "select" && (
                 <>
                   <SidebarSeparator className="mx-0" />

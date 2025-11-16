@@ -66,13 +66,28 @@ export const FormBuilder = () => {
         required: false,
         minLength: 0,
         maxLength: 255,
-        options: {
-          selectLabel: "Select an option",
-          selectItems: [
-            { label: "Option 1", value: "option1" },
-            { label: "Option 2", value: "option2" },
-          ],
-        },
+        options:
+          type === "select"
+            ? {
+                selectLabel: "Select an option",
+                selectItems: [
+                  { label: "Option 1", value: "option1" },
+                  { label: "Option 2", value: "option2" },
+                ],
+              }
+            : undefined,
+        fileConfig:
+          type === "file"
+            ? {
+                accept: "image/*",
+                multiple: false,
+                maxSize: 5 * 1024 * 1024,
+                maxFiles: 1,
+                showPreview: true,
+                previewSize: "md",
+                variant: "default",
+              }
+            : undefined,
       };
 
       addElement(newElement);

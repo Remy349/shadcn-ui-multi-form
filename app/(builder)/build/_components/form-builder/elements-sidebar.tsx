@@ -50,6 +50,7 @@ export const ElementsSidebar = () => {
     { type: "switch", label: "Switch" },
     { type: "password", label: "Password" },
     { type: "select", label: "Select" },
+    { type: "file", label: "File" },
   ];
 
   return (
