@@ -91,6 +91,16 @@ export const generateZodSchema = (elements: FormElement[]) => {
         break;
       }
 
+      case "file": {
+        fieldSchema = z.array(z.instanceof(File)).refine((files) => {
+          if (element.required) return files.length > 0;
+          return true;
+        }, `${element.label} is required`);
+        defaultValue = [];
+
+        break;
+      }
+
       default: {
         fieldSchema = z.string();
         defaultValue = "";
