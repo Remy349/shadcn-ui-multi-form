@@ -5,7 +5,8 @@ export type FormElementType =
   | "checkbox"
   | "switch"
   | "password"
-  | "select";
+  | "select"
+  | "file";
 
 export interface FormElement {
   id: string;
@@ -21,6 +22,15 @@ export interface FormElement {
   options?: {
     selectLabel: string;
     selectItems: { label: string; value: string }[];
+  };
+  fileConfig?: {
+    accept?: string;
+    multiple?: boolean;
+    maxSize?: number;
+    maxFiles?: number;
+    showPreview?: boolean;
+    previewSize?: "sm" | "md" | "lg";
+    variant?: "default" | "compact" | "minimal";
   };
 }
 
