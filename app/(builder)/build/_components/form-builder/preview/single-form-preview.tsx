@@ -35,6 +35,7 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { GripIcon } from "lucide-react";
+import { FileInputElement } from "./form-elements/file-input-element";
 
 interface SingleFormPreviewProps {
   currentForm: Form;
@@ -106,6 +107,13 @@ export const SingleFormPreview = ({ currentForm }: SingleFormPreviewProps) => {
       ),
       select: (
         <SelectInputElement
+          element={element}
+          field={field}
+          fieldState={fieldState}
+        />
+      ),
+      file: (
+        <FileInputElement
           element={element}
           field={field}
           fieldState={fieldState}

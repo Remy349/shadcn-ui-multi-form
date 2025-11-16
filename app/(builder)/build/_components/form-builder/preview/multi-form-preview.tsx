@@ -34,6 +34,7 @@ import { CheckboxInputElement } from "./form-elements/checkbox-input-element";
 import { SelectInputElement } from "./form-elements/select-input-element";
 import { Spinner } from "@/components/ui/spinner";
 import { useMultiStepForm } from "@/hooks/use-multi-step-form";
+import { FileInputElement } from "./form-elements/file-input-element";
 
 interface MultiFormPreviewProps {
   forms: Form[];
@@ -108,6 +109,13 @@ export const MultiFormPreview = ({ forms }: MultiFormPreviewProps) => {
       ),
       select: (
         <SelectInputElement
+          element={element}
+          field={field}
+          fieldState={fieldState}
+        />
+      ),
+      file: (
+        <FileInputElement
           element={element}
           field={field}
           fieldState={fieldState}
