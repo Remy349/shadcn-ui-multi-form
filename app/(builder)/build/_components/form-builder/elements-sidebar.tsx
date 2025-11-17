@@ -15,9 +15,27 @@ import { FormElementType } from "@/types/form-builder";
 import { useDraggable } from "@dnd-kit/core";
 import { ComponentIcon, LayoutPanelTopIcon, LogOutIcon } from "lucide-react";
 import Link from "next/link";
+import {
+  TextIcon,
+  EnvelopeClosedIcon,
+  FileTextIcon,
+  SwitchIcon,
+  LockClosedIcon,
+  ChevronDownIcon,
+  UploadIcon,
+  CheckboxIcon,
+} from "@radix-ui/react-icons";
+import { ForwardRefExoticComponent, RefAttributes } from "react";
+import { IconProps } from "@radix-ui/react-icons/dist/types";
+import { Badge } from "@/components/ui/badge";
 
 interface DraggableFormElementProps {
-  element: { type: FormElementType; label: string };
+  element: {
+    icon: ForwardRefExoticComponent<IconProps & RefAttributes<SVGSVGElement>>;
+    type: FormElementType;
+    label: string;
+    status?: "new" | "updated";
+  };
 }
 
 const DraggableFormElement = ({ element }: DraggableFormElementProps) => {
@@ -26,12 +44,24 @@ const DraggableFormElement = ({ element }: DraggableFormElementProps) => {
     data: { type: element.type },
   });
 
+  const IconComponent = element.icon;
+
   return (
     <div ref={setNodeRef} {...listeners} {...attributes}>
       <SidebarMenuItem>
         <SidebarMenuButton className="cursor-grab">
-          <ComponentIcon />
+          <div className="border-dashed rounded-sm border p-1 bg-background/50">
+            <IconComponent />
+          </div>
           <span className="font-medium">{element.label}</span>
+          {element.status && (
+            <Badge
+              variant="outline"
+              className="ml-auto bg-background/50 text-[10px] px-1.5 py-0.5"
+            >
+              {element.status === "new" ? "New" : "Updated"}
+            </Badge>
+          )}
         </SidebarMenuButton>
       </SidebarMenuItem>
     </div>
@@ -39,18 +69,44 @@ const DraggableFormElement = ({ element }: DraggableFormElementProps) => {
 };
 
 export const ElementsSidebar = () => {
+  const formElementIcons: Record<
+    FormElementType,
+    ForwardRefExoticComponent<IconProps & RefAttributes<SVGSVGElement>>
+  > = {
+    text: TextIcon,
+    email: EnvelopeClosedIcon,
+    textarea: FileTextIcon,
+    checkbox: CheckboxIcon,
+    switch: SwitchIcon,
+    password: LockClosedIcon,
+    select: ChevronDownIcon,
+    file: UploadIcon,
+  };
+
   const elements: {
+    icon: ForwardRefExoticComponent<IconProps & RefAttributes<SVGSVGElement>>;
     type: FormElementType;
     label: string;
+    status?: "new" | "updated";
   }[] = [
-    { type: "text", label: "Text" },
-    { type: "email", label: "Email" },
-    { type: "textarea", label: "Textarea" },
-    { type: "checkbox", label: "Checkbox" },
-    { type: "switch", label: "Switch" },
-    { type: "password", label: "Password" },
-    { type: "select", label: "Select" },
-    { type: "file", label: "File" },
+    { icon: formElementIcons.text, type: "text", label: "Text" },
+    { icon: formElementIcons.email, type: "email", label: "Email" },
+    { icon: formElementIcons.textarea, type: "textarea", label: "Textarea" },
+    { icon: formElementIcons.checkbox, type: "checkbox", label: "Checkbox" },
+    { icon: formElementIcons.switch, type: "switch", label: "Switch" },
+    { icon: formElementIcons.password, type: "password", label: "Password" },
+    {
+      icon: formElementIcons.select,
+      type: "select",
+      label: "Select",
+      status: "new",
+    },
+    {
+      icon: formElementIcons.file,
+      type: "file",
+      label: "File",
+      status: "updated",
+    },
   ];
 
   return (
@@ -72,9 +128,11 @@ export const ElementsSidebar = () => {
           <SidebarGroupLabel>Input Fields</SidebarGroupLabel>
           <SidebarGroupContent className="px-2">
             <SidebarMenu>
-              {elements.map((element) => (
-                <DraggableFormElement element={element} key={element.type} />
-              ))}
+              {elements
+                .sort((a, b) => a.label.localeCompare(b.label))
+                .map((element) => (
+                  <DraggableFormElement element={element} key={element.type} />
+                ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
