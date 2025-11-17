@@ -11,8 +11,7 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import { FormElementType } from "@/types/form-builder";
-import { useDraggable } from "@dnd-kit/core";
+import { FormElement, FormElementType } from "@/types/form-builder";
 import { ComponentIcon, LayoutPanelTopIcon, LogOutIcon } from "lucide-react";
 import Link from "next/link";
 import {
@@ -28,47 +27,13 @@ import {
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 import { IconProps } from "@radix-ui/react-icons/dist/types";
 import { Badge } from "@/components/ui/badge";
+import { generateId, toCamelCase } from "@/lib/utils";
 
-interface DraggableFormElementProps {
-  element: {
-    icon: ForwardRefExoticComponent<IconProps & RefAttributes<SVGSVGElement>>;
-    type: FormElementType;
-    label: string;
-    status?: "new" | "updated";
-  };
+interface ElementsSidebarProps {
+  addElement: (element: FormElement) => void;
 }
 
-const DraggableFormElement = ({ element }: DraggableFormElementProps) => {
-  const { attributes, listeners, setNodeRef } = useDraggable({
-    id: element.type,
-    data: { type: element.type },
-  });
-
-  const IconComponent = element.icon;
-
-  return (
-    <div ref={setNodeRef} {...listeners} {...attributes}>
-      <SidebarMenuItem>
-        <SidebarMenuButton className="cursor-grab">
-          <div className="border-dashed rounded-sm border p-1 bg-background/50">
-            <IconComponent />
-          </div>
-          <span className="font-medium">{element.label}</span>
-          {element.status && (
-            <Badge
-              variant="outline"
-              className="ml-auto bg-background/50 text-[10px] px-1.5 py-0.5"
-            >
-              {element.status === "new" ? "New" : "Updated"}
-            </Badge>
-          )}
-        </SidebarMenuButton>
-      </SidebarMenuItem>
-    </div>
-  );
-};
-
-export const ElementsSidebar = () => {
+export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
   const formElementIcons: Record<
     FormElementType,
     ForwardRefExoticComponent<IconProps & RefAttributes<SVGSVGElement>>
@@ -109,6 +74,45 @@ export const ElementsSidebar = () => {
     },
   ];
 
+  const handleAddElement = (type: FormElementType) => {
+    const newElement: FormElement = {
+      id: `${type}-${generateId()}`,
+      label: `${type.charAt(0).toUpperCase() + type.slice(1)} Field`,
+      name: toCamelCase(`${type} field ${generateId()}`),
+      type,
+      description: "",
+      placeholder: "",
+      disabled: false,
+      required: false,
+      minLength: 0,
+      maxLength: 255,
+      options:
+        type === "select"
+          ? {
+              selectLabel: "Select an option",
+              selectItems: [
+                { label: "Option 1", value: "option1" },
+                { label: "Option 2", value: "option2" },
+              ],
+            }
+          : undefined,
+      fileConfig:
+        type === "file"
+          ? {
+              accept: "image/*",
+              multiple: false,
+              maxSize: 5 * 1024 * 1024,
+              maxFiles: 1,
+              showPreview: true,
+              previewSize: "md",
+              variant: "default",
+            }
+          : undefined,
+    };
+
+    addElement(newElement);
+  };
+
   return (
     <Sidebar collapsible="none" className="border-r sticky top-0 h-svh">
       <SidebarHeader>
@@ -119,7 +123,9 @@ export const ElementsSidebar = () => {
               Elements
             </h2>
           </div>
-          <p className="text-xs text-muted-foreground">Drag to add to canvas</p>
+          <p className="text-xs text-muted-foreground">
+            Click to add to canvas
+          </p>
         </div>
       </SidebarHeader>
       <SidebarSeparator className="mx-0" />
@@ -130,9 +136,30 @@ export const ElementsSidebar = () => {
             <SidebarMenu>
               {elements
                 .sort((a, b) => a.label.localeCompare(b.label))
-                .map((element) => (
-                  <DraggableFormElement element={element} key={element.type} />
-                ))}
+                .map((element) => {
+                  const IconComponent = element.icon;
+
+                  return (
+                    <SidebarMenuItem key={element.type}>
+                      <SidebarMenuButton
+                        onClick={() => handleAddElement(element.type)}
+                      >
+                        <div className="border-dashed rounded-sm border p-1 bg-background/50">
+                          <IconComponent />
+                        </div>
+                        <span className="font-medium">{element.label}</span>
+                        {element.status && (
+                          <Badge
+                            variant="outline"
+                            className="ml-auto bg-background/50 text-[10px] px-1.5 py-0.5"
+                          >
+                            {element.status === "new" ? "New" : "Updated"}
+                          </Badge>
+                        )}
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

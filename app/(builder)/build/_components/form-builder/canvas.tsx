@@ -100,7 +100,7 @@ export const Canvas = ({
             </EmptyMedia>
             <EmptyTitle>Start building your form</EmptyTitle>
             <EmptyDescription>
-              Drag elements from the left sidebar to add them
+              Click elements from the left sidebar to add them
             </EmptyDescription>
           </EmptyHeader>
         </Empty>
