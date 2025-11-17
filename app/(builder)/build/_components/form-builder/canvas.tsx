@@ -14,17 +14,20 @@ import {
 } from "@/components/ui/empty";
 import { Form, FormElement, FormElementType } from "@/types/form-builder";
 import { GripIcon, Trash2Icon } from "lucide-react";
-import { TextInputElement } from "./form-elements/text-input-element";
-import { EmailInputElement } from "./form-elements/email-input-element";
 import { cn } from "@/lib/utils";
-import { TextareaInputElement } from "./form-elements/textarea-input-element";
-import { useDroppable } from "@dnd-kit/core";
-import { CheckboxInputElement } from "./form-elements/checkbox-input-element";
-import { SwitchInputElement } from "./form-elements/switch-input-element";
 import { Button } from "@/components/ui/button";
-import { PasswordInputElement } from "./form-elements/password-input-element";
-import { SelectInputElement } from "./form-elements/select-input-element";
-import { FileInputElement } from "./form-elements/file-input-element";
+import {
+  TextIcon,
+  EnvelopeClosedIcon,
+  FileTextIcon,
+  SwitchIcon,
+  LockClosedIcon,
+  ChevronDownIcon,
+  UploadIcon,
+  CheckboxIcon,
+} from "@radix-ui/react-icons";
+import { ForwardRefExoticComponent, RefAttributes } from "react";
+import { IconProps } from "@radix-ui/react-icons/dist/types";
 
 interface CanvasProps {
   currentForm: Form;
@@ -39,59 +42,22 @@ export const Canvas = ({
   setSelectedElement,
   selectedElement,
 }: CanvasProps) => {
-  const { setNodeRef, isOver } = useDroppable({
-    id: "canvas",
-  });
-
-  const renderFormElement = (element: FormElement) => {
-    const isSelected = selectedElement?.id === element.id;
-
-    const elementComponent: Record<FormElementType, React.ReactElement> = {
-      text: <TextInputElement element={element} />,
-      email: <EmailInputElement element={element} />,
-      textarea: <TextareaInputElement element={element} />,
-      checkbox: <CheckboxInputElement element={element} />,
-      switch: <SwitchInputElement element={element} />,
-      password: <PasswordInputElement element={element} />,
-      select: <SelectInputElement element={element} />,
-      file: <FileInputElement element={element} />,
-    };
-
-    return (
-      <div
-        onClick={() => setSelectedElement(element)}
-        className={cn(
-          "border rounded-md p-4 outline-none relative hover:border-primary",
-          isSelected && "bg-accent/30 border-primary",
-        )}
-      >
-        {isSelected && (
-          <div className="absolute z-10 top-0 right-0">
-            <Button
-              size="icon-sm"
-              variant="ghost"
-              onClick={(e) => {
-                e.stopPropagation();
-                deleteElement(element.id);
-              }}
-            >
-              <Trash2Icon />
-            </Button>
-          </div>
-        )}
-        {elementComponent[element.type]}
-      </div>
-    );
+  const formElementIcons: Record<
+    FormElementType,
+    ForwardRefExoticComponent<IconProps & RefAttributes<SVGSVGElement>>
+  > = {
+    text: TextIcon,
+    email: EnvelopeClosedIcon,
+    textarea: FileTextIcon,
+    checkbox: CheckboxIcon,
+    switch: SwitchIcon,
+    password: LockClosedIcon,
+    select: ChevronDownIcon,
+    file: UploadIcon,
   };
 
   return (
-    <div
-      ref={setNodeRef}
-      className={cn(
-        "rounded-md min-h-[calc(100vh-9rem)] border-2 border-dashed bg-sidebar",
-        isOver && "border-primary bg-primary/5",
-      )}
-    >
+    <div className="rounded-md min-h-[calc(100vh-9rem)] border-2 border-dashed bg-sidebar">
       {currentForm.elements.length === 0 ? (
         <Empty className="h-[calc(100vh-9rem)]">
           <EmptyHeader>
@@ -113,9 +79,42 @@ export const Canvas = ({
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {currentForm.elements.map((element) => (
-                  <div key={element.id}>{renderFormElement(element)}</div>
-                ))}
+                {currentForm.elements.map((element) => {
+                  const IconElement = formElementIcons[element.type];
+                  const isSelected = selectedElement?.id === element.id;
+
+                  return (
+                    <div
+                      className={cn(
+                        "border rounded-md p-3 hover:border-primary",
+                        isSelected && "border-primary bg-accent/30",
+                      )}
+                      key={element.id}
+                      onClick={() => setSelectedElement(element)}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <div className="border border-dashed bg-background/50 p-1 rounded-sm">
+                          <IconElement className="size-4" />
+                        </div>
+                        <span className="font-medium text-sm">
+                          {element.label}
+                        </span>
+                        {isSelected && (
+                          <Button
+                            size="icon-sm"
+                            className="ml-auto bg-destructive/10 text-destructive hover:bg-destructive/10"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteElement(element.id);
+                            }}
+                          >
+                            <Trash2Icon />
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </CardContent>
           </Card>
