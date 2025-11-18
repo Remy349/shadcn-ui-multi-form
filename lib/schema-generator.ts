@@ -15,6 +15,7 @@ export const generateZodSchema = (elements: FormElement[]) => {
       case "text":
       case "textarea":
       case "email":
+      case "rich-text-editor":
       case "password": {
         fieldSchema = z.string();
         defaultValue = "";

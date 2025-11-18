@@ -19,12 +19,13 @@ import { Button } from "@/components/ui/button";
 import {
   TextIcon,
   EnvelopeClosedIcon,
-  FileTextIcon,
   SwitchIcon,
   LockClosedIcon,
   ChevronDownIcon,
   UploadIcon,
   CheckboxIcon,
+  TextAlignLeftIcon,
+  TextAlignJustifyIcon,
 } from "@radix-ui/react-icons";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 import { IconProps } from "@radix-ui/react-icons/dist/types";
@@ -48,12 +49,13 @@ export const Canvas = ({
   > = {
     text: TextIcon,
     email: EnvelopeClosedIcon,
-    textarea: FileTextIcon,
+    textarea: TextAlignJustifyIcon,
     checkbox: CheckboxIcon,
     switch: SwitchIcon,
     password: LockClosedIcon,
     select: ChevronDownIcon,
     file: UploadIcon,
+    "rich-text-editor": TextAlignLeftIcon,
   };
 
   return (

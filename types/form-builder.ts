@@ -6,7 +6,8 @@ export type FormElementType =
   | "switch"
   | "password"
   | "select"
-  | "file";
+  | "file"
+  | "rich-text-editor";
 
 export interface FormElement {
   id: string;

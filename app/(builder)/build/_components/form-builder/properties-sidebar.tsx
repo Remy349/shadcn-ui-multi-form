@@ -53,6 +53,7 @@ export const PropertiesSidebar = ({
       password: "Password",
       select: "Select",
       file: "File",
+      "rich-text-editor": "Rich Text Editor",
     };
 
     return labels[type];
@@ -111,9 +112,12 @@ export const PropertiesSidebar = ({
                         placeholder="Enter field label"
                       />
                     </div>
-                    {!["switch", "checkbox", "file"].includes(
-                      selectedElement.type,
-                    ) && (
+                    {![
+                      "switch",
+                      "checkbox",
+                      "file",
+                      "rich-text-editor",
+                    ].includes(selectedElement.type) && (
                       <div className="space-y-2">
                         <Label className="text-xs" htmlFor="placeholder">
                           Placeholder (Optional)

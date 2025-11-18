@@ -17,12 +17,13 @@ import Link from "next/link";
 import {
   TextIcon,
   EnvelopeClosedIcon,
-  FileTextIcon,
   SwitchIcon,
   LockClosedIcon,
   ChevronDownIcon,
   UploadIcon,
   CheckboxIcon,
+  TextAlignLeftIcon,
+  TextAlignJustifyIcon,
 } from "@radix-ui/react-icons";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 import { IconProps } from "@radix-ui/react-icons/dist/types";
@@ -40,12 +41,13 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
   > = {
     text: TextIcon,
     email: EnvelopeClosedIcon,
-    textarea: FileTextIcon,
+    textarea: TextAlignJustifyIcon,
     checkbox: CheckboxIcon,
     switch: SwitchIcon,
     password: LockClosedIcon,
     select: ChevronDownIcon,
     file: UploadIcon,
+    "rich-text-editor": TextAlignLeftIcon,
   };
 
   const elements: {
@@ -72,12 +74,20 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
       label: "File",
       status: "updated",
     },
+    {
+      icon: formElementIcons["rich-text-editor"],
+      type: "rich-text-editor",
+      label: "Rich Text Editor",
+    },
   ];
 
   const handleAddElement = (type: FormElementType) => {
     const newElement: FormElement = {
       id: `${type}-${generateId()}`,
-      label: `${type.charAt(0).toUpperCase() + type.slice(1)} Field`,
+      label: `${type
+        .split("-")
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" ")} Field`,
       name: toCamelCase(`${type} field ${generateId()}`),
       type,
       description: "",

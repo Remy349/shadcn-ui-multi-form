@@ -36,6 +36,7 @@ import {
 } from "@/components/ui/empty";
 import { GripIcon } from "lucide-react";
 import { FileInputElement } from "./form-elements/file-input-element";
+import { RichTextEditorInputElement } from "./form-elements/rich-text-editor-input-element";
 
 interface SingleFormPreviewProps {
   currentForm: Form;
@@ -114,6 +115,13 @@ export const SingleFormPreview = ({ currentForm }: SingleFormPreviewProps) => {
       ),
       file: (
         <FileInputElement
+          element={element}
+          field={field}
+          fieldState={fieldState}
+        />
+      ),
+      "rich-text-editor": (
+        <RichTextEditorInputElement
           element={element}
           field={field}
           fieldState={fieldState}
