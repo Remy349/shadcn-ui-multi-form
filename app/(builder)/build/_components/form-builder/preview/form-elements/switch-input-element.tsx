@@ -37,7 +37,6 @@ export const SwitchInputElement = ({
         disabled={element.disabled}
         checked={field.value}
         onCheckedChange={field.onChange}
-        aria-invalid={fieldState.invalid}
       />
     </Field>
   );

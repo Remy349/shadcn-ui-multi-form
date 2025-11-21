@@ -28,11 +28,10 @@ export const CheckboxInputElement = ({
     <Field data-invalid={fieldState.invalid} orientation="horizontal">
       <Checkbox
         id={element.name}
-        name={element.name}
+        name={field.name}
         disabled={element.disabled}
         checked={field.value}
         onCheckedChange={field.onChange}
-        aria-invalid={fieldState.invalid}
       />
       <FieldContent>
         <FieldLabel htmlFor={element.name}>{element.label}</FieldLabel>

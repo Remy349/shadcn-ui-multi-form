@@ -45,8 +45,8 @@ export const SelectInputElement = ({
           <SelectContent>
             <SelectGroup>
               <SelectLabel>{element.options?.selectLabel}</SelectLabel>
-              {element.options?.selectItems.map((item, index) => (
-                <SelectItem key={index} value={item.value}>
+              {element.options?.selectItems.map((item) => (
+                <SelectItem key={item.value} value={item.value}>
                   {item.label}
                 </SelectItem>
               ))}
