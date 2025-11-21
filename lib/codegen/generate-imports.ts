@@ -14,8 +14,14 @@ export const generateImports = (elements: FormElement[]) => {
 
   const dynamicImports: Record<FormElementType, string[]> = {
     text: ['import { Input } from "@/components/ui/input"'],
-    checkbox: ['import { Checkbox } from "@/components/ui/checkbox"'],
-    switch: ['import { Switch } from "@/components/ui/switch"'],
+    checkbox: [
+      'import { Checkbox } from "@/components/ui/checkbox"',
+      'import { FieldContent } from "@/components/ui/field"',
+    ],
+    switch: [
+      'import { Switch } from "@/components/ui/switch"',
+      'import { FieldContent } from "@/components/ui/field"',
+    ],
     textarea: ['import { Textarea } from "@/components/ui/textarea"'],
     select: [
       'import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"',
