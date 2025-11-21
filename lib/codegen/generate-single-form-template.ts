@@ -23,7 +23,7 @@ export const SingleForm = () => {
       <CardContent>
         <form id="single-form" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
-            ${form.elements.map((element) => generateFormElements(element))}
+            ${form.elements.map((element) => generateFormElements(element)).join("\n")}
           </FieldGroup>
         </form>
       </CardContent>
