@@ -21,6 +21,7 @@ import { EditForm } from "./edit-form";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { CodePreview } from "../code/code-preview";
 
 interface ToolbarProps {
   forms: Form[];
@@ -103,9 +104,7 @@ export const Toolbar = ({
           <Badge variant="secondary">Preview Mode</Badge>
         )}
         <div className="flex items-center space-x-2">
-          <Button size="icon-sm" variant="secondary">
-            <CodeIcon />
-          </Button>
+          <CodePreview />
           <Button
             size="icon-sm"
             variant="secondary"
