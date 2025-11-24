@@ -1,12 +1,21 @@
 import { Form } from "@/types/form-builder";
 import { generateFormElements } from "./generate-form-elements";
+import { generateZodSchemaCode } from "./generate-zod-schema-code";
+import { generateZodSchema } from "../schema-generator";
 
 export const generateSingleFormTemplate = (form: Form) => {
-  return `
-export const SingleForm = () => {
-  const form = useForm()
+  const { defaultValues } = generateZodSchema(form.elements);
 
-  const onSubmit = async (values: any) => {
+  return `
+${generateZodSchemaCode(form.elements)}
+
+export const SingleForm = () => {
+  const form = useForm<FormSchema>({
+    resolver: zodResolver(formSchema),
+    defaultValues: ${JSON.stringify(defaultValues, null, 2)},
+  })
+
+  const onSubmit = async (values: FormSchema) => {
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
     toast.success("Form successfully submitted");
