@@ -1,9 +1,14 @@
 import { FormElement, FormElementType } from "@/types/form-builder";
 
-export const generateImports = (elements: FormElement[]) => {
+export const generateImports = (
+  elements: FormElement[],
+  isMultiForm: boolean,
+) => {
   const importDefaultSet = new Set([
     '"use client"',
     "",
+    'import z from "zod"',
+    'import { zodResolver } from "@hookform/resolvers/zod"',
     'import { useForm, Controller } from "react-hook-form"',
     'import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"',
     'import { Button } from "@/components/ui/button"',
@@ -11,6 +16,13 @@ export const generateImports = (elements: FormElement[]) => {
     'import { Spinner } from "@/components/ui/spinner"',
     'import { toast } from "sonner"',
   ]);
+
+  if (isMultiForm) {
+    importDefaultSet.add(
+      'import { ChevronLeft, ChevronRight } from "lucide-react"',
+    );
+    importDefaultSet.add('import { Progress } from "@/components/ui/progress"');
+  }
 
   const dynamicImports: Record<FormElementType, string[]> = {
     text: ['import { Input } from "@/components/ui/input"'],

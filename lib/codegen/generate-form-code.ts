@@ -11,8 +11,9 @@ export const generateFormCode = async (forms: Form[]) => {
 
   const allElements = forms.flatMap((form) => form.elements);
   const templateType = getFormTemplateType(forms);
+  const isMultiForm = templateType === "multi";
 
-  if (templateType === "single") {
+  if (!isMultiForm) {
     templateFormCode = generateSingleFormTemplate(forms[0]);
     filename = "single-form.tsx";
   } else {
@@ -20,7 +21,7 @@ export const generateFormCode = async (forms: Form[]) => {
     filename = "multi-form.tsx";
   }
 
-  const imports = generateImports(allElements);
+  const imports = generateImports(allElements, isMultiForm);
   const importsCode = Array.from(imports).join("\n");
 
   const rawCode = `${importsCode}
