@@ -1,15 +1,12 @@
-import { FormElement } from "@/types/form-builder";
-import z from "zod";
+import z, { type ZodType } from "zod";
+import type { FormElement } from "@/types/form-builder";
 
 export const generateZodSchema = (elements: FormElement[]) => {
-  const shape: Record<string, any> = {};
-  const defaultValues: Record<string, any> = {};
+  const shape: Record<string, ZodType> = {};
+  const defaultValues: Record<string, unknown> = {};
 
   elements.forEach((element) => {
     if (!element.name) return;
-
-    let fieldSchema: any;
-    let defaultValue: any;
 
     switch (element.type) {
       case "text":
@@ -17,8 +14,8 @@ export const generateZodSchema = (elements: FormElement[]) => {
       case "email":
       case "rich-text-editor":
       case "password": {
-        fieldSchema = z.string();
-        defaultValue = "";
+        let fieldSchema = z.string();
+        const defaultValue = "";
 
         if (element.required) {
           fieldSchema = fieldSchema.min(1, `${element.label} is required`);
@@ -42,12 +39,15 @@ export const generateZodSchema = (elements: FormElement[]) => {
           );
         }
 
+        shape[element.name] = fieldSchema;
+        defaultValues[element.name] = defaultValue;
+
         break;
       }
 
       case "select": {
-        fieldSchema = z.string();
-        defaultValue = "";
+        let fieldSchema = z.string();
+        const defaultValue = "";
 
         const values =
           element.options?.selectItems.map((item) => item.value) || [];
@@ -63,12 +63,15 @@ export const generateZodSchema = (elements: FormElement[]) => {
           );
         }
 
+        shape[element.name] = fieldSchema;
+        defaultValues[element.name] = defaultValue;
+
         break;
       }
 
       case "checkbox": {
-        fieldSchema = z.boolean();
-        defaultValue = false;
+        let fieldSchema = z.boolean();
+        const defaultValue = false;
 
         if (element.required) {
           fieldSchema = fieldSchema.refine((val) => val === true, {
@@ -76,12 +79,15 @@ export const generateZodSchema = (elements: FormElement[]) => {
           });
         }
 
+        shape[element.name] = fieldSchema;
+        defaultValues[element.name] = defaultValue;
+
         break;
       }
 
       case "switch": {
-        fieldSchema = z.boolean();
-        defaultValue = false;
+        let fieldSchema = z.boolean();
+        const defaultValue = false;
 
         if (element.required) {
           fieldSchema = fieldSchema.refine((val) => val === true, {
@@ -89,27 +95,33 @@ export const generateZodSchema = (elements: FormElement[]) => {
           });
         }
 
+        shape[element.name] = fieldSchema;
+        defaultValues[element.name] = defaultValue;
+
         break;
       }
 
       case "file": {
-        fieldSchema = z.array(z.instanceof(File)).refine((files) => {
-          if (element.required) return files.length > 0;
-          return true;
-        }, `${element.label} is required`);
-        defaultValue = [];
+        let fieldSchema = z.array(z.instanceof(File));
+
+        if (element.required) {
+          fieldSchema = fieldSchema.refine(
+            (files) => files.length > 0,
+            `${element.label} is required`,
+          );
+        }
+
+        shape[element.name] = fieldSchema;
+        defaultValues[element.name] = [];
 
         break;
       }
 
       default: {
-        fieldSchema = z.string();
-        defaultValue = "";
+        shape[element.name] = z.string();
+        defaultValues[element.name] = "";
       }
     }
-
-    shape[element.name] = fieldSchema;
-    defaultValues[element.name] = defaultValue;
   });
 
   const schema = z.object(shape);
