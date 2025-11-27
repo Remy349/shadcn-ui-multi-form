@@ -22,6 +22,7 @@ export const generateImports = (
       'import { ChevronLeft, ChevronRight } from "lucide-react"',
     );
     importDefaultSet.add('import { Progress } from "@/components/ui/progress"');
+    importDefaultSet.add('import { useState } from "react"');
   }
 
   const dynamicImports: Record<FormElementType, string[]> = {
