@@ -16,11 +16,11 @@ export const SingleForm = () => {
   })
 
   const onSubmit = async (values: FormSchema) => {
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    await new Promise((resolve) => setTimeout(resolve, 1500))
 
-    toast.success("Form successfully submitted");
+    toast.success("Form successfully submitted")
 
-    console.log(values);
+    console.log(values)
   };
 
   return (
