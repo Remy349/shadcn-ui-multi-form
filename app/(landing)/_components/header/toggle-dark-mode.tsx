@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Moon, Sun } from "lucide-react";
+import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 
 export const ToggleDarkMode = () => {
@@ -9,16 +9,12 @@ export const ToggleDarkMode = () => {
 
   return (
     <Button
-      className="size-8"
-      variant="outline"
-      size="icon"
+      className="cursor-pointer"
+      variant="ghost"
+      size="icon-sm"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
     >
-      {theme === "dark" ? (
-        <Moon className="size-4" />
-      ) : (
-        <Sun className="size-4" />
-      )}
+      {theme === "dark" ? <MoonIcon /> : <SunIcon />}
     </Button>
   );
 };

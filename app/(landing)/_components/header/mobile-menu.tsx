@@ -20,11 +20,11 @@ export const MobileMenu = () => {
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <Button size="icon" className="size-8 md:hidden" variant="outline">
-          <Menu className="size-4" />
+        <Button size="icon-sm" className="md:hidden" variant="ghost">
+          <Menu />
         </Button>
       </SheetTrigger>
-      <SheetContent side="left">
+      <SheetContent side="right">
         <SheetHeader>
           <SheetTitle></SheetTitle>
           <SheetDescription></SheetDescription>
