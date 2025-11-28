@@ -10,7 +10,7 @@ export const Footer = () => {
       <div className="mx-auto max-w-5xl px-6">
         <Link
           href="/"
-          aria-label="go home"
+          aria-label="Home"
           className="mx-auto size-fit flex items-center space-x-2 border p-2 rounded-xl bg-muted"
         >
           <LayoutPanelTopIcon className="size-4" />
@@ -42,7 +42,7 @@ export const Footer = () => {
             href="https://github.com/Remy349/shadcn-ui-multi-form"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="LinkedIn"
+            aria-label="GitHub repository"
             className="text-muted-foreground hover:text-primary block"
           >
             <FaGithub className="size-6" />
@@ -65,4 +65,3 @@ export const Footer = () => {
     </footer>
   );
 };
-
