@@ -11,7 +11,7 @@ export const Footer = () => {
         <Link
           href="/"
           aria-label="Home"
-          className="mx-auto size-fit flex items-center space-x-2 border p-2 rounded-xl bg-muted"
+          className="mx-auto size-fit flex items-center space-x-2 p-2 rounded-2xl bg-muted border border-dashed"
         >
           <LayoutPanelTopIcon className="size-4" />
           <span className="font-bold text-sm">MultiForm</span>
@@ -32,7 +32,6 @@ export const Footer = () => {
           <Link
             href="https://x.com/Remy_349"
             target="_blank"
-            rel="noopener noreferrer"
             aria-label="X/Twitter"
             className="text-muted-foreground hover:text-primary block"
           >
@@ -41,7 +40,6 @@ export const Footer = () => {
           <Link
             href="https://github.com/Remy349/shadcn-ui-multi-form"
             target="_blank"
-            rel="noopener noreferrer"
             aria-label="GitHub repository"
             className="text-muted-foreground hover:text-primary block"
           >
@@ -52,14 +50,13 @@ export const Footer = () => {
           © {new Date().getFullYear()} MultiForm, All rights reserved.
           <br />
           Developed by{" "}
-          <a
+          <Link
             href="https://github.com/Remy349"
             target="_blank"
-            rel="noopener noreferrer"
             className="underline"
           >
             Remy349
-          </a>
+          </Link>
         </span>
       </div>
     </footer>
