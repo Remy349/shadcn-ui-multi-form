@@ -179,11 +179,11 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary">
-                  <LayoutPanelTopIcon className="size-5 text-background" />
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-muted border border-dashed">
+                  <LayoutPanelTopIcon className="size-4" />
                 </div>
                 <div className="flex flex-col leading-tight">
-                  <span className="font-medium text-sm">Multi Form</span>
+                  <span className="font-bold text-sm">MultiForm</span>
                   <span className="text-xs text-muted-foreground">
                     Building Panel
                   </span>
