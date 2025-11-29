@@ -26,7 +26,7 @@ export const Hero = () => {
         <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl lg:text-7xl md:leading-[1.2] font-bold tracking-tighter">
           The Fastest Way to Build Multi Step Forms
         </h1>
-        <p className="mt-6 md:text-lg text-foreground/80">
+        <p className="mt-6 text-base text-foreground/80">
           Design multi step and single forms with an intuitive experience and
           stylish components, obtaining clean React + TypeScript code, typed
           with Zod and structured with Shadcn UI; an open-source, free tool
