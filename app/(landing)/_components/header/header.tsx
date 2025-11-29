@@ -22,20 +22,20 @@ export const Header = () => {
         <div className="flex items-center gap-x-1">
           <Button size="icon-sm" variant="ghost" asChild>
             <Link
-              href="https://github.com/Remy349/shadcn-ui-multi-form"
-              target="_blank"
-              aria-label="GitHub repository"
-            >
-              <FaGithub />
-            </Link>
-          </Button>
-          <Button size="icon-sm" variant="ghost" asChild>
-            <Link
               href="https://x.com/Remy_349"
               target="_blank"
               aria-label="X/Twitter"
             >
               <BsTwitterX />
+            </Link>
+          </Button>
+          <Button size="icon-sm" variant="ghost" asChild>
+            <Link
+              href="https://github.com/Remy349/shadcn-ui-multi-form"
+              target="_blank"
+              aria-label="GitHub repository"
+            >
+              <FaGithub />
             </Link>
           </Button>
           <ToggleDarkMode />
