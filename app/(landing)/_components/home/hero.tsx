@@ -2,12 +2,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { AnimatedGridPattern } from "./animated-grid-pattern";
 import { cn } from "@/lib/utils";
-import {
-  ArrowUpRightIcon,
-  CirclePlayIcon,
-  SparkleIcon,
-  SparklesIcon,
-} from "lucide-react";
+import { SparklesIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { FaGithub } from "react-icons/fa";
 
