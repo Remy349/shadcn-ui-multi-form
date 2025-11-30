@@ -9,7 +9,7 @@ import { FaGithub } from "react-icons/fa";
 
 export const Header = () => {
   return (
-    <header className="sticky top-0 left-0 z-50 bg-background border-b border-dashed w-full">
+    <header className="sticky top-0 left-0 z-50 w-full backdrop-blur-lg">
       <nav className="px-6 mx-auto flex items-center justify-between h-16 max-w-5xl">
         <Link
           href="/"
