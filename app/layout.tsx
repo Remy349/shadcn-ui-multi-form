@@ -7,10 +7,22 @@ import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: {
-    default: "ShadcnUI Multi Form",
-    template: "%s | ShadcnUI Multi Form",
+    default: "Shadcn UI Multi Form",
+    template: "%s | Shadcn UI Multi Form",
   },
-  keywords: ["shadcn", "react", "multi form", "build"],
+  description:
+    "Build modern multi step and single forms effortlessly with Shadcn UI Multi Form.",
+  keywords: [
+    "shadcn",
+    "react",
+    "multi form",
+    "build",
+    "shadcn ui form builder",
+    "multi step form builder",
+    "dynamic form builder",
+  ],
+  authors: [{ name: "Santiago Moraga - Remy349" }],
+  creator: "Santiago Moraga - Remy349",
 };
 
 export default function RootLayout({
