@@ -1,3 +1,4 @@
+import { Features } from "./_components/home/features";
 import { Hero } from "./_components/home/hero";
 import { TechStack } from "./_components/home/tech-stack";
 
@@ -6,6 +7,7 @@ export default function Home() {
     <>
       <Hero />
       <TechStack />
+      <Features />
     </>
   );
 }
