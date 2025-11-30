@@ -12,7 +12,7 @@ export const Features = () => {
     <section className="py-[4rem]">
       <div className="mx-auto max-w-5xl space-y-8 px-6 md:space-y-16">
         <div className="relative z-10 mx-auto max-w-xl text-center">
-          <h2 className="text-balance tracking-tighter text-3xl font-bold lg:text-4xl">
+          <h2 className="text-balance tracking-tighter text-3xl font-bold md:text-4xl lg:text-5xl">
             A Smarter Way to Build Multi-Step Forms
           </h2>
         </div>
