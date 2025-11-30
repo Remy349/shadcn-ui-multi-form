@@ -1,17 +1,10 @@
 import {
   BlocksIcon,
-  Cpu,
-  Fingerprint,
-  MonitorSmartphone,
   MonitorSmartphoneIcon,
   MousePointerClickIcon,
-  Pencil,
   ScanIcon,
-  Settings2,
   ShieldCheckIcon,
-  Sparkles,
   SparklesIcon,
-  Zap,
 } from "lucide-react";
 
 export const Features = () => {
