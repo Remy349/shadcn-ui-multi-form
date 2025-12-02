@@ -3,6 +3,7 @@ import Link from "next/link";
 import { links } from "./links";
 import { FaGithub } from "react-icons/fa";
 import { BsTwitterX } from "react-icons/bs";
+import type { Route } from "next";
 
 export const Footer = () => {
   return (
@@ -21,7 +22,7 @@ export const Footer = () => {
           {links.map((item) => (
             <Link
               key={item.name}
-              href={item.href}
+              href={item.href as Route}
               className="text-muted-foreground hover:text-primary block duration-150"
             >
               <span>{item.name}</span>

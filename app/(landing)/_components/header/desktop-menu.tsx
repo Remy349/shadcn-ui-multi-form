@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { links } from "./links";
 import Link from "next/link";
+import type { Route } from "next";
 
 export const DesktopMenu = () => {
   return (
@@ -8,7 +9,7 @@ export const DesktopMenu = () => {
       {links.map((item) => (
         <li key={item.name}>
           <Button size="sm" className="font-medium" variant="link" asChild>
-            <Link href={item.href}>{item.name}</Link>
+            <Link href={item.href as Route}>{item.name}</Link>
           </Button>
         </li>
       ))}
