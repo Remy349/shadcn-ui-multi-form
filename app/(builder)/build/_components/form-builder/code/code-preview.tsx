@@ -11,7 +11,7 @@ import {
 import { CodeBlock, CodeBlockContent } from "@/lib/codegen/code-block";
 import { generateFormCode } from "@/lib/codegen/generate-form-code";
 import { useFormBuilderStore } from "@/store/form-builder-store";
-import { CodeIcon, CopyIcon } from "lucide-react";
+import { CheckCheckIcon, CodeIcon, CopyIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -22,13 +22,13 @@ export const CodePreview = () => {
   const [code, setCode] = useState("");
   const [filename, setFilename] = useState("");
 
-  const handleCopyToClipboard = () => {
+  const handleCopyToClipboard = async () => {
+    await navigator.clipboard.writeText(code);
     setIsCopied(true);
-    navigator.clipboard.writeText(code);
 
     setTimeout(() => {
       setIsCopied(false);
-    }, 1000);
+    }, 1500);
 
     toast.success("Code copied to clipboard");
   };
@@ -61,9 +61,12 @@ export const CodePreview = () => {
           </SheetHeader>
           <div className="flex items-center justify-between border-t border-b px-6 py-3 bg-muted">
             <span className="font-mono text-xs">{filename}</span>
-            <Button variant="ghost" size="sm" onClick={handleCopyToClipboard}>
-              <CopyIcon />
-              {isCopied ? "Copied!" : "Copy"}
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={handleCopyToClipboard}
+            >
+              {isCopied ? <CheckCheckIcon /> : <CopyIcon />}
             </Button>
           </div>
           <ScrollArea className="min-h-0">

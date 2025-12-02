@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CodeBlock, CodeBlockContent } from "@/lib/codegen/code-block";
 import { formatCode } from "@/lib/codegen/formatter";
 import { cn } from "@/lib/utils";
-import { CodeIcon, CopyIcon, EyeIcon } from "lucide-react";
+import { CheckCheckIcon, CodeIcon, CopyIcon, EyeIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -22,13 +22,13 @@ export const Preview = () => {
   const [code, setCode] = useState("");
   const [isCopied, setIsCopied] = useState(false);
 
-  const handleCopyToClipboard = () => {
+  const handleCopyToClipboard = async () => {
+    await navigator.clipboard.writeText(code);
     setIsCopied(true);
-    navigator.clipboard.writeText(code);
 
     setTimeout(() => {
       setIsCopied(false);
-    }, 1000);
+    }, 1500);
 
     toast.success("Code copied to clipboard");
   };
@@ -75,12 +75,11 @@ export const Preview = () => {
             </TabsList>
             <Button
               variant="ghost"
-              size="sm"
+              size="icon-sm"
               onClick={handleCopyToClipboard}
               className="text-muted-foreground hover:text-foreground"
             >
-              <CopyIcon />
-              {isCopied ? "Copied!" : "Copy"}
+              {isCopied ? <CheckCheckIcon /> : <CopyIcon />}
             </Button>
           </div>
           <TabsContent value="preview" className="m-0">
