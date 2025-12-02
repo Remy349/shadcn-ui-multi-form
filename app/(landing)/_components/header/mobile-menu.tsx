@@ -13,6 +13,7 @@ import { Menu } from "lucide-react";
 import { links } from "./links";
 import Link from "next/link";
 import { useState } from "react";
+import type { Route } from "next";
 
 export const MobileMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +36,7 @@ export const MobileMenu = () => {
               <li key={item.name}>
                 <Link
                   className="font-medium"
-                  href={item.href}
+                  href={item.href as Route}
                   onClick={() => setIsOpen(false)}
                 >
                   {item.name}
