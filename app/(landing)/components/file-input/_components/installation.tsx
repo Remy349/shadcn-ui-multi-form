@@ -9,6 +9,9 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const rawCode = `
+// file-input.tsx
+// Put this file in your /components/ui/file-input.tsx
+
 "use client"
 
 import React, { useRef, useState, useCallback } from "react";

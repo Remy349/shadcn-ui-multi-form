@@ -9,6 +9,9 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const rawCode = `
+// password-input.tsx
+// Put this file in your /components/ui/password-input.tsx
+
 "use client"
 
 import * as React from "react"

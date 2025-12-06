@@ -8,7 +8,6 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { FileInput } from "@/components/ui/file-input";
-import { PasswordInput } from "@/components/ui/password-input";
 import { Spinner } from "@/components/ui/spinner";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { CodeBlock, CodeBlockContent } from "@/lib/codegen/code-block";
@@ -87,7 +86,7 @@ export const FormExample = () => {
                 aria-invalid={fieldState.invalid}
                 accept="image/*"
                 multiple
-                maxFiles={3}
+                maxFiles={2}
                 maxSize={5 * 1024 * 1024}
                 variant="default"
                 previewSize="sm"
@@ -219,7 +218,7 @@ export const Example = () => {
                             aria-invalid={fieldState.invalid}
                             accept="image/*"
                             multiple
-                            maxFiles={3}
+                            maxFiles={2}
                             maxSize={5 * 1024 * 1024}
                             variant="default"
                             previewSize="sm"
