@@ -13,6 +13,7 @@ import { Menu } from "lucide-react";
 import { links } from "./links";
 import Link from "next/link";
 import { useState } from "react";
+import type { Route } from "next";
 
 export const MobileMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,11 +21,11 @@ export const MobileMenu = () => {
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <Button size="icon" className="size-8 md:hidden" variant="outline">
-          <Menu className="size-4" />
+        <Button size="icon-sm" className="md:hidden" variant="ghost">
+          <Menu />
         </Button>
       </SheetTrigger>
-      <SheetContent side="left">
+      <SheetContent side="right">
         <SheetHeader>
           <SheetTitle></SheetTitle>
           <SheetDescription></SheetDescription>
@@ -35,7 +36,7 @@ export const MobileMenu = () => {
               <li key={item.name}>
                 <Link
                   className="font-medium"
-                  href={item.href}
+                  href={item.href as Route}
                   onClick={() => setIsOpen(false)}
                 >
                   {item.name}

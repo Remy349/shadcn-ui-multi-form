@@ -1,3 +1,8 @@
+import {
+  LockClosedIcon,
+  TextAlignLeftIcon,
+  UploadIcon,
+} from "@radix-ui/react-icons";
 import type { Metadata } from "next";
 import {
   Card,
@@ -5,33 +10,35 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
 
 export const metadata: Metadata = {
   title: "Components",
 };
 
-export default function Page() {
+export default function Components() {
   return (
-    <section className="pt-[4rem] pb-[2.5rem]">
-      <div className="px-6 mx-auto md:max-w-3xl lg:max-w-5xl">
-        <h1 className="font-bold text-2xl mb-2 text-left md:text-3xl">
-          Components
-        </h1>
-        <p className="text-muted-foreground text-left text-sm mb-8">
-          Discover custom components designed specifically for Shadcn UI Multi
-          Form. These components are essential for building seamless multi-step
-          forms with enhanced functionality and a smooth user experience.
-        </p>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <section className="py-[4rem] min-h-screen">
+      <div className="px-6 max-w-5xl mx-auto space-y-16">
+        <div className="text-center max-w-3xl mx-auto">
+          <h1 className="font-bold tracking-tighter text-3xl md:text-4xl lg:text-5xl text-balance">
+            Build Forms Faster with Ready to Use Components
+          </h1>
+          <p className="text-foreground/80 text-base mt-6">
+            Explore a curated collection of modern, reusable form components
+            powered by Shadcn UI. Each element is designed for flexibility,
+            seamless integration, and clean React + TypeScript code generation.
+          </p>
+        </div>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <Link href="/components/password-input">
-            <Card className="shadow-sm ease-in-out duration-200 md:hover:-translate-y-2">
+            <Card className="shadow-none border border-dashed hover:border-primary">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg">Password Input</CardTitle>
-                  <ArrowRight className="size-4 text-muted-foreground" />
+                  <CardTitle>Password Input</CardTitle>
+                  <div className="bg-muted rounded-md p-1.5 border">
+                    <LockClosedIcon className="size-4" />
+                  </div>
                 </div>
                 <CardDescription>
                   Allows users to toggle password visibility for better
@@ -41,11 +48,13 @@ export default function Page() {
             </Card>
           </Link>
           <Link href="/components/file-input">
-            <Card className="shadow-sm ease-in-out duration-200 md:hover:-translate-y-2">
+            <Card className="shadow-none border border-dashed hover:border-primary">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg">File Input</CardTitle>
-                  <ArrowRight className="size-4 text-muted-foreground" />
+                  <CardTitle>File Input</CardTitle>
+                  <div className="bg-muted rounded-md p-1.5 border">
+                    <UploadIcon className="size-4" />
+                  </div>
                 </div>
                 <CardDescription>
                   Enables users to upload files with a clean and simple
@@ -55,13 +64,13 @@ export default function Page() {
             </Card>
           </Link>
           <Link href="/components/rich-text-editor">
-            <Card className="shadow-sm ease-in-out duration-200 md:hover:-translate-y-2">
+            <Card className="shadow-none border border-dashed hover:border-primary">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg">Rich Text Editor</CardTitle>
-                  <Badge className="font-medium px-2 py-0 text-[0.65rem]">
-                    New
-                  </Badge>
+                  <CardTitle>Rich Text Editor</CardTitle>
+                  <div className="bg-muted rounded-md p-1.5 border">
+                    <TextAlignLeftIcon className="size-4" />
+                  </div>
                 </div>
                 <CardDescription>
                   Enables easy text formatting with support for bold, italics,
