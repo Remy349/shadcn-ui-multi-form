@@ -22,6 +22,11 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { CodePreview } from "../code/code-preview";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface ToolbarProps {
   forms: Form[];
@@ -64,9 +69,14 @@ export const Toolbar = ({
       >
         {!isPreviewMode ? (
           <div className="flex items-center space-x-2">
-            <Button variant="secondary" size="icon-sm" onClick={addForm}>
-              <PlusIcon />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="secondary" size="icon-sm" onClick={addForm}>
+                  <PlusIcon />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Add Form</TooltipContent>
+            </Tooltip>
             <Separator
               orientation="vertical"
               className="data-[orientation=vertical]:h-4"
@@ -89,14 +99,19 @@ export const Toolbar = ({
             <div className="flex items-center space-x-1.5">
               <EditForm currentForm={currentForm} updateForm={updateForm} />
               {forms.length > 1 && (
-                <Button
-                  variant="secondary"
-                  size="icon-sm"
-                  className="text-destructive hover:text-destructive bg-destructive/10 hover:bg-destructive/10"
-                  onClick={() => deleteForm(currentForm.id)}
-                >
-                  <Trash2Icon />
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="secondary"
+                      size="icon-sm"
+                      className="text-destructive hover:text-destructive bg-destructive/10 hover:bg-destructive/10"
+                      onClick={() => deleteForm(currentForm.id)}
+                    >
+                      <Trash2Icon />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Delete Form</TooltipContent>
+                </Tooltip>
               )}
             </div>
           </div>
@@ -105,13 +120,20 @@ export const Toolbar = ({
         )}
         <div className="flex items-center space-x-2">
           <CodePreview />
-          <Button
-            size="icon-sm"
-            variant="secondary"
-            onClick={togglePreviewMode}
-          >
-            {isPreviewMode ? <EyeOffIcon /> : <EyeIcon />}
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="icon-sm"
+                variant="secondary"
+                onClick={togglePreviewMode}
+              >
+                {isPreviewMode ? <EyeOffIcon /> : <EyeIcon />}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              {isPreviewMode ? "Edit Mode" : "Preview Mode"}
+            </TooltipContent>
+          </Tooltip>
           <Separator
             orientation="vertical"
             className="data-[orientation=vertical]:h-4"
