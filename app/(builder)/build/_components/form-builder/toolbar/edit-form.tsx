@@ -17,11 +17,6 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { Form, UpdateForm } from "@/types/form-builder";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PencilIcon } from "lucide-react";
@@ -56,16 +51,11 @@ export const EditForm = ({ currentForm, updateForm }: EditFormProps) => {
   return (
     <Dialog>
       <form id="form-edit-form" onSubmit={form.handleSubmit(onSubmit)}>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <DialogTrigger asChild>
-              <Button variant="secondary" size="icon-sm">
-                <PencilIcon />
-              </Button>
-            </DialogTrigger>
-          </TooltipTrigger>
-          <TooltipContent>Edit Form</TooltipContent>
-        </Tooltip>
+        <DialogTrigger asChild>
+          <Button variant="secondary" size="icon-sm">
+            <PencilIcon />
+          </Button>
+        </DialogTrigger>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Edit Form Details</DialogTitle>

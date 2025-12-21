@@ -8,11 +8,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { CodeBlock, CodeBlockContent } from "@/lib/codegen/code-block";
 import { generateFormCode } from "@/lib/codegen/generate-form-code";
 import { useFormBuilderStore } from "@/store/form-builder-store";
@@ -51,16 +46,11 @@ export const CodePreview = () => {
 
   return (
     <Sheet>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <SheetTrigger asChild>
-            <Button size="icon-sm" variant="secondary">
-              <CodeIcon />
-            </Button>
-          </SheetTrigger>
-        </TooltipTrigger>
-        <TooltipContent>View Generated Code</TooltipContent>
-      </Tooltip>
+      <SheetTrigger asChild>
+        <Button size="icon-sm" variant="secondary">
+          <CodeIcon />
+        </Button>
+      </SheetTrigger>
       <SheetContent side="right" className="min-w-[650px]">
         <div className="flex h-full flex-col">
           <SheetHeader className="p-6 pb-4">
