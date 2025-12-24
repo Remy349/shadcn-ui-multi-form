@@ -1,4 +1,5 @@
 import {
+  EnvelopeClosedIcon,
   LockClosedIcon,
   TextAlignLeftIcon,
   UploadIcon,
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
 
 export default function Components() {
   return (
-    <section className="py-[4rem] min-h-screen">
+    <section className="py-[4rem]">
       <div className="px-6 max-w-5xl mx-auto space-y-16">
         <div className="text-center max-w-3xl mx-auto">
           <h1 className="font-bold tracking-tighter text-3xl md:text-4xl lg:text-5xl text-balance">
@@ -75,6 +76,22 @@ export default function Components() {
                 <CardDescription>
                   Enables easy text formatting with support for bold, italics,
                   lists, and more.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </Link>
+          <Link href="/components/email-input">
+            <Card className="shadow-none border border-dashed hover:border-primary">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle>Email Input</CardTitle>
+                  <div className="bg-muted rounded-md p-1.5 border">
+                    <EnvelopeClosedIcon className="size-4" />
+                  </div>
+                </div>
+                <CardDescription>
+                  Validates email addresses to ensure correct formatting and
+                  deliverability.
                 </CardDescription>
               </CardHeader>
             </Card>

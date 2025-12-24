@@ -87,19 +87,14 @@ export const generateFormElements = (element: FormElement) => {
   render={({ field, fieldState }) => (
     <Field data-invalid={fieldState.invalid}>
       ${getFieldLabel(element.name, element.label)}
-      <InputGroup>
-        <InputGroupInput
-          {...field}
-          id="${element.name}"
-          aria-invalid={fieldState.invalid}
-          placeholder="${element.placeholder}"
-          autoComplete="off"
-          disabled={${element.disabled}}
-        />
-        <InputGroupAddon>
-          <MailIcon />
-        </InputGroupAddon>
-      </InputGroup>
+      <EmailInput
+        {...field}
+        id="${element.name}"
+        aria-invalid={fieldState.invalid}
+        placeholder="${element.placeholder}"
+        autoComplete="off"
+        disabled="${element.disabled}"
+      />
       ${getFieldDescription(element.description)}
       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
     </Field>
