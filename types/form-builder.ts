@@ -7,7 +7,8 @@ export type FormElementType =
   | "password"
   | "select"
   | "file"
-  | "rich-text-editor";
+  | "rich-text-editor"
+  | "date-picker";
 
 export interface FormElement {
   id: string;

@@ -11,7 +11,7 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import { FormElement, FormElementType } from "@/types/form-builder";
+import type { FormElement, FormElementType } from "@/types/form-builder";
 import { ComponentIcon, LayoutPanelTopIcon, LogOutIcon } from "lucide-react";
 import Link from "next/link";
 import {
@@ -24,9 +24,10 @@ import {
   CheckboxIcon,
   TextAlignLeftIcon,
   TextAlignJustifyIcon,
+  CalendarIcon,
 } from "@radix-ui/react-icons";
-import { ForwardRefExoticComponent, RefAttributes } from "react";
-import { IconProps } from "@radix-ui/react-icons/dist/types";
+import type { ForwardRefExoticComponent, RefAttributes } from "react";
+import type { IconProps } from "@radix-ui/react-icons/dist/types";
 import { Badge } from "@/components/ui/badge";
 import { generateId, toCamelCase } from "@/lib/utils";
 
@@ -48,6 +49,7 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
     select: ChevronDownIcon,
     file: UploadIcon,
     "rich-text-editor": TextAlignLeftIcon,
+    "date-picker": CalendarIcon,
   };
 
   const elements: {
@@ -66,18 +68,22 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
       icon: formElementIcons.select,
       type: "select",
       label: "Select",
-      status: "new",
     },
     {
       icon: formElementIcons.file,
       type: "file",
       label: "File",
-      status: "updated",
     },
     {
       icon: formElementIcons["rich-text-editor"],
       type: "rich-text-editor",
       label: "Rich Text Editor",
+    },
+    {
+      icon: formElementIcons["date-picker"],
+      type: "date-picker",
+      label: "Date Picker",
+      status: "new",
     },
   ];
 

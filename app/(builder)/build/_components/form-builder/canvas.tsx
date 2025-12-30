@@ -12,7 +12,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { Form, FormElement, FormElementType } from "@/types/form-builder";
+import type { Form, FormElement, FormElementType } from "@/types/form-builder";
 import { GripIcon, Trash2Icon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -26,9 +26,10 @@ import {
   CheckboxIcon,
   TextAlignLeftIcon,
   TextAlignJustifyIcon,
+  CalendarIcon,
 } from "@radix-ui/react-icons";
-import { ForwardRefExoticComponent, RefAttributes } from "react";
-import { IconProps } from "@radix-ui/react-icons/dist/types";
+import type { ForwardRefExoticComponent, RefAttributes } from "react";
+import type { IconProps } from "@radix-ui/react-icons/dist/types";
 
 interface CanvasProps {
   currentForm: Form;
@@ -56,6 +57,7 @@ export const Canvas = ({
     select: ChevronDownIcon,
     file: UploadIcon,
     "rich-text-editor": TextAlignLeftIcon,
+    "date-picker": CalendarIcon,
   };
 
   return (

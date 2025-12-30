@@ -117,6 +117,34 @@ export const generateZodSchema = (elements: FormElement[]) => {
         break;
       }
 
+      case "date-picker": {
+        let fieldSchema: ZodType = z.preprocess(
+          (val) => (val === "" || val === null ? undefined : val),
+          z.date({
+            error: (issue) =>
+              issue.input === undefined
+                ? `${element.label} is required`
+                : "Invalid date",
+          }),
+        );
+
+        const defaultValue = undefined;
+
+        if (element.required) {
+          fieldSchema = fieldSchema.refine(
+            (val) => val instanceof Date && !isNaN(val.getTime()),
+            `${element.label} is required`,
+          );
+        } else {
+          fieldSchema = fieldSchema.optional();
+        }
+
+        shape[element.name] = fieldSchema;
+        defaultValues[element.name] = defaultValue;
+
+        break;
+      }
+
       default: {
         shape[element.name] = z.string();
         defaultValues[element.name] = "";

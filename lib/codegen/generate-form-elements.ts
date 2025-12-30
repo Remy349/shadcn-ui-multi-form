@@ -239,6 +239,29 @@ export const generateFormElements = (element: FormElement) => {
 `;
     }
 
+    case "date-picker": {
+      return `
+<Controller
+  name="${element.name}"
+  control={form.control}
+  render={({ field, fieldState }) => (
+    <Field data-invalid={fieldState.invalid}>
+      ${getFieldLabel(element.name, element.label)}
+      <DatePicker
+        id="${element.name}"
+        value={field.value}
+        onChange={field.onChange}
+        aria-invalid={fieldState.invalid}
+        placeholder="${element.placeholder}"
+        disabled={${element.disabled}}
+      />
+      ${getFieldDescription(element.description)}
+      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+    </Field>
+  )}
+/>`;
+    }
+
     default: {
       return null;
     }

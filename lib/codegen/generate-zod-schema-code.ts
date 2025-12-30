@@ -76,6 +76,29 @@ const generateFieldZodSchemaCode = (element: FormElement) => {
 
       return fieldSchema;
     }
+
+    case "date-picker": {
+      let fieldSchema = `z.preprocess(
+        (val) => (val === "" || val === null ? undefined : val),
+        z.date({
+          error: (issue) =>
+            issue.input === undefined
+              ? "${element.label} is required"
+              : "Invalid date",
+        }),
+      )`;
+
+      if (element.required) {
+        fieldSchema += `.refine(
+          (val) => val instanceof Date && !isNaN(val.getTime()),
+          "${element.label} is required"
+        )`;
+      } else {
+        fieldSchema += `.optional()`;
+      }
+
+      return fieldSchema;
+    }
   }
 };
 

@@ -36,6 +36,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { useMultiStepForm } from "@/hooks/use-multi-step-form";
 import { FileInputElement } from "./form-elements/file-input-element";
 import { RichTextEditorInputElement } from "./form-elements/rich-text-editor-input-element";
+import { DatePickerInputElement } from "./form-elements/date-picker-input-element";
 
 interface MultiFormPreviewProps {
   forms: Form[];
@@ -124,6 +125,13 @@ export const MultiFormPreview = ({ forms }: MultiFormPreviewProps) => {
       ),
       "rich-text-editor": (
         <RichTextEditorInputElement
+          element={element}
+          field={field}
+          fieldState={fieldState}
+        />
+      ),
+      "date-picker": (
+        <DatePickerInputElement
           element={element}
           field={field}
           fieldState={fieldState}

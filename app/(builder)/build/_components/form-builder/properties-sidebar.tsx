@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Switch } from "@/components/ui/switch";
 import { toCamelCase } from "@/lib/utils";
-import {
+import type {
   FormElement,
   FormElementType,
   UpdateFormElement,
@@ -54,6 +54,7 @@ export const PropertiesSidebar = ({
       select: "Select",
       file: "File",
       "rich-text-editor": "Rich Text Editor",
+      "date-picker": "Date Picker",
     };
 
     return labels[type];
@@ -180,9 +181,13 @@ export const PropertiesSidebar = ({
                         }
                       />
                     </div>
-                    {!["select", "checkbox", "switch", "file"].includes(
-                      selectedElement.type,
-                    ) && (
+                    {![
+                      "select",
+                      "checkbox",
+                      "switch",
+                      "file",
+                      "date-picker",
+                    ].includes(selectedElement.type) && (
                       <>
                         <div className="space-y-2">
                           <Label className="text-xs" htmlFor="min-length">
