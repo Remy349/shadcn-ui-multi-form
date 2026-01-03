@@ -27,6 +27,7 @@ const linksComponents: LinkComponent[] = [
   { href: "/components/file-input", label: "File Input" },
   { href: "/components/rich-text-editor", label: "Rich Text Editor" },
   { href: "/components/email-input", label: "Email Input" },
+  { href: "/components/date-picker", label: "Date Picker" },
 ];
 
 export const NavigationControls = () => {

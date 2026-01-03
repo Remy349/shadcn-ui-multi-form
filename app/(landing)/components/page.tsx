@@ -1,4 +1,5 @@
 import {
+  CalendarIcon,
   EnvelopeClosedIcon,
   LockClosedIcon,
   TextAlignLeftIcon,
@@ -92,6 +93,22 @@ export default function Components() {
                 <CardDescription>
                   Validates email addresses to ensure correct formatting and
                   deliverability.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </Link>
+          <Link href="/components/date-picker">
+            <Card className="shadow-none border border-dashed hover:border-primary">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle>Date Picker</CardTitle>
+                  <div className="bg-muted rounded-md p-1.5 border">
+                    <CalendarIcon className="size-4" />
+                  </div>
+                </div>
+                <CardDescription>
+                  A date picker that lets users select a date from a calendar
+                  popover.
                 </CardDescription>
               </CardHeader>
             </Card>
