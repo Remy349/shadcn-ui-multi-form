@@ -1,6 +1,6 @@
 import { Form } from "@/types/form-builder";
 import { generateZodSchema } from "../schema-generator";
-import { generateZodSchemaCode } from "./generate-zod-schema-code";
+import { generateZodSchemaCode } from "./generate-schema-code";
 import { generateFormElements } from "./generate-form-elements";
 
 const serializeValue = (value: unknown): string => {
