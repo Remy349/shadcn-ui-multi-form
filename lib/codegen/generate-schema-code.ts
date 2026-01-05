@@ -1,5 +1,10 @@
-import { FormElement } from "@/types/form-builder";
+import type { FormElement } from "@/types/form-builder";
 import { generateZodSchema } from "../schema-generator";
+import {
+  REGEXP_ONLY_CHARS,
+  REGEXP_ONLY_DIGITS,
+  REGEXP_ONLY_DIGITS_AND_CHARS,
+} from "input-otp";
 
 const generateFieldZodSchemaCode = (element: FormElement) => {
   switch (element.type) {
@@ -96,6 +101,27 @@ const generateFieldZodSchemaCode = (element: FormElement) => {
       } else {
         fieldSchema += `.optional()`;
       }
+
+      return fieldSchema;
+    }
+
+    case "input-otp": {
+      const patternStr =
+        element.otpConfig?.pattern === REGEXP_ONLY_CHARS
+          ? REGEXP_ONLY_CHARS
+          : element.otpConfig?.pattern === REGEXP_ONLY_DIGITS
+            ? REGEXP_ONLY_DIGITS
+            : (element.otpConfig?.pattern ?? REGEXP_ONLY_DIGITS_AND_CHARS);
+
+      const pattern = new RegExp(patternStr);
+
+      const fieldSchema = `z
+        .string()
+        .min(
+          ${element.otpConfig?.length || 6},
+          "${element.label} must be ${element.otpConfig?.length || 6} characters",
+        )
+        .regex(${pattern}, "${element.label} has invalid characters")`;
 
       return fieldSchema;
     }
