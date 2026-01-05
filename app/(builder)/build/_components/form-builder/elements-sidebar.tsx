@@ -25,11 +25,13 @@ import {
   TextAlignLeftIcon,
   TextAlignJustifyIcon,
   CalendarIcon,
+  MagicWandIcon,
 } from "@radix-ui/react-icons";
 import type { ForwardRefExoticComponent, RefAttributes } from "react";
 import type { IconProps } from "@radix-ui/react-icons/dist/types";
 import { Badge } from "@/components/ui/badge";
 import { generateId, toCamelCase } from "@/lib/utils";
+import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 
 interface ElementsSidebarProps {
   addElement: (element: FormElement) => void;
@@ -50,6 +52,7 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
     file: UploadIcon,
     "rich-text-editor": TextAlignLeftIcon,
     "date-picker": CalendarIcon,
+    "input-otp": MagicWandIcon,
   };
 
   const elements: {
@@ -83,6 +86,12 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
       icon: formElementIcons["date-picker"],
       type: "date-picker",
       label: "Date Picker",
+      status: "new",
+    },
+    {
+      icon: formElementIcons["input-otp"],
+      type: "input-otp",
+      label: "Input OTP",
       status: "new",
     },
   ];
@@ -122,6 +131,13 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
               showPreview: true,
               previewSize: "md",
               variant: "default",
+            }
+          : undefined,
+      otpConfig:
+        type === "input-otp"
+          ? {
+              length: 6,
+              pattern: REGEXP_ONLY_DIGITS_AND_CHARS,
             }
           : undefined,
     };

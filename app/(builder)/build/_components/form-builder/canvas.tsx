@@ -27,6 +27,7 @@ import {
   TextAlignLeftIcon,
   TextAlignJustifyIcon,
   CalendarIcon,
+  MagicWandIcon,
 } from "@radix-ui/react-icons";
 import type { ForwardRefExoticComponent, RefAttributes } from "react";
 import type { IconProps } from "@radix-ui/react-icons/dist/types";
@@ -58,6 +59,7 @@ export const Canvas = ({
     file: UploadIcon,
     "rich-text-editor": TextAlignLeftIcon,
     "date-picker": CalendarIcon,
+    "input-otp": MagicWandIcon,
   };
 
   return (

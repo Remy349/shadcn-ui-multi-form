@@ -1,4 +1,4 @@
-import { FormElement, FormElementType } from "@/types/form-builder";
+import type { FormElement, FormElementType } from "@/types/form-builder";
 
 export const generateImports = (
   elements: FormElement[],
@@ -44,6 +44,9 @@ export const generateImports = (
     ],
     file: ['import { FileInput } from "@/components/ui/file-input"'],
     "date-picker": ['import { DatePicker } from "@/components/ui/date-picker"'],
+    "input-otp": [
+      'import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp"',
+    ],
     email: ['import { EmailInput } from "@/components/ui/email-input"'],
     "rich-text-editor": [
       'import { RichTextEditor } from "@/components/ui/editor/rich-text-editor"',

@@ -38,6 +38,7 @@ import { GripIcon } from "lucide-react";
 import { FileInputElement } from "./form-elements/file-input-element";
 import { RichTextEditorInputElement } from "./form-elements/rich-text-editor-input-element";
 import { DatePickerInputElement } from "./form-elements/date-picker-input-element";
+import { InputOTPInputElement } from "./form-elements/input-otp-input-element";
 
 interface SingleFormPreviewProps {
   currentForm: Form;
@@ -130,6 +131,13 @@ export const SingleFormPreview = ({ currentForm }: SingleFormPreviewProps) => {
       ),
       "date-picker": (
         <DatePickerInputElement
+          element={element}
+          field={field}
+          fieldState={fieldState}
+        />
+      ),
+      "input-otp": (
+        <InputOTPInputElement
           element={element}
           field={field}
           fieldState={fieldState}

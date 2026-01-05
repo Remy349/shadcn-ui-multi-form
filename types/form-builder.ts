@@ -8,7 +8,8 @@ export type FormElementType =
   | "select"
   | "file"
   | "rich-text-editor"
-  | "date-picker";
+  | "date-picker"
+  | "input-otp";
 
 export interface FormElement {
   id: string;
@@ -33,6 +34,10 @@ export interface FormElement {
     showPreview?: boolean;
     previewSize?: "sm" | "md" | "lg";
     variant?: "default" | "compact" | "minimal";
+  };
+  otpConfig?: {
+    length?: number;
+    pattern?: string;
   };
 }
 

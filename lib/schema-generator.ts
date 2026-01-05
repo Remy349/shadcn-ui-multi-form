@@ -1,5 +1,10 @@
 import z, { type ZodType } from "zod";
 import type { FormElement } from "@/types/form-builder";
+import {
+  REGEXP_ONLY_CHARS,
+  REGEXP_ONLY_DIGITS,
+  REGEXP_ONLY_DIGITS_AND_CHARS,
+} from "input-otp";
 
 export const generateZodSchema = (elements: FormElement[]) => {
   const shape: Record<string, ZodType> = {};
@@ -141,6 +146,30 @@ export const generateZodSchema = (elements: FormElement[]) => {
 
         shape[element.name] = fieldSchema;
         defaultValues[element.name] = defaultValue;
+
+        break;
+      }
+
+      case "input-otp": {
+        const patternStr =
+          element.otpConfig?.pattern === REGEXP_ONLY_CHARS
+            ? REGEXP_ONLY_CHARS
+            : element.otpConfig?.pattern === REGEXP_ONLY_DIGITS
+              ? REGEXP_ONLY_DIGITS
+              : (element.otpConfig?.pattern ?? REGEXP_ONLY_DIGITS_AND_CHARS);
+
+        const pattern = new RegExp(patternStr);
+
+        const fieldSchema = z
+          .string()
+          .min(
+            element.otpConfig?.length || 6,
+            `${element.label} must be ${element.otpConfig?.length || 6} characters`,
+          )
+          .regex(pattern, `${element.label} has invalid characters`);
+
+        shape[element.name] = fieldSchema;
+        defaultValues[element.name] = "";
 
         break;
       }

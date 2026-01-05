@@ -1,4 +1,9 @@
 import { FormElement } from "@/types/form-builder";
+import {
+  REGEXP_ONLY_CHARS,
+  REGEXP_ONLY_DIGITS,
+  REGEXP_ONLY_DIGITS_AND_CHARS,
+} from "input-otp";
 
 const getFieldLabel = (name: string, label: string) => {
   return `<FieldLabel htmlFor="${name}">${label}</FieldLabel>`;
@@ -255,6 +260,45 @@ export const generateFormElements = (element: FormElement) => {
         placeholder="${element.placeholder}"
         disabled={${element.disabled}}
       />
+      ${getFieldDescription(element.description)}
+      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+    </Field>
+  )}
+/>`;
+    }
+
+    case "input-otp": {
+      const otpLength = element.otpConfig?.length ?? 6;
+      const patternStr =
+        element.otpConfig?.pattern === REGEXP_ONLY_CHARS
+          ? REGEXP_ONLY_CHARS
+          : element.otpConfig?.pattern === REGEXP_ONLY_DIGITS
+            ? REGEXP_ONLY_DIGITS
+            : (element.otpConfig?.pattern ?? REGEXP_ONLY_DIGITS_AND_CHARS);
+
+      return `
+<Controller
+  name="${element.name}"
+  control={form.control}
+  render={({ field, fieldState }) => (
+    <Field data-invalid={fieldState.invalid}>
+      ${getFieldLabel(element.name, element.label)}
+      <InputOTP
+        id="${element.name}"
+        maxLength={${otpLength}}
+        pattern="${patternStr}"
+        value={field.value}
+        onChange={field.onChange}
+        aria-invalid={fieldState.invalid}
+        onBlur={field.onBlur}
+        disabled={${element.disabled}}
+      >
+        <InputOTPGroup className="gap-2.5 *:data-[slot=input-otp-slot]:rounded-md *:data-[slot=input-otp-slot]:border">
+          {Array.from({ length: ${otpLength} }, (_, i) => (
+            <InputOTPSlot key={i} index={i} />
+          ))}
+        </InputOTPGroup>
+      </InputOTP>
       ${getFieldDescription(element.description)}
       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
     </Field>

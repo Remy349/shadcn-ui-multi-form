@@ -33,6 +33,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  REGEXP_ONLY_DIGITS_AND_CHARS,
+  REGEXP_ONLY_CHARS,
+  REGEXP_ONLY_DIGITS,
+} from "input-otp";
 
 interface PropertiesSidebarProps {
   selectedElement: FormElement | null;
@@ -55,6 +60,7 @@ export const PropertiesSidebar = ({
       file: "File",
       "rich-text-editor": "Rich Text Editor",
       "date-picker": "Date Picker",
+      "input-otp": "Input OTP",
     };
 
     return labels[type];
@@ -118,6 +124,7 @@ export const PropertiesSidebar = ({
                       "checkbox",
                       "file",
                       "rich-text-editor",
+                      "input-otp",
                     ].includes(selectedElement.type) && (
                       <div className="space-y-2">
                         <Label className="text-xs" htmlFor="placeholder">
@@ -162,31 +169,34 @@ export const PropertiesSidebar = ({
                 <SidebarGroupLabel>Validation</SidebarGroupLabel>
                 <SidebarGroupContent className="px-2">
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-0.5">
-                        <Label className="text-xs" htmlFor="required">
-                          Required Field
-                        </Label>
-                        <p className="text-muted-foreground text-xs">
-                          User must fill this field
-                        </p>
+                    {!["input-otp"].includes(selectedElement.type) && (
+                      <div className="flex items-center justify-between">
+                        <div className="space-y-0.5">
+                          <Label className="text-xs" htmlFor="required">
+                            Required Field
+                          </Label>
+                          <p className="text-muted-foreground text-xs">
+                            User must fill this field
+                          </p>
+                        </div>
+                        <Switch
+                          id="required"
+                          checked={selectedElement.required}
+                          onCheckedChange={(checked) =>
+                            updateElement(selectedElement.id, {
+                              required: checked,
+                            })
+                          }
+                        />
                       </div>
-                      <Switch
-                        id="required"
-                        checked={selectedElement.required}
-                        onCheckedChange={(checked) =>
-                          updateElement(selectedElement.id, {
-                            required: checked,
-                          })
-                        }
-                      />
-                    </div>
+                    )}
                     {![
                       "select",
                       "checkbox",
                       "switch",
                       "file",
                       "date-picker",
+                      "input-otp",
                     ].includes(selectedElement.type) && (
                       <>
                         <div className="space-y-2">
@@ -251,6 +261,91 @@ export const PropertiesSidebar = ({
                   </div>
                 </SidebarGroupContent>
               </SidebarGroup>
+              {selectedElement.type === "input-otp" && (
+                <>
+                  <SidebarSeparator className="mx-0" />
+                  <SidebarGroup>
+                    <SidebarGroupLabel>OTP Settings</SidebarGroupLabel>
+                    <SidebarGroupContent className="px-2">
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <Label className="text-xs" htmlFor="otp-length">
+                            Length
+                          </Label>
+                          <Input
+                            id="otp-length"
+                            type="number"
+                            min={1}
+                            max={8}
+                            className="bg-background"
+                            value={selectedElement.otpConfig?.length ?? 6}
+                            onChange={(e) =>
+                              updateElement(selectedElement.id, {
+                                otpConfig: {
+                                  ...selectedElement.otpConfig,
+                                  length: Number(e.target.value) || 6,
+                                },
+                              })
+                            }
+                            autoComplete="off"
+                            placeholder="Enter OTP length"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-xs" htmlFor="otp-pattern">
+                            Allowed Characters
+                          </Label>
+                          <Select
+                            value={(() => {
+                              const source = selectedElement.otpConfig?.pattern;
+                              if (source === REGEXP_ONLY_CHARS)
+                                return "letters";
+                              if (source === REGEXP_ONLY_DIGITS)
+                                return "digits";
+                              return "alphanumeric";
+                            })()}
+                            onValueChange={(value) => {
+                              const nextPattern =
+                                value === "letters"
+                                  ? REGEXP_ONLY_CHARS
+                                  : value === "digits"
+                                    ? REGEXP_ONLY_DIGITS
+                                    : REGEXP_ONLY_DIGITS_AND_CHARS;
+                              updateElement(selectedElement.id, {
+                                otpConfig: {
+                                  ...selectedElement.otpConfig,
+                                  pattern: nextPattern,
+                                },
+                              });
+                            }}
+                          >
+                            <SelectTrigger
+                              id="otp-pattern"
+                              className="bg-background w-full"
+                            >
+                              <SelectValue placeholder="Choose pattern" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="alphanumeric">
+                                Alphanumeric (A–Z, 0–9)
+                              </SelectItem>
+                              <SelectItem value="letters">
+                                Letters only (A–Z)
+                              </SelectItem>
+                              <SelectItem value="digits">
+                                Digits only (0–9)
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <p className="text-xs text-muted-foreground">
+                            Controls which characters are allowed in the OTP.
+                          </p>
+                        </div>
+                      </div>
+                    </SidebarGroupContent>
+                  </SidebarGroup>
+                </>
+              )}
               {selectedElement.type === "file" && (
                 <>
                   <SidebarSeparator className="mx-0" />

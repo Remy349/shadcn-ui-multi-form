@@ -37,6 +37,7 @@ import { useMultiStepForm } from "@/hooks/use-multi-step-form";
 import { FileInputElement } from "./form-elements/file-input-element";
 import { RichTextEditorInputElement } from "./form-elements/rich-text-editor-input-element";
 import { DatePickerInputElement } from "./form-elements/date-picker-input-element";
+import { InputOTPInputElement } from "./form-elements/input-otp-input-element";
 
 interface MultiFormPreviewProps {
   forms: Form[];
@@ -132,6 +133,13 @@ export const MultiFormPreview = ({ forms }: MultiFormPreviewProps) => {
       ),
       "date-picker": (
         <DatePickerInputElement
+          element={element}
+          field={field}
+          fieldState={fieldState}
+        />
+      ),
+      "input-otp": (
+        <InputOTPInputElement
           element={element}
           field={field}
           fieldState={fieldState}
