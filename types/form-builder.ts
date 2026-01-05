@@ -9,7 +9,8 @@ export type FormElementType =
   | "file"
   | "rich-text-editor"
   | "date-picker"
-  | "input-otp";
+  | "input-otp"
+  | "slider";
 
 export interface FormElement {
   id: string;
@@ -38,6 +39,13 @@ export interface FormElement {
   otpConfig?: {
     length?: number;
     pattern?: string;
+  };
+  sliderConfig?: {
+    min?: number;
+    max?: number;
+    step?: number;
+    defaultValue?: number;
+    orientation?: "horizontal" | "vertical";
   };
 }
 

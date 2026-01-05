@@ -51,6 +51,7 @@ export const generateImports = (
     "rich-text-editor": [
       'import { RichTextEditor } from "@/components/ui/editor/rich-text-editor"',
     ],
+    slider: ['import { Slider } from "@/components/ui/slider"'],
   };
 
   const proccessImports = (element: FormElement) => {

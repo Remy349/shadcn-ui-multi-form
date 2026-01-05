@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Field, FieldGroup } from "@/components/ui/field";
 import { Progress } from "@/components/ui/progress";
-import { Form, FormElement, FormElementType } from "@/types/form-builder";
+import type { Form, FormElement, FormElementType } from "@/types/form-builder";
 import {
   Empty,
   EmptyDescription,
@@ -38,6 +38,7 @@ import { FileInputElement } from "./form-elements/file-input-element";
 import { RichTextEditorInputElement } from "./form-elements/rich-text-editor-input-element";
 import { DatePickerInputElement } from "./form-elements/date-picker-input-element";
 import { InputOTPInputElement } from "./form-elements/input-otp-input-element";
+import { SliderInputElement } from "./form-elements/slider-input-element";
 
 interface MultiFormPreviewProps {
   forms: Form[];
@@ -140,6 +141,13 @@ export const MultiFormPreview = ({ forms }: MultiFormPreviewProps) => {
       ),
       "input-otp": (
         <InputOTPInputElement
+          element={element}
+          field={field}
+          fieldState={fieldState}
+        />
+      ),
+      slider: (
+        <SliderInputElement
           element={element}
           field={field}
           fieldState={fieldState}

@@ -306,6 +306,48 @@ export const generateFormElements = (element: FormElement) => {
 />`;
     }
 
+    case "slider": {
+      const min = element.sliderConfig?.min;
+      const max = element.sliderConfig?.max;
+      const step = element.sliderConfig?.step;
+      const orientation = element.sliderConfig?.orientation;
+      const defaultValue = element.sliderConfig?.defaultValue;
+
+      return `
+<Controller
+  name="${element.name}"
+  control={form.control}
+  render={({ field, fieldState }) => {
+    const currentValue =
+      typeof field.value === "number" ? field.value : ${defaultValue};
+
+    return (
+      <Field data-invalid={fieldState.invalid}>
+        <div className="flex items-center space-x-2">
+          <FieldLabel htmlFor="${element.name}">${element.label}</FieldLabel>
+          <span className="text-xs text-muted-foreground">({currentValue})</span>
+        </div>
+        ${getFieldDescription(element.description)}
+        <Slider
+          id="${element.name}"
+          value={[currentValue]}
+          onValueChange={(val) => field.onChange(val[0])}
+          onBlur={field.onBlur}
+          aria-invalid={fieldState.invalid}
+          min={${min}}
+          max={${max}}
+          step={${step}}
+          orientation="${orientation}"
+          defaultValue={[${defaultValue}]}
+          disabled={${element.disabled}}
+        />
+        {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+      </Field>
+    );
+  }}
+/>`;
+    }
+
     default: {
       return null;
     }

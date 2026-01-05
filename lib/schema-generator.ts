@@ -174,6 +174,39 @@ export const generateZodSchema = (elements: FormElement[]) => {
         break;
       }
 
+      case "slider": {
+        const min = element.sliderConfig?.min ?? 0;
+        const max = element.sliderConfig?.max ?? 100;
+        const step = element.sliderConfig?.step;
+        const defaultValue = element.sliderConfig?.defaultValue ?? min;
+
+        let fieldSchema = z
+          .number({
+            error: (issue) =>
+              issue.input === undefined
+                ? `${element.label} is required`
+                : "Invalid number",
+          })
+          .min(min, `${element.label} must be at least ${min}`)
+          .max(max, `${element.label} must be at most ${max}`);
+
+        if (step && step > 0) {
+          fieldSchema = fieldSchema.refine(
+            (val) => Math.abs((val - min) % step) < 1e-9,
+            `${element.label} must align to step ${step}`,
+          );
+        }
+
+        if (!element.required) {
+          fieldSchema = fieldSchema.optional();
+        }
+
+        shape[element.name] = fieldSchema;
+        defaultValues[element.name] = defaultValue;
+
+        break;
+      }
+
       default: {
         shape[element.name] = z.string();
         defaultValues[element.name] = "";

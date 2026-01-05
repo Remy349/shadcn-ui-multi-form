@@ -26,6 +26,7 @@ import {
   TextAlignJustifyIcon,
   CalendarIcon,
   MagicWandIcon,
+  SliderIcon,
 } from "@radix-ui/react-icons";
 import type { ForwardRefExoticComponent, RefAttributes } from "react";
 import type { IconProps } from "@radix-ui/react-icons/dist/types";
@@ -53,6 +54,7 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
     "rich-text-editor": TextAlignLeftIcon,
     "date-picker": CalendarIcon,
     "input-otp": MagicWandIcon,
+    slider: SliderIcon,
   };
 
   const elements: {
@@ -92,6 +94,12 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
       icon: formElementIcons["input-otp"],
       type: "input-otp",
       label: "Input OTP",
+      status: "new",
+    },
+    {
+      icon: formElementIcons.slider,
+      type: "slider",
+      label: "Slider",
       status: "new",
     },
   ];
@@ -138,6 +146,16 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
           ? {
               length: 6,
               pattern: REGEXP_ONLY_DIGITS_AND_CHARS,
+            }
+          : undefined,
+      sliderConfig:
+        type === "slider"
+          ? {
+              min: 0,
+              max: 100,
+              step: 1,
+              defaultValue: 50,
+              orientation: "horizontal",
             }
           : undefined,
     };

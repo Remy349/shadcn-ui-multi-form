@@ -61,6 +61,7 @@ export const PropertiesSidebar = ({
       "rich-text-editor": "Rich Text Editor",
       "date-picker": "Date Picker",
       "input-otp": "Input OTP",
+      slider: "Slider",
     };
 
     return labels[type];
@@ -125,6 +126,7 @@ export const PropertiesSidebar = ({
                       "file",
                       "rich-text-editor",
                       "input-otp",
+                      "slider",
                     ].includes(selectedElement.type) && (
                       <div className="space-y-2">
                         <Label className="text-xs" htmlFor="placeholder">
@@ -197,6 +199,7 @@ export const PropertiesSidebar = ({
                       "file",
                       "date-picker",
                       "input-otp",
+                      "slider",
                     ].includes(selectedElement.type) && (
                       <>
                         <div className="space-y-2">
@@ -340,6 +343,147 @@ export const PropertiesSidebar = ({
                           <p className="text-xs text-muted-foreground">
                             Controls which characters are allowed in the OTP.
                           </p>
+                        </div>
+                      </div>
+                    </SidebarGroupContent>
+                  </SidebarGroup>
+                </>
+              )}
+              {selectedElement.type === "slider" && (
+                <>
+                  <SidebarSeparator className="mx-0" />
+                  <SidebarGroup>
+                    <SidebarGroupLabel>Slider Settings</SidebarGroupLabel>
+                    <SidebarGroupContent className="px-2">
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <Label className="text-xs" htmlFor="slider-min">
+                            Min
+                          </Label>
+                          <Input
+                            id="slider-min"
+                            type="number"
+                            className="bg-background"
+                            value={selectedElement.sliderConfig?.min ?? 0}
+                            onChange={(e) =>
+                              updateElement(selectedElement.id, {
+                                sliderConfig: {
+                                  ...selectedElement.sliderConfig,
+                                  min: Number(e.target.value),
+                                },
+                              })
+                            }
+                            autoComplete="off"
+                            placeholder="Min value"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-xs" htmlFor="slider-max">
+                            Max
+                          </Label>
+                          <Input
+                            id="slider-max"
+                            type="number"
+                            className="bg-background"
+                            value={selectedElement.sliderConfig?.max ?? 100}
+                            onChange={(e) =>
+                              updateElement(selectedElement.id, {
+                                sliderConfig: {
+                                  ...selectedElement.sliderConfig,
+                                  max: Number(e.target.value),
+                                },
+                              })
+                            }
+                            autoComplete="off"
+                            placeholder="Max value"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-xs" htmlFor="slider-step">
+                            Step
+                          </Label>
+                          <Input
+                            id="slider-step"
+                            type="number"
+                            min={0.0001}
+                            className="bg-background"
+                            value={selectedElement.sliderConfig?.step ?? 1}
+                            onChange={(e) =>
+                              updateElement(selectedElement.id, {
+                                sliderConfig: {
+                                  ...selectedElement.sliderConfig,
+                                  step: Number(e.target.value) || 1,
+                                },
+                              })
+                            }
+                            autoComplete="off"
+                            placeholder="Step"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-xs" htmlFor="slider-default">
+                            Default Value
+                          </Label>
+                          <Input
+                            id="slider-default"
+                            type="number"
+                            className="bg-background"
+                            max={selectedElement.sliderConfig?.max}
+                            min={selectedElement.sliderConfig?.min}
+                            value={
+                              selectedElement.sliderConfig?.defaultValue ?? 50
+                            }
+                            onChange={(e) =>
+                              updateElement(selectedElement.id, {
+                                sliderConfig: {
+                                  ...selectedElement.sliderConfig,
+                                  defaultValue: Number(e.target.value),
+                                },
+                              })
+                            }
+                            autoComplete="off"
+                            placeholder="Default value"
+                          />
+                          <p className="text-xs text-muted-foreground">
+                            Must be within min/max; defaults to 50 if empty.
+                          </p>
+                        </div>
+                        <div className="space-y-2">
+                          <Label
+                            className="text-xs"
+                            htmlFor="slider-orientation"
+                          >
+                            Orientation
+                          </Label>
+                          <Select
+                            value={
+                              selectedElement.sliderConfig?.orientation ??
+                              "horizontal"
+                            }
+                            onValueChange={(value) =>
+                              updateElement(selectedElement.id, {
+                                sliderConfig: {
+                                  ...selectedElement.sliderConfig,
+                                  orientation: value as
+                                    | "horizontal"
+                                    | "vertical",
+                                },
+                              })
+                            }
+                          >
+                            <SelectTrigger
+                              id="slider-orientation"
+                              className="bg-background w-full"
+                            >
+                              <SelectValue placeholder="Orientation" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="horizontal">
+                                Horizontal
+                              </SelectItem>
+                              <SelectItem value="vertical">Vertical</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </div>
                       </div>
                     </SidebarGroupContent>
