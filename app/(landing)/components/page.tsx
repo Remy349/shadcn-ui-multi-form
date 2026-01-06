@@ -1,6 +1,7 @@
 import {
   CalendarIcon,
   EnvelopeClosedIcon,
+  FrameIcon,
   LockClosedIcon,
   TextAlignLeftIcon,
   UploadIcon,
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
   title: "Components",
 };
 
-export default function Components() {
+export default function ComponentsPage() {
   return (
     <section className="py-[4rem]">
       <div className="px-6 max-w-5xl mx-auto space-y-16">
@@ -109,6 +110,22 @@ export default function Components() {
                 <CardDescription>
                   A date picker that lets users select a date from a calendar
                   popover.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </Link>
+          <Link href="/components/phone-input">
+            <Card className="shadow-none border border-dashed hover:border-primary">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle>Phone Input</CardTitle>
+                  <div className="bg-muted rounded-md p-1.5 border">
+                    <FrameIcon className="size-4" />
+                  </div>
+                </div>
+                <CardDescription>
+                  Phone number input with country support, formatting, and
+                  validation.
                 </CardDescription>
               </CardHeader>
             </Card>
