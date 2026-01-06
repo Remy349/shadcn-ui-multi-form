@@ -348,6 +348,29 @@ export const generateFormElements = (element: FormElement) => {
 />`;
     }
 
+    case "phone-input": {
+      return `
+<Controller
+  name="${element.name}"
+  control={form.control}
+  render={({ field, fieldState }) => (
+    <Field data-invalid={fieldState.invalid}>
+      ${getFieldLabel(element.name, element.label)}
+      <PhoneInput
+        {...field}
+        id="${element.name}"
+        placeholder="${element.placeholder}"
+        aria-invalid={fieldState.invalid}
+        autoComplete="off"
+        disabled={${element.disabled}}
+      />
+      ${getFieldDescription(element.description)}
+      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+    </Field>
+  )}
+/>`;
+    }
+
     default: {
       return null;
     }

@@ -52,6 +52,10 @@ export const generateImports = (
       'import { RichTextEditor } from "@/components/ui/editor/rich-text-editor"',
     ],
     slider: ['import { Slider } from "@/components/ui/slider"'],
+    "phone-input": [
+      'import { PhoneInput } from "@/components/ui/phone-input"',
+      'import { isValidPhoneNumber } from "react-phone-number-input"',
+    ],
   };
 
   const proccessImports = (element: FormElement) => {

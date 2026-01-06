@@ -29,6 +29,7 @@ import {
   CalendarIcon,
   MagicWandIcon,
   SliderIcon,
+  FrameIcon,
 } from "@radix-ui/react-icons";
 import type { ForwardRefExoticComponent, RefAttributes } from "react";
 import type { IconProps } from "@radix-ui/react-icons/dist/types";
@@ -61,7 +62,8 @@ export const Canvas = ({
     "rich-text-editor": TextAlignLeftIcon,
     "date-picker": CalendarIcon,
     "input-otp": MagicWandIcon,
-    "slider": SliderIcon,
+    slider: SliderIcon,
+    "phone-input": FrameIcon,
   };
 
   return (

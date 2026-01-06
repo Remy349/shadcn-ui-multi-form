@@ -10,7 +10,8 @@ export type FormElementType =
   | "rich-text-editor"
   | "date-picker"
   | "input-otp"
-  | "slider";
+  | "slider"
+  | "phone-input";
 
 export interface FormElement {
   id: string;

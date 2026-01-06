@@ -149,6 +149,18 @@ const generateFieldZodSchemaCode = (element: FormElement) => {
 
       return fieldSchema;
     }
+
+    case "phone-input": {
+      let fieldSchema = `z.string()`;
+
+      if (element.required) {
+        fieldSchema += `.min(1, "${element.label} is required")`;
+      }
+
+      fieldSchema += `.refine(isValidPhoneNumber, "Invalid phone number")`;
+
+      return fieldSchema;
+    }
   }
 };
 

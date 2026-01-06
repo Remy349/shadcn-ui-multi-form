@@ -5,6 +5,7 @@ import {
   REGEXP_ONLY_DIGITS,
   REGEXP_ONLY_DIGITS_AND_CHARS,
 } from "input-otp";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
 export const generateZodSchema = (elements: FormElement[]) => {
   const shape: Record<string, ZodType> = {};
@@ -200,6 +201,25 @@ export const generateZodSchema = (elements: FormElement[]) => {
         if (!element.required) {
           fieldSchema = fieldSchema.optional();
         }
+
+        shape[element.name] = fieldSchema;
+        defaultValues[element.name] = defaultValue;
+
+        break;
+      }
+
+      case "phone-input": {
+        let fieldSchema = z.string();
+        const defaultValue = "";
+
+        if (element.required) {
+          fieldSchema = fieldSchema.min(1, `${element.label} is required`);
+        }
+
+        fieldSchema = fieldSchema.refine(
+          isValidPhoneNumber,
+          "Invalid phone number",
+        );
 
         shape[element.name] = fieldSchema;
         defaultValues[element.name] = defaultValue;

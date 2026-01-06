@@ -27,6 +27,7 @@ import {
   CalendarIcon,
   MagicWandIcon,
   SliderIcon,
+  FrameIcon,
 } from "@radix-ui/react-icons";
 import type { ForwardRefExoticComponent, RefAttributes } from "react";
 import type { IconProps } from "@radix-ui/react-icons/dist/types";
@@ -55,6 +56,7 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
     "date-picker": CalendarIcon,
     "input-otp": MagicWandIcon,
     slider: SliderIcon,
+    "phone-input": FrameIcon,
   };
 
   const elements: {
@@ -100,6 +102,12 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
       icon: formElementIcons.slider,
       type: "slider",
       label: "Slider",
+      status: "new",
+    },
+    {
+      icon: formElementIcons["phone-input"],
+      type: "phone-input",
+      label: "Phone Input",
       status: "new",
     },
   ];

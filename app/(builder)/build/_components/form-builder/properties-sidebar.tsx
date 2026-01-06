@@ -62,6 +62,7 @@ export const PropertiesSidebar = ({
       "date-picker": "Date Picker",
       "input-otp": "Input OTP",
       slider: "Slider",
+      "phone-input": "Phone Input",
     };
 
     return labels[type];
@@ -200,6 +201,7 @@ export const PropertiesSidebar = ({
                       "date-picker",
                       "input-otp",
                       "slider",
+                      "phone-input",
                     ].includes(selectedElement.type) && (
                       <>
                         <div className="space-y-2">

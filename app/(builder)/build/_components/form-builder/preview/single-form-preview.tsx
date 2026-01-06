@@ -40,6 +40,7 @@ import { RichTextEditorInputElement } from "./form-elements/rich-text-editor-inp
 import { DatePickerInputElement } from "./form-elements/date-picker-input-element";
 import { InputOTPInputElement } from "./form-elements/input-otp-input-element";
 import { SliderInputElement } from "./form-elements/slider-input-element";
+import { PhoneInputElement } from "./form-elements/phone-input-element";
 
 interface SingleFormPreviewProps {
   currentForm: Form;
@@ -146,6 +147,13 @@ export const SingleFormPreview = ({ currentForm }: SingleFormPreviewProps) => {
       ),
       slider: (
         <SliderInputElement
+          element={element}
+          field={field}
+          fieldState={fieldState}
+        />
+      ),
+      "phone-input": (
+        <PhoneInputElement
           element={element}
           field={field}
           fieldState={fieldState}
