@@ -22,17 +22,11 @@ import z from "zod";
 
 const formSchema = z.object({
   selectedDate: z
-    .preprocess(
-      (val) => (val === "" || val === null ? undefined : val),
-      z.date({
-        error: (issue) =>
-          issue.input === undefined ? "Field is required" : "Invalid date",
-      }),
-    )
-    .refine(
-      (val) => val instanceof Date && !isNaN(val.getTime()),
-      "Field is required",
-    ),
+    .date({
+      error: (issue) =>
+        issue.input === undefined ? "Field is required" : "Invalid date",
+    })
+    .refine((val) => !Number.isNaN(val.getTime()), "Invalid date"),
 });
 
 type FormSchema = z.infer<typeof formSchema>;
@@ -56,17 +50,11 @@ import { zodResolver } from "@hookform/resolvers/zod"
 
 const formSchema = z.object({
   selectedDate: z
-    .preprocess(
-      (val) => (val === "" || val === null ? undefined : val),
-      z.date({
-        error: (issue) =>
-          issue.input === undefined ? "Field is required" : "Invalid date",
-      }),
-    )
-    .refine(
-      (val) => val instanceof Date && !isNaN(val.getTime()),
-      "Field is required",
-    ),
+    .date({
+      error: (issue) =>
+        issue.input === undefined ? "Field is required" : "Invalid date",
+    })
+    .refine((val) => !Number.isNaN(val.getTime()), "Invalid date"),
 })
 
 type FormSchema = z.infer<typeof formSchema>
