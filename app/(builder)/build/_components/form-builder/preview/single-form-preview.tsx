@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Field, FieldGroup } from "@/components/ui/field";
 import { Spinner } from "@/components/ui/spinner";
-import { Form, FormElement, FormElementType } from "@/types/form-builder";
+import type { Form, FormElement, FormElementType } from "@/types/form-builder";
 import {
   Controller,
   ControllerFieldState,
@@ -37,6 +37,10 @@ import {
 import { GripIcon } from "lucide-react";
 import { FileInputElement } from "./form-elements/file-input-element";
 import { RichTextEditorInputElement } from "./form-elements/rich-text-editor-input-element";
+import { DatePickerInputElement } from "./form-elements/date-picker-input-element";
+import { InputOTPInputElement } from "./form-elements/input-otp-input-element";
+import { SliderInputElement } from "./form-elements/slider-input-element";
+import { PhoneInputElement } from "./form-elements/phone-input-element";
 
 interface SingleFormPreviewProps {
   currentForm: Form;
@@ -122,6 +126,34 @@ export const SingleFormPreview = ({ currentForm }: SingleFormPreviewProps) => {
       ),
       "rich-text-editor": (
         <RichTextEditorInputElement
+          element={element}
+          field={field}
+          fieldState={fieldState}
+        />
+      ),
+      "date-picker": (
+        <DatePickerInputElement
+          element={element}
+          field={field}
+          fieldState={fieldState}
+        />
+      ),
+      "input-otp": (
+        <InputOTPInputElement
+          element={element}
+          field={field}
+          fieldState={fieldState}
+        />
+      ),
+      slider: (
+        <SliderInputElement
+          element={element}
+          field={field}
+          fieldState={fieldState}
+        />
+      ),
+      "phone-input": (
+        <PhoneInputElement
           element={element}
           field={field}
           fieldState={fieldState}

@@ -1,5 +1,10 @@
-import { FormElement } from "@/types/form-builder";
+import type { FormElement } from "@/types/form-builder";
 import { generateZodSchema } from "../schema-generator";
+import {
+  REGEXP_ONLY_CHARS,
+  REGEXP_ONLY_DIGITS,
+  REGEXP_ONLY_DIGITS_AND_CHARS,
+} from "input-otp";
 
 const generateFieldZodSchemaCode = (element: FormElement) => {
   switch (element.type) {
@@ -73,6 +78,80 @@ const generateFieldZodSchemaCode = (element: FormElement) => {
       if (element.required) {
         fieldSchema += `.refine((files) => files.length > 0, "${element.label} is required")`;
       }
+
+      return fieldSchema;
+    }
+
+    case "date-picker": {
+      let fieldSchema = `z
+          .date({
+            error: (issue) =>
+              issue.input === undefined
+                ? "${element.label} is required"
+                : "Invalid date",
+          })
+          .refine((val) => !Number.isNaN(val.getTime()), "Invalid date")`;
+
+      if (!element.required) {
+        fieldSchema += ".optional()";
+      }
+
+      return fieldSchema;
+    }
+
+    case "input-otp": {
+      const patternStr =
+        element.otpConfig?.pattern === REGEXP_ONLY_CHARS
+          ? REGEXP_ONLY_CHARS
+          : element.otpConfig?.pattern === REGEXP_ONLY_DIGITS
+            ? REGEXP_ONLY_DIGITS
+            : (element.otpConfig?.pattern ?? REGEXP_ONLY_DIGITS_AND_CHARS);
+
+      const pattern = new RegExp(patternStr);
+
+      const fieldSchema = `z
+        .string()
+        .min(
+          ${element.otpConfig?.length || 6},
+          "${element.label} must be ${element.otpConfig?.length || 6} characters",
+        )
+        .regex(${pattern}, "${element.label} has invalid characters")`;
+
+      return fieldSchema;
+    }
+
+    case "slider": {
+      const min = element.sliderConfig?.min ?? 0;
+      const max = element.sliderConfig?.max ?? 100;
+      const step = element.sliderConfig?.step;
+
+      let fieldSchema = `z
+        .number({ error: (issue) => issue.input === undefined ? "${element.label} is required" : "Invalid number" })
+        .min(${min}, "${element.label} must be at least ${min}")
+        .max(${max}, "${element.label} must be at most ${max}")`;
+
+      if (step && step > 0) {
+        fieldSchema += `.refine(
+          (val) => typeof val === "number" && Math.abs((val - ${min}) % ${step}) < 1e-9,
+          "${element.label} must align to step ${step}",
+        )`;
+      }
+
+      if (!element.required) {
+        fieldSchema += `.optional()`;
+      }
+
+      return fieldSchema;
+    }
+
+    case "phone-input": {
+      let fieldSchema = `z.string()`;
+
+      if (element.required) {
+        fieldSchema += `.min(1, "${element.label} is required")`;
+      }
+
+      fieldSchema += `.refine(isValidPhoneNumber, "Invalid phone number")`;
 
       return fieldSchema;
     }

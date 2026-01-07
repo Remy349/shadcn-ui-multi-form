@@ -1,4 +1,4 @@
-import { FormElement, FormElementType } from "@/types/form-builder";
+import type { FormElement, FormElementType } from "@/types/form-builder";
 
 export const generateImports = (
   elements: FormElement[],
@@ -43,12 +43,18 @@ export const generateImports = (
       'import { PasswordInput } from "@/components/ui/password-input"',
     ],
     file: ['import { FileInput } from "@/components/ui/file-input"'],
-    email: [
-      'import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"',
-      'import { MailIcon } from "lucide-react"',
+    "date-picker": ['import { DatePicker } from "@/components/ui/date-picker"'],
+    "input-otp": [
+      'import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp"',
     ],
+    email: ['import { EmailInput } from "@/components/ui/email-input"'],
     "rich-text-editor": [
       'import { RichTextEditor } from "@/components/ui/editor/rich-text-editor"',
+    ],
+    slider: ['import { Slider } from "@/components/ui/slider"'],
+    "phone-input": [
+      'import { PhoneInput } from "@/components/ui/phone-input"',
+      'import { isValidPhoneNumber } from "react-phone-number-input"',
     ],
   };
 

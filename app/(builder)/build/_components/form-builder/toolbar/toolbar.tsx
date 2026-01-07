@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Form, UpdateForm } from "@/types/form-builder";
 import {
-  CodeIcon,
   EyeIcon,
   EyeOffIcon,
   PlusIcon,

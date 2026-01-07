@@ -5,20 +5,19 @@ import { Example } from "./_components/example";
 import { NavigationControls } from "../_components/navigation-controls";
 
 export const metadata: Metadata = {
-  title: "Rich Text Editor",
+  title: "Email Input",
 };
 
-export default function RichTextEditor() {
+export default function EmailInputPage() {
   return (
     <section className="py-[4rem]">
       <div className="mx-auto px-6 max-w-3xl space-y-12">
         <div className="space-y-6">
           <NavigationControls />
           <p className="text-foreground/80 text-base">
-            The Rich Text Editor is a fully customizable and lightweight WYSIWYG
-            editor built on top of Tiptap. It provides a smooth and intuitive
-            editing experience, making it easy to format text with bold,
-            italics, headings, lists, links, and more.
+            The Email Input component provides a user friendly way to enter and
+            validate email addresses, ensuring proper formatting and enhancing
+            user experience.
           </p>
         </div>
         <Preview />

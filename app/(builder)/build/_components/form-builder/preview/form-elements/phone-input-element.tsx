@@ -1,36 +1,36 @@
-import { EmailInput } from "@/components/ui/email-input";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldLabel,
 } from "@/components/ui/field";
-import { FormElement } from "@/types/form-builder";
-import {
+import { PhoneInput } from "@/components/ui/phone-input";
+import type { FormElement } from "@/types/form-builder";
+import type {
   ControllerFieldState,
   ControllerRenderProps,
   FieldValues,
 } from "react-hook-form";
 
-interface EmailInputElementProps {
+interface PhoneInputElementProps {
   element: FormElement;
   field: ControllerRenderProps<FieldValues, string>;
   fieldState: ControllerFieldState;
 }
 
-export const EmailInputElement = ({
+export const PhoneInputElement = ({
   element,
   field,
   fieldState,
-}: EmailInputElementProps) => {
+}: PhoneInputElementProps) => {
   return (
     <Field data-invalid={fieldState.invalid}>
       <FieldLabel htmlFor={element.name}>{element.label}</FieldLabel>
-      <EmailInput
+      <PhoneInput
         {...field}
         id={element.name}
-        aria-invalid={fieldState.invalid}
         placeholder={element.placeholder}
+        aria-invalid={fieldState.invalid}
         autoComplete="off"
         disabled={element.disabled}
       />

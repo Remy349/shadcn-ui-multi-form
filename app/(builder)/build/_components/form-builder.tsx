@@ -51,7 +51,7 @@ export const FormBuilder = () => {
             isPreviewMode && "bg-muted/50",
           )}
         >
-          <div className={cn("max-w-2xl mx-auto", isPreviewMode && "max-w-lg")}>
+          <div className={cn("max-w-2xl mx-auto", isPreviewMode && "max-w-md")}>
             {!isPreviewMode ? (
               <Canvas
                 currentForm={currentForm}

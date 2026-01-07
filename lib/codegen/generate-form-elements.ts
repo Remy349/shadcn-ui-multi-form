@@ -1,4 +1,9 @@
 import { FormElement } from "@/types/form-builder";
+import {
+  REGEXP_ONLY_CHARS,
+  REGEXP_ONLY_DIGITS,
+  REGEXP_ONLY_DIGITS_AND_CHARS,
+} from "input-otp";
 
 const getFieldLabel = (name: string, label: string) => {
   return `<FieldLabel htmlFor="${name}">${label}</FieldLabel>`;
@@ -87,19 +92,14 @@ export const generateFormElements = (element: FormElement) => {
   render={({ field, fieldState }) => (
     <Field data-invalid={fieldState.invalid}>
       ${getFieldLabel(element.name, element.label)}
-      <InputGroup>
-        <InputGroupInput
-          {...field}
-          id="${element.name}"
-          aria-invalid={fieldState.invalid}
-          placeholder="${element.placeholder}"
-          autoComplete="off"
-          disabled={${element.disabled}}
-        />
-        <InputGroupAddon>
-          <MailIcon />
-        </InputGroupAddon>
-      </InputGroup>
+      <EmailInput
+        {...field}
+        id="${element.name}"
+        aria-invalid={fieldState.invalid}
+        placeholder="${element.placeholder}"
+        autoComplete="off"
+        disabled="${element.disabled}"
+      />
       ${getFieldDescription(element.description)}
       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
     </Field>
@@ -242,6 +242,133 @@ export const generateFormElements = (element: FormElement) => {
   )}
 />
 `;
+    }
+
+    case "date-picker": {
+      return `
+<Controller
+  name="${element.name}"
+  control={form.control}
+  render={({ field, fieldState }) => (
+    <Field data-invalid={fieldState.invalid}>
+      ${getFieldLabel(element.name, element.label)}
+      <DatePicker
+        id="${element.name}"
+        value={field.value}
+        onChange={field.onChange}
+        aria-invalid={fieldState.invalid}
+        placeholder="${element.placeholder}"
+        disabled={${element.disabled}}
+      />
+      ${getFieldDescription(element.description)}
+      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+    </Field>
+  )}
+/>`;
+    }
+
+    case "input-otp": {
+      const otpLength = element.otpConfig?.length ?? 6;
+      const patternStr =
+        element.otpConfig?.pattern === REGEXP_ONLY_CHARS
+          ? REGEXP_ONLY_CHARS
+          : element.otpConfig?.pattern === REGEXP_ONLY_DIGITS
+            ? REGEXP_ONLY_DIGITS
+            : (element.otpConfig?.pattern ?? REGEXP_ONLY_DIGITS_AND_CHARS);
+
+      return `
+<Controller
+  name="${element.name}"
+  control={form.control}
+  render={({ field, fieldState }) => (
+    <Field data-invalid={fieldState.invalid}>
+      ${getFieldLabel(element.name, element.label)}
+      <InputOTP
+        id="${element.name}"
+        maxLength={${otpLength}}
+        pattern="${patternStr}"
+        value={field.value}
+        onChange={field.onChange}
+        aria-invalid={fieldState.invalid}
+        onBlur={field.onBlur}
+        disabled={${element.disabled}}
+      >
+        <InputOTPGroup className="gap-2.5 *:data-[slot=input-otp-slot]:rounded-md *:data-[slot=input-otp-slot]:border">
+          {Array.from({ length: ${otpLength} }, (_, i) => (
+            <InputOTPSlot key={i} index={i} />
+          ))}
+        </InputOTPGroup>
+      </InputOTP>
+      ${getFieldDescription(element.description)}
+      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+    </Field>
+  )}
+/>`;
+    }
+
+    case "slider": {
+      const min = element.sliderConfig?.min;
+      const max = element.sliderConfig?.max;
+      const step = element.sliderConfig?.step;
+      const orientation = element.sliderConfig?.orientation;
+      const defaultValue = element.sliderConfig?.defaultValue;
+
+      return `
+<Controller
+  name="${element.name}"
+  control={form.control}
+  render={({ field, fieldState }) => {
+    const currentValue =
+      typeof field.value === "number" ? field.value : ${defaultValue};
+
+    return (
+      <Field data-invalid={fieldState.invalid}>
+        <div className="flex items-center space-x-2">
+          <FieldLabel htmlFor="${element.name}">${element.label}</FieldLabel>
+          <span className="text-xs text-muted-foreground">({currentValue})</span>
+        </div>
+        ${getFieldDescription(element.description)}
+        <Slider
+          id="${element.name}"
+          value={[currentValue]}
+          onValueChange={(val) => field.onChange(val[0])}
+          onBlur={field.onBlur}
+          aria-invalid={fieldState.invalid}
+          min={${min}}
+          max={${max}}
+          step={${step}}
+          orientation="${orientation}"
+          defaultValue={[${defaultValue}]}
+          disabled={${element.disabled}}
+        />
+        {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+      </Field>
+    );
+  }}
+/>`;
+    }
+
+    case "phone-input": {
+      return `
+<Controller
+  name="${element.name}"
+  control={form.control}
+  render={({ field, fieldState }) => (
+    <Field data-invalid={fieldState.invalid}>
+      ${getFieldLabel(element.name, element.label)}
+      <PhoneInput
+        {...field}
+        id="${element.name}"
+        placeholder="${element.placeholder}"
+        aria-invalid={fieldState.invalid}
+        autoComplete="off"
+        disabled={${element.disabled}}
+      />
+      ${getFieldDescription(element.description)}
+      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+    </Field>
+  )}
+/>`;
     }
 
     default: {

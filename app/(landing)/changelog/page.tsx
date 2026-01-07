@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import {
   BugIcon,
   CalendarIcon,
-  LucideIcon,
+  type LucideIcon,
   RocketIcon,
   ZapIcon,
 } from "lucide-react";
@@ -50,6 +50,51 @@ const changeTypeConfig: Record<
 };
 
 const releases: Release[] = [
+  {
+    id: 5,
+    title:
+      "Expanding the Input Ecosystem – New Components & Improved Discovery v1.3.1",
+    period: "January 6, 2026",
+    description:
+      "This update expands the form builder with powerful new input components and improves component discovery through a redesigned Components page. It focuses on flexibility, accessibility, and faster form composition.",
+    changes: [
+      {
+        id: 1,
+        type: "new",
+        text: "New Date Picker input for selecting dates with a modern calendar UI.",
+      },
+      {
+        id: 2,
+        type: "new",
+        text: "New Slider input for numeric ranges and controlled value selection.",
+      },
+      {
+        id: 3,
+        type: "new",
+        text: "New OTP Input for one-time passwords and verification flows.",
+      },
+      {
+        id: 4,
+        type: "new",
+        text: "New Phone Input powered by react-phone-number-input with country support and formatting.",
+      },
+      {
+        id: 5,
+        type: "improved",
+        text: "All new inputs are fully integrated into the Form Builder and code generator.",
+      },
+      {
+        id: 6,
+        type: "improved",
+        text: "Redesigned Components page with individual component previews and searchable discovery.",
+      },
+      {
+        id: 7,
+        type: "improved",
+        text: "Improved component documentation clarity for faster adoption.",
+      },
+    ],
+  },
   {
     id: 4,
     title: "Shadcn UI Multi Form – The Biggest Upgrade Since Launch v1.3.0",

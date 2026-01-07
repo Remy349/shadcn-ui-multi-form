@@ -1,37 +1,37 @@
-import { EmailInput } from "@/components/ui/email-input";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldLabel,
 } from "@/components/ui/field";
-import { FormElement } from "@/types/form-builder";
-import {
+import { DatePicker } from "@/components/ui/date-picker";
+import type { FormElement } from "@/types/form-builder";
+import type {
   ControllerFieldState,
   ControllerRenderProps,
   FieldValues,
 } from "react-hook-form";
 
-interface EmailInputElementProps {
+interface DatePickerInputElementProps {
   element: FormElement;
   field: ControllerRenderProps<FieldValues, string>;
   fieldState: ControllerFieldState;
 }
 
-export const EmailInputElement = ({
+export const DatePickerInputElement = ({
   element,
   field,
   fieldState,
-}: EmailInputElementProps) => {
+}: DatePickerInputElementProps) => {
   return (
     <Field data-invalid={fieldState.invalid}>
       <FieldLabel htmlFor={element.name}>{element.label}</FieldLabel>
-      <EmailInput
-        {...field}
+      <DatePicker
         id={element.name}
+        value={field.value}
+        onChange={field.onChange}
         aria-invalid={fieldState.invalid}
         placeholder={element.placeholder}
-        autoComplete="off"
         disabled={element.disabled}
       />
       <FieldDescription>{element.description}</FieldDescription>

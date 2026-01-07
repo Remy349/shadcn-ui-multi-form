@@ -11,7 +11,7 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import { FormElement, FormElementType } from "@/types/form-builder";
+import type { FormElement, FormElementType } from "@/types/form-builder";
 import { ComponentIcon, LayoutPanelTopIcon, LogOutIcon } from "lucide-react";
 import Link from "next/link";
 import {
@@ -24,11 +24,16 @@ import {
   CheckboxIcon,
   TextAlignLeftIcon,
   TextAlignJustifyIcon,
+  CalendarIcon,
+  MagicWandIcon,
+  SliderIcon,
+  FrameIcon,
 } from "@radix-ui/react-icons";
-import { ForwardRefExoticComponent, RefAttributes } from "react";
-import { IconProps } from "@radix-ui/react-icons/dist/types";
+import type { ForwardRefExoticComponent, RefAttributes } from "react";
+import type { IconProps } from "@radix-ui/react-icons/dist/types";
 import { Badge } from "@/components/ui/badge";
 import { generateId, toCamelCase } from "@/lib/utils";
+import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 
 interface ElementsSidebarProps {
   addElement: (element: FormElement) => void;
@@ -48,6 +53,10 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
     select: ChevronDownIcon,
     file: UploadIcon,
     "rich-text-editor": TextAlignLeftIcon,
+    "date-picker": CalendarIcon,
+    "input-otp": MagicWandIcon,
+    slider: SliderIcon,
+    "phone-input": FrameIcon,
   };
 
   const elements: {
@@ -66,18 +75,40 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
       icon: formElementIcons.select,
       type: "select",
       label: "Select",
-      status: "new",
     },
     {
       icon: formElementIcons.file,
       type: "file",
       label: "File",
-      status: "updated",
     },
     {
       icon: formElementIcons["rich-text-editor"],
       type: "rich-text-editor",
       label: "Rich Text Editor",
+    },
+    {
+      icon: formElementIcons["date-picker"],
+      type: "date-picker",
+      label: "Date Picker",
+      status: "new",
+    },
+    {
+      icon: formElementIcons["input-otp"],
+      type: "input-otp",
+      label: "Input OTP",
+      status: "new",
+    },
+    {
+      icon: formElementIcons.slider,
+      type: "slider",
+      label: "Slider",
+      status: "new",
+    },
+    {
+      icon: formElementIcons["phone-input"],
+      type: "phone-input",
+      label: "Phone Input",
+      status: "new",
     },
   ];
 
@@ -116,6 +147,23 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
               showPreview: true,
               previewSize: "md",
               variant: "default",
+            }
+          : undefined,
+      otpConfig:
+        type === "input-otp"
+          ? {
+              length: 6,
+              pattern: REGEXP_ONLY_DIGITS_AND_CHARS,
+            }
+          : undefined,
+      sliderConfig:
+        type === "slider"
+          ? {
+              min: 0,
+              max: 100,
+              step: 1,
+              defaultValue: 50,
+              orientation: "horizontal",
             }
           : undefined,
     };

@@ -7,7 +7,11 @@ export type FormElementType =
   | "password"
   | "select"
   | "file"
-  | "rich-text-editor";
+  | "rich-text-editor"
+  | "date-picker"
+  | "input-otp"
+  | "slider"
+  | "phone-input";
 
 export interface FormElement {
   id: string;
@@ -32,6 +36,17 @@ export interface FormElement {
     showPreview?: boolean;
     previewSize?: "sm" | "md" | "lg";
     variant?: "default" | "compact" | "minimal";
+  };
+  otpConfig?: {
+    length?: number;
+    pattern?: string;
+  };
+  sliderConfig?: {
+    min?: number;
+    max?: number;
+    step?: number;
+    defaultValue?: number;
+    orientation?: "horizontal" | "vertical";
   };
 }
 
