@@ -83,23 +83,17 @@ const generateFieldZodSchemaCode = (element: FormElement) => {
     }
 
     case "date-picker": {
-      let fieldSchema = `z.preprocess(
-        (val) => (val === "" || val === null ? undefined : val),
-        z.date({
-          error: (issue) =>
-            issue.input === undefined
-              ? "${element.label} is required"
-              : "Invalid date",
-        }),
-      )`;
+      let fieldSchema = `z
+          .date({
+            error: (issue) =>
+              issue.input === undefined
+                ? "${element.label} is required"
+                : "Invalid date",
+          })
+          .refine((val) => !Number.isNaN(val.getTime()), "Invalid date")`;
 
-      if (element.required) {
-        fieldSchema += `.refine(
-          (val) => val instanceof Date && !isNaN(val.getTime()),
-          "${element.label} is required"
-        )`;
-      } else {
-        fieldSchema += `.optional()`;
+      if (!element.required) {
+        fieldSchema += ".optional()";
       }
 
       return fieldSchema;
@@ -138,7 +132,7 @@ const generateFieldZodSchemaCode = (element: FormElement) => {
 
       if (step && step > 0) {
         fieldSchema += `.refine(
-          (val) => Math.abs((val - ${min}) % ${step}) < 1e-9,
+          (val) => typeof val === "number" && Math.abs((val - ${min}) % ${step}) < 1e-9,
           "${element.label} must align to step ${step}",
         )`;
       }

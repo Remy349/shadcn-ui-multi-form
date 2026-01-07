@@ -124,24 +124,18 @@ export const generateZodSchema = (elements: FormElement[]) => {
       }
 
       case "date-picker": {
-        let fieldSchema: ZodType = z.preprocess(
-          (val) => (val === "" || val === null ? undefined : val),
-          z.date({
+        let fieldSchema: ZodType = z
+          .date({
             error: (issue) =>
               issue.input === undefined
                 ? `${element.label} is required`
                 : "Invalid date",
-          }),
-        );
+          })
+          .refine((val) => !Number.isNaN(val.getTime()), "Invalid date");
 
         const defaultValue = undefined;
 
-        if (element.required) {
-          fieldSchema = fieldSchema.refine(
-            (val) => val instanceof Date && !isNaN(val.getTime()),
-            `${element.label} is required`,
-          );
-        } else {
+        if (!element.required) {
           fieldSchema = fieldSchema.optional();
         }
 
@@ -181,7 +175,7 @@ export const generateZodSchema = (elements: FormElement[]) => {
         const step = element.sliderConfig?.step;
         const defaultValue = element.sliderConfig?.defaultValue ?? min;
 
-        let fieldSchema = z
+        let fieldSchema: ZodType = z
           .number({
             error: (issue) =>
               issue.input === undefined
@@ -193,7 +187,8 @@ export const generateZodSchema = (elements: FormElement[]) => {
 
         if (step && step > 0) {
           fieldSchema = fieldSchema.refine(
-            (val) => Math.abs((val - min) % step) < 1e-9,
+            (val) =>
+              typeof val === "number" && Math.abs((val - min) % step) < 1e-9,
             `${element.label} must align to step ${step}`,
           );
         }
