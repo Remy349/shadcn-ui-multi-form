@@ -187,6 +187,51 @@ export const generateFormElements = (element: FormElement) => {
 `;
     }
 
+    case "radio-group": {
+      return `
+<Controller
+  name="${element.name}"
+  control={form.control}
+  render={({ field, fieldState }) => {
+    const options = ${JSON.stringify(element.radioGroupOptions?.items)};
+
+    return (
+      <FieldSet data-invalid={fieldState.invalid}>
+        <FieldLegend>${element.label}</FieldLegend>
+        ${getFieldDescription(element.description)}
+        <RadioGroup
+          name={field.name}
+          value={field.value}
+          onValueChange={field.onChange}
+          aria-invalid={fieldState.invalid}
+          disabled={${element.disabled}}
+        >
+          {options.map((item) => (
+            <FieldLabel
+              key={item.value}
+              htmlFor={item.value}
+            >
+              <Field orientation="horizontal" data-invalid={fieldState.invalid}>
+                <FieldContent>
+                  <FieldTitle>{item.label}</FieldTitle>
+                </FieldContent>
+                <RadioGroupItem
+                  value={item.value}
+                  id={item.value}
+                  aria-invalid={fieldState.invalid}
+                />
+              </Field>
+            </FieldLabel>
+          ))}
+        </RadioGroup>
+        {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+      </FieldSet>
+    )
+  }}
+/>
+`;
+    }
+
     case "select": {
       return `
 <Controller

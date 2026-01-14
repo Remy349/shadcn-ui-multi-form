@@ -56,6 +56,10 @@ export const generateImports = (
       'import { PhoneInput } from "@/components/ui/phone-input"',
       'import { isValidPhoneNumber } from "react-phone-number-input"',
     ],
+    "radio-group": [
+      'import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"',
+      'import { FieldContent, FieldSet, FieldLegend, FieldTitle } from "@/components/ui/field"',
+    ],
   };
 
   const proccessImports = (element: FormElement) => {

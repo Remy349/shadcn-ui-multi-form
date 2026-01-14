@@ -30,6 +30,7 @@ import {
   MagicWandIcon,
   SliderIcon,
   FrameIcon,
+  RadiobuttonIcon,
 } from "@radix-ui/react-icons";
 import type { ForwardRefExoticComponent, RefAttributes } from "react";
 import type { IconProps } from "@radix-ui/react-icons/dist/types";
@@ -64,6 +65,7 @@ export const Canvas = ({
     "input-otp": MagicWandIcon,
     slider: SliderIcon,
     "phone-input": FrameIcon,
+    "radio-group": RadiobuttonIcon,
   };
 
   return (

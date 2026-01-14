@@ -63,6 +63,7 @@ export const PropertiesSidebar = ({
       "input-otp": "Input OTP",
       slider: "Slider",
       "phone-input": "Phone Input",
+      "radio-group": "Radio Group",
     };
 
     return labels[type];
@@ -128,6 +129,7 @@ export const PropertiesSidebar = ({
                       "rich-text-editor",
                       "input-otp",
                       "slider",
+                      "radio-group",
                     ].includes(selectedElement.type) && (
                       <div className="space-y-2">
                         <Label className="text-xs" htmlFor="placeholder">
@@ -202,6 +204,7 @@ export const PropertiesSidebar = ({
                       "input-otp",
                       "slider",
                       "phone-input",
+                      "radio-group",
                     ].includes(selectedElement.type) && (
                       <>
                         <div className="space-y-2">
@@ -684,6 +687,99 @@ export const PropertiesSidebar = ({
                             }
                           />
                         </div>
+                      </div>
+                    </SidebarGroupContent>
+                  </SidebarGroup>
+                </>
+              )}
+              {selectedElement.type === "radio-group" && (
+                <>
+                  <SidebarSeparator className="mx-0" />
+                  <SidebarGroup>
+                    <SidebarGroupLabel>Radio Group Options</SidebarGroupLabel>
+                    <SidebarGroupContent className="px-2">
+                      <div className="grid space-y-2">
+                        <div className="flex items-center justify-between">
+                          <Label className="text-xs">Radio Items</Label>
+                          <p className="text-xs text-muted-foreground">
+                            {selectedElement.radioGroupOptions?.items.length}{" "}
+                            Items
+                          </p>
+                        </div>
+                        <div className="space-y-2">
+                          {selectedElement.radioGroupOptions?.items.map(
+                            (item, index) => (
+                              <div
+                                className="flex items-center space-x-1"
+                                key={index}
+                              >
+                                <Input
+                                  value={item.label}
+                                  className="bg-background"
+                                  autoComplete="off"
+                                  placeholder={`Option ${index + 1}`}
+                                  onChange={(e) => {
+                                    const updatedItems = [
+                                      ...(selectedElement.radioGroupOptions
+                                        ?.items || []),
+                                    ];
+
+                                    updatedItems[index] = {
+                                      label: e.target.value,
+                                      value: toCamelCase(e.target.value),
+                                    };
+
+                                    updateElement(selectedElement.id, {
+                                      radioGroupOptions: {
+                                        items: updatedItems,
+                                      },
+                                    });
+                                  }}
+                                />
+                                <Button
+                                  variant="secondary"
+                                  size="icon-sm"
+                                  onClick={() => {
+                                    const updatedItems =
+                                      selectedElement.radioGroupOptions?.items.filter(
+                                        (_, i) => i !== index,
+                                      ) || [];
+
+                                    updateElement(selectedElement.id, {
+                                      radioGroupOptions: {
+                                        items: updatedItems,
+                                      },
+                                    });
+                                  }}
+                                >
+                                  <Trash2Icon />
+                                </Button>
+                              </div>
+                            ),
+                          )}
+                        </div>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            const currentItems =
+                              selectedElement.radioGroupOptions?.items || [];
+
+                            updateElement(selectedElement.id, {
+                              radioGroupOptions: {
+                                items: [
+                                  ...currentItems,
+                                  {
+                                    label: `Option ${currentItems.length + 1}`,
+                                    value: `option${currentItems.length + 1}`,
+                                  },
+                                ],
+                              },
+                            });
+                          }}
+                        >
+                          <PlusIcon />
+                        </Button>
                       </div>
                     </SidebarGroupContent>
                   </SidebarGroup>
