@@ -98,7 +98,7 @@ export const generateFormElements = (element: FormElement) => {
         aria-invalid={fieldState.invalid}
         placeholder="${element.placeholder}"
         autoComplete="off"
-        disabled="${element.disabled}"
+        disabled={${element.disabled}}
       />
       ${getFieldDescription(element.description)}
       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
