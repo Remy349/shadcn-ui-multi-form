@@ -38,6 +38,12 @@ import {
   REGEXP_ONLY_CHARS,
   REGEXP_ONLY_DIGITS,
 } from "input-otp";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 
 interface PropertiesSidebarProps {
   selectedElement: FormElement | null;
@@ -361,47 +367,49 @@ export const PropertiesSidebar = ({
                     <SidebarGroupLabel>Slider Settings</SidebarGroupLabel>
                     <SidebarGroupContent className="px-2">
                       <div className="space-y-4">
-                        <div className="space-y-2">
-                          <Label className="text-xs" htmlFor="slider-min">
-                            Min
-                          </Label>
-                          <Input
-                            id="slider-min"
-                            type="number"
-                            className="bg-background"
-                            value={selectedElement.sliderConfig?.min ?? 0}
-                            onChange={(e) =>
-                              updateElement(selectedElement.id, {
-                                sliderConfig: {
-                                  ...selectedElement.sliderConfig,
-                                  min: Number(e.target.value),
-                                },
-                              })
-                            }
-                            autoComplete="off"
-                            placeholder="Min value"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label className="text-xs" htmlFor="slider-max">
-                            Max
-                          </Label>
-                          <Input
-                            id="slider-max"
-                            type="number"
-                            className="bg-background"
-                            value={selectedElement.sliderConfig?.max ?? 100}
-                            onChange={(e) =>
-                              updateElement(selectedElement.id, {
-                                sliderConfig: {
-                                  ...selectedElement.sliderConfig,
-                                  max: Number(e.target.value),
-                                },
-                              })
-                            }
-                            autoComplete="off"
-                            placeholder="Max value"
-                          />
+                        <div className="grid grid-cols-2 space-x-2">
+                          <div className="space-y-2">
+                            <Label className="text-xs" htmlFor="slider-min">
+                              Min
+                            </Label>
+                            <Input
+                              id="slider-min"
+                              type="number"
+                              className="bg-background"
+                              value={selectedElement.sliderConfig?.min ?? 0}
+                              onChange={(e) =>
+                                updateElement(selectedElement.id, {
+                                  sliderConfig: {
+                                    ...selectedElement.sliderConfig,
+                                    min: Number(e.target.value),
+                                  },
+                                })
+                              }
+                              autoComplete="off"
+                              placeholder="Min value"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-xs" htmlFor="slider-max">
+                              Max
+                            </Label>
+                            <Input
+                              id="slider-max"
+                              type="number"
+                              className="bg-background"
+                              value={selectedElement.sliderConfig?.max ?? 100}
+                              onChange={(e) =>
+                                updateElement(selectedElement.id, {
+                                  sliderConfig: {
+                                    ...selectedElement.sliderConfig,
+                                    max: Number(e.target.value),
+                                  },
+                                })
+                              }
+                              autoComplete="off"
+                              placeholder="Max value"
+                            />
+                          </div>
                         </div>
                         <div className="space-y-2">
                           <Label className="text-xs" htmlFor="slider-step">
@@ -709,57 +717,58 @@ export const PropertiesSidebar = ({
                         <div className="space-y-2">
                           {selectedElement.radioGroupOptions?.items.map(
                             (item, index) => (
-                              <div
-                                className="flex items-center space-x-1"
-                                key={index}
-                              >
-                                <Input
-                                  value={item.label}
-                                  className="bg-background"
-                                  autoComplete="off"
-                                  placeholder={`Option ${index + 1}`}
-                                  onChange={(e) => {
-                                    const updatedItems = [
-                                      ...(selectedElement.radioGroupOptions
-                                        ?.items || []),
-                                    ];
+                              <div key={index}>
+                                <InputGroup>
+                                  <InputGroupInput
+                                    value={item.label}
+                                    className="bg-background"
+                                    autoComplete="off"
+                                    placeholder={`Option ${index + 1}`}
+                                    onChange={(e) => {
+                                      const updatedItems = [
+                                        ...(selectedElement.radioGroupOptions
+                                          ?.items || []),
+                                      ];
 
-                                    updatedItems[index] = {
-                                      label: e.target.value,
-                                      value: toCamelCase(e.target.value),
-                                    };
+                                      updatedItems[index] = {
+                                        label: e.target.value,
+                                        value: toCamelCase(e.target.value),
+                                      };
 
-                                    updateElement(selectedElement.id, {
-                                      radioGroupOptions: {
-                                        items: updatedItems,
-                                      },
-                                    });
-                                  }}
-                                />
-                                <Button
-                                  variant="secondary"
-                                  size="icon-sm"
-                                  onClick={() => {
-                                    const updatedItems =
-                                      selectedElement.radioGroupOptions?.items.filter(
-                                        (_, i) => i !== index,
-                                      ) || [];
+                                      updateElement(selectedElement.id, {
+                                        radioGroupOptions: {
+                                          items: updatedItems,
+                                        },
+                                      });
+                                    }}
+                                  />
+                                  <InputGroupAddon align="inline-end">
+                                    <InputGroupButton
+                                      size="icon-xs"
+                                      onClick={() => {
+                                        const updatedItems =
+                                          selectedElement.radioGroupOptions?.items.filter(
+                                            (_, i) => i !== index,
+                                          ) || [];
 
-                                    updateElement(selectedElement.id, {
-                                      radioGroupOptions: {
-                                        items: updatedItems,
-                                      },
-                                    });
-                                  }}
-                                >
-                                  <Trash2Icon />
-                                </Button>
+                                        updateElement(selectedElement.id, {
+                                          radioGroupOptions: {
+                                            items: updatedItems,
+                                          },
+                                        });
+                                      }}
+                                    >
+                                      <Trash2Icon />
+                                    </InputGroupButton>
+                                  </InputGroupAddon>
+                                </InputGroup>
                               </div>
                             ),
                           )}
                         </div>
                         <Button
                           variant="outline"
+                          className="border-dashed"
                           size="sm"
                           onClick={() => {
                             const currentItems =
@@ -824,63 +833,64 @@ export const PropertiesSidebar = ({
                           <div className="space-y-2">
                             {selectedElement.options?.selectItems.map(
                               (item, index) => (
-                                <div
-                                  className="flex items-center space-x-1"
-                                  key={index}
-                                >
-                                  <Input
-                                    value={item.label}
-                                    className="bg-background"
-                                    autoComplete="off"
-                                    placeholder={`Option ${index + 1}`}
-                                    onChange={(e) => {
-                                      const updatedItems = [
-                                        ...(selectedElement.options
-                                          ?.selectItems || []),
-                                      ];
+                                <div key={index}>
+                                  <InputGroup>
+                                    <InputGroupInput
+                                      value={item.label}
+                                      className="bg-background"
+                                      autoComplete="off"
+                                      placeholder={`Option ${index + 1}`}
+                                      onChange={(e) => {
+                                        const updatedItems = [
+                                          ...(selectedElement.options
+                                            ?.selectItems || []),
+                                        ];
 
-                                      updatedItems[index] = {
-                                        label: e.target.value,
-                                        value: toCamelCase(e.target.value),
-                                      };
+                                        updatedItems[index] = {
+                                          label: e.target.value,
+                                          value: toCamelCase(e.target.value),
+                                        };
 
-                                      updateElement(selectedElement.id, {
-                                        options: {
-                                          selectLabel:
-                                            selectedElement.options
-                                              ?.selectLabel || "",
-                                          selectItems: updatedItems,
-                                        },
-                                      });
-                                    }}
-                                  />
-                                  <Button
-                                    variant="secondary"
-                                    size="icon-sm"
-                                    onClick={() => {
-                                      const updatedItems =
-                                        selectedElement.options?.selectItems.filter(
-                                          (_, i) => i !== index,
-                                        ) || [];
+                                        updateElement(selectedElement.id, {
+                                          options: {
+                                            selectLabel:
+                                              selectedElement.options
+                                                ?.selectLabel || "",
+                                            selectItems: updatedItems,
+                                          },
+                                        });
+                                      }}
+                                    />
+                                    <InputGroupAddon align="inline-end">
+                                      <InputGroupButton
+                                        size="icon-xs"
+                                        onClick={() => {
+                                          const updatedItems =
+                                            selectedElement.options?.selectItems.filter(
+                                              (_, i) => i !== index,
+                                            ) || [];
 
-                                      updateElement(selectedElement.id, {
-                                        options: {
-                                          selectLabel:
-                                            selectedElement.options
-                                              ?.selectLabel || "",
-                                          selectItems: updatedItems,
-                                        },
-                                      });
-                                    }}
-                                  >
-                                    <Trash2Icon />
-                                  </Button>
+                                          updateElement(selectedElement.id, {
+                                            options: {
+                                              selectLabel:
+                                                selectedElement.options
+                                                  ?.selectLabel || "",
+                                              selectItems: updatedItems,
+                                            },
+                                          });
+                                        }}
+                                      >
+                                        <Trash2Icon />
+                                      </InputGroupButton>
+                                    </InputGroupAddon>
+                                  </InputGroup>
                                 </div>
                               ),
                             )}
                           </div>
                           <Button
                             variant="outline"
+                            className="border-dashed"
                             size="sm"
                             onClick={() => {
                               const currentItems =
