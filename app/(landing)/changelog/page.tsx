@@ -51,6 +51,40 @@ const changeTypeConfig: Record<
 
 const releases: Release[] = [
   {
+    id: 6,
+    title: "Input Flexibility & Configuration UX Enhancements v1.4.0",
+    period: "January 26, 2026",
+    description:
+      "This release introduces a new Radio Group input and refines the configuration experience of existing components. It also includes important rendering fixes to ensure consistent and reliable form previews.",
+    changes: [
+      {
+        id: 1,
+        type: "new",
+        text: "New Radio Group input for single-choice selections with configurable options.",
+      },
+      {
+        id: 2,
+        type: "fixed",
+        text: "Fixed an issue where the Email input was not rendering correctly in the form preview.",
+      },
+      {
+        id: 3,
+        type: "improved",
+        text: "Improved the design and user experience when editing Select input properties.",
+      },
+      {
+        id: 4,
+        type: "improved",
+        text: "Enhanced the Slider input configuration panel for better clarity and usability.",
+      },
+      {
+        id: 5,
+        type: "improved",
+        text: "Overall UI refinements across input property editors for a smoother configuration workflow.",
+      },
+    ],
+  },
+  {
     id: 5,
     title:
       "Expanding the Input Ecosystem – New Components & Improved Discovery v1.3.1",
