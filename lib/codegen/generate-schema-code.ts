@@ -34,6 +34,24 @@ const generateFieldZodSchemaCode = (element: FormElement) => {
       return fieldSchema;
     }
 
+    case "radio-group": {
+      let fieldSchema = "z.string()";
+
+      const values =
+        element.radioGroupOptions?.items.map((item) => item.value) || [];
+
+      if (element.required) {
+        fieldSchema += `.min(1, "${element.label} is required")`;
+      }
+
+      if (values.length > 0) {
+        const valuesArray = JSON.stringify(values);
+        fieldSchema += `.refine((val) => ${valuesArray}.includes(val), "${element.label} must be a valid option")`;
+      }
+
+      return fieldSchema;
+    }
+
     case "select": {
       let fieldSchema = "z.string()";
 

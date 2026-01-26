@@ -51,6 +51,30 @@ export const generateZodSchema = (elements: FormElement[]) => {
         break;
       }
 
+      case "radio-group": {
+        let fieldSchema = z.string();
+        const defaultValue = "";
+
+        const values =
+          element.radioGroupOptions?.items.map((item) => item.value) || [];
+
+        if (element.required) {
+          fieldSchema = fieldSchema.min(1, `${element.label} is required`);
+        }
+
+        if (values.length > 0) {
+          fieldSchema = fieldSchema.refine(
+            (val) => values.includes(val),
+            `${element.label} must be a valid option`,
+          );
+        }
+
+        shape[element.name] = fieldSchema;
+        defaultValues[element.name] = defaultValue;
+
+        break;
+      }
+
       case "select": {
         let fieldSchema = z.string();
         const defaultValue = "";

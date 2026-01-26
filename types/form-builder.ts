@@ -11,7 +11,8 @@ export type FormElementType =
   | "date-picker"
   | "input-otp"
   | "slider"
-  | "phone-input";
+  | "phone-input"
+  | "radio-group";
 
 export interface FormElement {
   id: string;
@@ -47,6 +48,12 @@ export interface FormElement {
     step?: number;
     defaultValue?: number;
     orientation?: "horizontal" | "vertical";
+  };
+  radioGroupOptions?: {
+    items: {
+      label: string;
+      value: string;
+    }[];
   };
 }
 

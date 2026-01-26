@@ -28,6 +28,7 @@ import {
   MagicWandIcon,
   SliderIcon,
   FrameIcon,
+  RadiobuttonIcon,
 } from "@radix-ui/react-icons";
 import type { ForwardRefExoticComponent, RefAttributes } from "react";
 import type { IconProps } from "@radix-ui/react-icons/dist/types";
@@ -57,6 +58,7 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
     "input-otp": MagicWandIcon,
     slider: SliderIcon,
     "phone-input": FrameIcon,
+    "radio-group": RadiobuttonIcon,
   };
 
   const elements: {
@@ -108,6 +110,12 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
       icon: formElementIcons["phone-input"],
       type: "phone-input",
       label: "Phone Input",
+      status: "new",
+    },
+    {
+      icon: formElementIcons["radio-group"],
+      type: "radio-group",
+      label: "Radio Group",
       status: "new",
     },
   ];
@@ -164,6 +172,21 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
               step: 1,
               defaultValue: 50,
               orientation: "horizontal",
+            }
+          : undefined,
+      radioGroupOptions:
+        type === "radio-group"
+          ? {
+              items: [
+                {
+                  label: "Option 1",
+                  value: "option1",
+                },
+                {
+                  label: "Option 2",
+                  value: "option2",
+                },
+              ],
             }
           : undefined,
     };

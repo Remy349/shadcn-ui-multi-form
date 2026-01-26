@@ -40,6 +40,7 @@ import { DatePickerInputElement } from "./form-elements/date-picker-input-elemen
 import { InputOTPInputElement } from "./form-elements/input-otp-input-element";
 import { SliderInputElement } from "./form-elements/slider-input-element";
 import { PhoneInputElement } from "./form-elements/phone-input-element";
+import { RadioGroupInputElement } from "./form-elements/radio-group-input-element";
 
 interface MultiFormPreviewProps {
   forms: Form[];
@@ -156,6 +157,13 @@ export const MultiFormPreview = ({ forms }: MultiFormPreviewProps) => {
       ),
       "phone-input": (
         <PhoneInputElement
+          element={element}
+          field={field}
+          fieldState={fieldState}
+        />
+      ),
+      "radio-group": (
+        <RadioGroupInputElement
           element={element}
           field={field}
           fieldState={fieldState}
