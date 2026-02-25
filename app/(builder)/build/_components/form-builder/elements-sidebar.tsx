@@ -92,31 +92,26 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
       icon: formElementIcons["date-picker"],
       type: "date-picker",
       label: "Date Picker",
-      status: "new",
     },
     {
       icon: formElementIcons["input-otp"],
       type: "input-otp",
       label: "Input OTP",
-      status: "new",
     },
     {
       icon: formElementIcons.slider,
       type: "slider",
       label: "Slider",
-      status: "new",
     },
     {
       icon: formElementIcons["phone-input"],
       type: "phone-input",
       label: "Phone Input",
-      status: "new",
     },
     {
       icon: formElementIcons["radio-group"],
       type: "radio-group",
       label: "Radio Group",
-      status: "new",
     },
   ];
 
