@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { LayoutPanelTopIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DesktopMenu } from "./desktop-menu";
 import { MobileMenu } from "./mobile-menu";
@@ -16,11 +15,10 @@ export const Header = async () => {
     <header className="sticky top-0 left-0 z-50 w-full backdrop-blur-lg">
       <nav className="px-6 mx-auto flex items-center justify-between h-16 max-w-5xl">
         <div className="flex items-center space-x-2">
-          <Link
-            href="/"
-            className="flex items-center space-x-2 bg-muted p-2 rounded-2xl border border-dashed"
-          >
-            <LayoutPanelTopIcon className="size-4" />
+          <Link href="/" className="flex items-center space-x-1 py-1 px-2">
+            <picture>
+              <img src="/logo.png" alt="MultiForm Logo" className="size-8" />
+            </picture>
             <span className="font-bold text-sm">MultiForm</span>
           </Link>
           <Badge variant="secondary" className="font-semibold">

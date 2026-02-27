@@ -1,4 +1,3 @@
-import { LayoutPanelTopIcon } from "lucide-react";
 import Link from "next/link";
 import { links } from "./links";
 import { FaGithub } from "react-icons/fa";
@@ -12,9 +11,11 @@ export const Footer = () => {
         <Link
           href="/"
           aria-label="Home"
-          className="mx-auto size-fit flex items-center space-x-2 p-2 rounded-2xl bg-muted border border-dashed"
+          className="mx-auto size-fit flex items-center space-x-1 px-2 py-1"
         >
-          <LayoutPanelTopIcon className="size-4" />
+          <picture>
+            <img src="/logo.png" alt="MultiForm Logo" className="size-10" />
+          </picture>
           <span className="font-bold text-sm">MultiForm</span>
         </Link>
 
