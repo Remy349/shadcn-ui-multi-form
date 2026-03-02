@@ -3,6 +3,7 @@ import { links } from "./links";
 import { FaGithub } from "react-icons/fa";
 import { BsTwitterX } from "react-icons/bs";
 import type { Route } from "next";
+import { LayersIcon } from "lucide-react";
 
 export const Footer = () => {
   return (
@@ -11,11 +12,11 @@ export const Footer = () => {
         <Link
           href="/"
           aria-label="Home"
-          className="mx-auto size-fit flex items-center space-x-1 px-2 py-1"
+          className="mx-auto size-fit flex items-center space-x-2"
         >
-          <picture>
-            <img src="/logo.png" alt="MultiForm Logo" className="size-10" />
-          </picture>
+          <div className="rounded-md bg-muted p-2 border border-dashed">
+            <LayersIcon className="size-4 text-primary/80" />
+          </div>
           <span className="font-bold text-sm">MultiForm</span>
         </Link>
 
