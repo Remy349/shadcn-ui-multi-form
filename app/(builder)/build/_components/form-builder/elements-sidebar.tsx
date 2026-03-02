@@ -12,7 +12,7 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 import type { FormElement, FormElementType } from "@/types/form-builder";
-import { ComponentIcon, LayoutPanelTopIcon, LogOutIcon } from "lucide-react";
+import { ComponentIcon, LogOutIcon } from "lucide-react";
 import Link from "next/link";
 import {
   TextIcon,
@@ -29,6 +29,7 @@ import {
   SliderIcon,
   FrameIcon,
   RadiobuttonIcon,
+  LayersIcon,
 } from "@radix-ui/react-icons";
 import type { ForwardRefExoticComponent, RefAttributes } from "react";
 import type { IconProps } from "@radix-ui/react-icons/dist/types";
@@ -246,7 +247,7 @@ export const ElementsSidebar = ({ addElement }: ElementsSidebarProps) => {
             <SidebarMenuButton size="lg" asChild>
               <Link href="/">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-muted border border-dashed">
-                  <LayoutPanelTopIcon className="size-4" />
+                  <LayersIcon className="size-4 text-primary/80" />
                 </div>
                 <div className="flex flex-col leading-tight">
                   <span className="font-bold text-sm">MultiForm</span>

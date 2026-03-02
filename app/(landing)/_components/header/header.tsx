@@ -7,6 +7,7 @@ import { BsTwitterX } from "react-icons/bs";
 import { FaGithub } from "react-icons/fa";
 import { Badge } from "@/components/ui/badge";
 import { getGitHubRepoStars } from "@/lib/github";
+import { LayersIcon } from "lucide-react";
 
 export const Header = async () => {
   const stars = await getGitHubRepoStars();
@@ -15,10 +16,10 @@ export const Header = async () => {
     <header className="sticky top-0 left-0 z-50 w-full backdrop-blur-lg">
       <nav className="px-6 mx-auto flex items-center justify-between h-16 max-w-5xl">
         <div className="flex items-center space-x-2">
-          <Link href="/" className="flex items-center space-x-1 py-1 px-2">
-            <picture>
-              <img src="/logo.png" alt="MultiForm Logo" className="size-8" />
-            </picture>
+          <Link href="/" className="flex items-center space-x-2">
+            <div className="rounded-md bg-muted p-2 border border-dashed">
+              <LayersIcon className="size-4 text-primary/80" />
+            </div>
             <span className="font-bold text-sm">MultiForm</span>
           </Link>
           <Badge variant="secondary" className="font-semibold">
