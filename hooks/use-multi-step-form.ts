@@ -1,16 +1,17 @@
 "use client";
 
-import { generateZodSchema } from "@/lib/schema-generator";
-import { Form } from "@/types/form-builder";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { generateZodSchema } from "@/lib/schema-generator";
+import { type Form, isFieldElement } from "@/types/form-builder";
 
 export const useMultiStepForm = (forms: Form[]) => {
   const schemas = useMemo(() => {
     return forms.map((form) => {
-      const { schema, defaultValues } = generateZodSchema(form.elements);
+      const fieldElements = form.elements.filter(isFieldElement);
+      const { schema, defaultValues } = generateZodSchema(fieldElements);
 
       return { schema, defaultValues };
     });
@@ -46,9 +47,9 @@ export const useMultiStepForm = (forms: Form[]) => {
   const progress = ((currentStep + 1) / forms.length) * 100;
 
   const handleNextButton = async () => {
-    const currentFields = forms[currentStep].elements.map(
-      (element) => element.name,
-    );
+    const currentFields = forms[currentStep].elements
+      .filter(isFieldElement)
+      .map((element) => element.name);
 
     const isValid = await form.trigger(currentFields);
 

@@ -1,3 +1,9 @@
+import {
+  REGEXP_ONLY_CHARS,
+  REGEXP_ONLY_DIGITS,
+  REGEXP_ONLY_DIGITS_AND_CHARS,
+} from "input-otp";
+import { PlusIcon, Settings2Icon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Empty,
@@ -7,8 +13,21 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { Input } from "@/components/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Sidebar,
   SidebarContent,
@@ -19,60 +38,29 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { Switch } from "@/components/ui/switch";
+import { getFieldRegistryItem } from "@/lib/builder/registry";
 import { toCamelCase } from "@/lib/utils";
 import type {
-  FormElement,
-  FormElementType,
+  BuilderElement,
+  FieldElementType,
   UpdateFormElement,
 } from "@/types/form-builder";
-import { PlusIcon, Settings2Icon, Trash2Icon } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  REGEXP_ONLY_DIGITS_AND_CHARS,
-  REGEXP_ONLY_CHARS,
-  REGEXP_ONLY_DIGITS,
-} from "input-otp";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from "@/components/ui/input-group";
+import { isFieldElement } from "@/types/form-builder";
 
 interface PropertiesSidebarProps {
-  selectedElement: FormElement | null;
-  updateElement: (elementId: string, updatedElement: UpdateFormElement) => void;
+  selectedElement: BuilderElement | null;
+  updateNode: (elementId: string, updatedElement: UpdateFormElement) => void;
 }
 
 export const PropertiesSidebar = ({
   selectedElement,
-  updateElement,
+  updateNode,
 }: PropertiesSidebarProps) => {
-  const elementTypeLabel = (type: FormElementType) => {
-    const labels: Record<FormElementType, string> = {
-      text: "Text",
-      email: "Email",
-      textarea: "Textarea",
-      checkbox: "Checkbox",
-      switch: "Switch",
-      password: "Password",
-      select: "Select",
-      file: "File",
-      "rich-text-editor": "Rich Text Editor",
-      "date-picker": "Date Picker",
-      "input-otp": "Input OTP",
-      slider: "Slider",
-      "phone-input": "Phone Input",
-      "radio-group": "Radio Group",
-    };
+  const fieldElement =
+    selectedElement && isFieldElement(selectedElement) ? selectedElement : null;
 
-    return labels[type];
+  const elementTypeLabel = (type: FieldElementType) => {
+    return getFieldRegistryItem(type).label;
   };
 
   return (
@@ -93,14 +81,14 @@ export const PropertiesSidebar = ({
       <SidebarSeparator className="mx-0" />
       <ScrollArea className="h-[calc(100svh-71px)]">
         <SidebarContent>
-          {selectedElement ? (
+          {fieldElement ? (
             <>
               <SidebarGroup>
                 <SidebarGroupLabel>Element Type</SidebarGroupLabel>
                 <SidebarGroupContent className="px-2">
                   <Input
                     className="bg-background"
-                    value={elementTypeLabel(selectedElement.type)}
+                    value={elementTypeLabel(fieldElement.type)}
                     disabled
                   />
                 </SidebarGroupContent>
@@ -116,10 +104,10 @@ export const PropertiesSidebar = ({
                       </Label>
                       <Input
                         id="label"
-                        value={selectedElement.label}
+                        value={fieldElement.label}
                         className="bg-background"
                         onChange={(e) =>
-                          updateElement(selectedElement.id, {
+                          updateNode(fieldElement.id, {
                             label: e.target.value,
                             name: toCamelCase(e.target.value),
                           })
@@ -136,17 +124,17 @@ export const PropertiesSidebar = ({
                       "input-otp",
                       "slider",
                       "radio-group",
-                    ].includes(selectedElement.type) && (
+                    ].includes(fieldElement.type) && (
                       <div className="space-y-2">
                         <Label className="text-xs" htmlFor="placeholder">
                           Placeholder (Optional)
                         </Label>
                         <Input
                           id="placeholder"
-                          value={selectedElement.placeholder}
+                          value={fieldElement.placeholder}
                           className="bg-background"
                           onChange={(e) =>
-                            updateElement(selectedElement.id, {
+                            updateNode(fieldElement.id, {
                               placeholder: e.target.value,
                             })
                           }
@@ -161,10 +149,10 @@ export const PropertiesSidebar = ({
                       </Label>
                       <Input
                         id="description"
-                        value={selectedElement.description}
+                        value={fieldElement.description}
                         className="bg-background"
                         onChange={(e) =>
-                          updateElement(selectedElement.id, {
+                          updateNode(fieldElement.id, {
                             description: e.target.value,
                           })
                         }
@@ -180,7 +168,7 @@ export const PropertiesSidebar = ({
                 <SidebarGroupLabel>Validation</SidebarGroupLabel>
                 <SidebarGroupContent className="px-2">
                   <div className="space-y-4">
-                    {!["input-otp"].includes(selectedElement.type) && (
+                    {!["input-otp"].includes(fieldElement.type) && (
                       <div className="flex items-center justify-between">
                         <div className="space-y-0.5">
                           <Label className="text-xs" htmlFor="required">
@@ -192,9 +180,9 @@ export const PropertiesSidebar = ({
                         </div>
                         <Switch
                           id="required"
-                          checked={selectedElement.required}
+                          checked={fieldElement.required}
                           onCheckedChange={(checked) =>
-                            updateElement(selectedElement.id, {
+                            updateNode(fieldElement.id, {
                               required: checked,
                             })
                           }
@@ -211,7 +199,7 @@ export const PropertiesSidebar = ({
                       "slider",
                       "phone-input",
                       "radio-group",
-                    ].includes(selectedElement.type) && (
+                    ].includes(fieldElement.type) && (
                       <>
                         <div className="space-y-2">
                           <Label className="text-xs" htmlFor="min-length">
@@ -221,10 +209,10 @@ export const PropertiesSidebar = ({
                             id="min-length"
                             type="number"
                             min={0}
-                            value={selectedElement.minLength}
+                            value={fieldElement.minLength}
                             className="bg-background"
                             onChange={(e) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 minLength: Number(e.target.value),
                               })
                             }
@@ -240,10 +228,10 @@ export const PropertiesSidebar = ({
                             id="max-length"
                             type="number"
                             min={0}
-                            value={selectedElement.maxLength}
+                            value={fieldElement.maxLength}
                             className="bg-background"
                             onChange={(e) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 maxLength: Number(e.target.value),
                               })
                             }
@@ -264,9 +252,9 @@ export const PropertiesSidebar = ({
                       </div>
                       <Switch
                         id="disabled"
-                        checked={selectedElement.disabled}
+                        checked={fieldElement.disabled}
                         onCheckedChange={(checked) =>
-                          updateElement(selectedElement.id, {
+                          updateNode(fieldElement.id, {
                             disabled: checked,
                           })
                         }
@@ -275,7 +263,7 @@ export const PropertiesSidebar = ({
                   </div>
                 </SidebarGroupContent>
               </SidebarGroup>
-              {selectedElement.type === "input-otp" && (
+              {fieldElement.type === "input-otp" && (
                 <>
                   <SidebarSeparator className="mx-0" />
                   <SidebarGroup>
@@ -292,11 +280,11 @@ export const PropertiesSidebar = ({
                             min={1}
                             max={8}
                             className="bg-background"
-                            value={selectedElement.otpConfig?.length ?? 6}
+                            value={fieldElement.otpConfig?.length ?? 6}
                             onChange={(e) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 otpConfig: {
-                                  ...selectedElement.otpConfig,
+                                  ...fieldElement.otpConfig,
                                   length: Number(e.target.value) || 6,
                                 },
                               })
@@ -311,7 +299,7 @@ export const PropertiesSidebar = ({
                           </Label>
                           <Select
                             value={(() => {
-                              const source = selectedElement.otpConfig?.pattern;
+                              const source = fieldElement.otpConfig?.pattern;
                               if (source === REGEXP_ONLY_CHARS)
                                 return "letters";
                               if (source === REGEXP_ONLY_DIGITS)
@@ -325,9 +313,9 @@ export const PropertiesSidebar = ({
                                   : value === "digits"
                                     ? REGEXP_ONLY_DIGITS
                                     : REGEXP_ONLY_DIGITS_AND_CHARS;
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 otpConfig: {
-                                  ...selectedElement.otpConfig,
+                                  ...fieldElement.otpConfig,
                                   pattern: nextPattern,
                                 },
                               });
@@ -360,7 +348,7 @@ export const PropertiesSidebar = ({
                   </SidebarGroup>
                 </>
               )}
-              {selectedElement.type === "slider" && (
+              {fieldElement.type === "slider" && (
                 <>
                   <SidebarSeparator className="mx-0" />
                   <SidebarGroup>
@@ -376,11 +364,11 @@ export const PropertiesSidebar = ({
                               id="slider-min"
                               type="number"
                               className="bg-background"
-                              value={selectedElement.sliderConfig?.min ?? 0}
+                              value={fieldElement.sliderConfig?.min ?? 0}
                               onChange={(e) =>
-                                updateElement(selectedElement.id, {
+                                updateNode(fieldElement.id, {
                                   sliderConfig: {
-                                    ...selectedElement.sliderConfig,
+                                    ...fieldElement.sliderConfig,
                                     min: Number(e.target.value),
                                   },
                                 })
@@ -397,11 +385,11 @@ export const PropertiesSidebar = ({
                               id="slider-max"
                               type="number"
                               className="bg-background"
-                              value={selectedElement.sliderConfig?.max ?? 100}
+                              value={fieldElement.sliderConfig?.max ?? 100}
                               onChange={(e) =>
-                                updateElement(selectedElement.id, {
+                                updateNode(fieldElement.id, {
                                   sliderConfig: {
-                                    ...selectedElement.sliderConfig,
+                                    ...fieldElement.sliderConfig,
                                     max: Number(e.target.value),
                                   },
                                 })
@@ -420,11 +408,11 @@ export const PropertiesSidebar = ({
                             type="number"
                             min={0.0001}
                             className="bg-background"
-                            value={selectedElement.sliderConfig?.step ?? 1}
+                            value={fieldElement.sliderConfig?.step ?? 1}
                             onChange={(e) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 sliderConfig: {
-                                  ...selectedElement.sliderConfig,
+                                  ...fieldElement.sliderConfig,
                                   step: Number(e.target.value) || 1,
                                 },
                               })
@@ -441,15 +429,15 @@ export const PropertiesSidebar = ({
                             id="slider-default"
                             type="number"
                             className="bg-background"
-                            max={selectedElement.sliderConfig?.max}
-                            min={selectedElement.sliderConfig?.min}
+                            max={fieldElement.sliderConfig?.max}
+                            min={fieldElement.sliderConfig?.min}
                             value={
-                              selectedElement.sliderConfig?.defaultValue ?? 50
+                              fieldElement.sliderConfig?.defaultValue ?? 50
                             }
                             onChange={(e) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 sliderConfig: {
-                                  ...selectedElement.sliderConfig,
+                                  ...fieldElement.sliderConfig,
                                   defaultValue: Number(e.target.value),
                                 },
                               })
@@ -470,13 +458,13 @@ export const PropertiesSidebar = ({
                           </Label>
                           <Select
                             value={
-                              selectedElement.sliderConfig?.orientation ??
+                              fieldElement.sliderConfig?.orientation ??
                               "horizontal"
                             }
                             onValueChange={(value) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 sliderConfig: {
-                                  ...selectedElement.sliderConfig,
+                                  ...fieldElement.sliderConfig,
                                   orientation: value as
                                     | "horizontal"
                                     | "vertical",
@@ -503,7 +491,7 @@ export const PropertiesSidebar = ({
                   </SidebarGroup>
                 </>
               )}
-              {selectedElement.type === "file" && (
+              {fieldElement.type === "file" && (
                 <>
                   <SidebarSeparator className="mx-0" />
                   <SidebarGroup>
@@ -515,11 +503,11 @@ export const PropertiesSidebar = ({
                             Accepted file types
                           </Label>
                           <Select
-                            value={selectedElement.fileConfig?.accept}
+                            value={fieldElement.fileConfig?.accept}
                             onValueChange={(value) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 fileConfig: {
-                                  ...selectedElement.fileConfig,
+                                  ...fieldElement.fileConfig,
                                   accept: value,
                                 },
                               })
@@ -554,15 +542,15 @@ export const PropertiesSidebar = ({
                             min={1}
                             max={1024}
                             value={
-                              selectedElement.fileConfig?.maxSize
-                                ? selectedElement.fileConfig.maxSize /
+                              fieldElement.fileConfig?.maxSize
+                                ? fieldElement.fileConfig.maxSize /
                                   (1024 * 1024)
                                 : 5
                             }
                             onChange={(e) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 fileConfig: {
-                                  ...selectedElement.fileConfig,
+                                  ...fieldElement.fileConfig,
                                   maxSize: Number(e.target.value) * 1024 * 1024,
                                 },
                               })
@@ -577,14 +565,14 @@ export const PropertiesSidebar = ({
                             id="max-files"
                             type="number"
                             className="bg-background"
-                            disabled={!selectedElement.fileConfig?.multiple}
+                            disabled={!fieldElement.fileConfig?.multiple}
                             min={1}
                             max={10}
-                            value={selectedElement.fileConfig?.maxFiles}
+                            value={fieldElement.fileConfig?.maxFiles}
                             onChange={(e) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 fileConfig: {
-                                  ...selectedElement.fileConfig,
+                                  ...fieldElement.fileConfig,
                                   maxFiles: Number(e.target.value),
                                 },
                               })
@@ -596,11 +584,11 @@ export const PropertiesSidebar = ({
                             Preview size
                           </Label>
                           <Select
-                            value={selectedElement.fileConfig?.previewSize}
+                            value={fieldElement.fileConfig?.previewSize}
                             onValueChange={(value) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 fileConfig: {
-                                  ...selectedElement.fileConfig,
+                                  ...fieldElement.fileConfig,
                                   previewSize: value as "sm" | "md" | "lg",
                                 },
                               })
@@ -624,11 +612,11 @@ export const PropertiesSidebar = ({
                             Variant
                           </Label>
                           <Select
-                            value={selectedElement.fileConfig?.variant}
+                            value={fieldElement.fileConfig?.variant}
                             onValueChange={(value) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 fileConfig: {
-                                  ...selectedElement.fileConfig,
+                                  ...fieldElement.fileConfig,
                                   variant: value as
                                     | "default"
                                     | "compact"
@@ -661,11 +649,11 @@ export const PropertiesSidebar = ({
                           </div>
                           <Switch
                             id="multiple"
-                            checked={selectedElement.fileConfig?.multiple}
+                            checked={fieldElement.fileConfig?.multiple}
                             onCheckedChange={(checked) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 fileConfig: {
-                                  ...selectedElement.fileConfig,
+                                  ...fieldElement.fileConfig,
                                   multiple: checked,
                                   maxFiles: 1,
                                 },
@@ -684,11 +672,11 @@ export const PropertiesSidebar = ({
                           </div>
                           <Switch
                             id="show-preview"
-                            checked={selectedElement.fileConfig?.showPreview}
+                            checked={fieldElement.fileConfig?.showPreview}
                             onCheckedChange={(checked) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 fileConfig: {
-                                  ...selectedElement.fileConfig,
+                                  ...fieldElement.fileConfig,
                                   showPreview: checked,
                                 },
                               })
@@ -700,7 +688,7 @@ export const PropertiesSidebar = ({
                   </SidebarGroup>
                 </>
               )}
-              {selectedElement.type === "radio-group" && (
+              {fieldElement.type === "radio-group" && (
                 <>
                   <SidebarSeparator className="mx-0" />
                   <SidebarGroup>
@@ -710,61 +698,64 @@ export const PropertiesSidebar = ({
                         <div className="flex items-center justify-between">
                           <Label className="text-xs">Radio Items</Label>
                           <p className="text-xs text-muted-foreground">
-                            {selectedElement.radioGroupOptions?.items.length}{" "}
-                            Items
+                            {fieldElement.radioGroupOptions?.items.length} Items
                           </p>
                         </div>
                         <div className="space-y-2">
-                          {selectedElement.radioGroupOptions?.items.map(
-                            (item, index) => (
-                              <div key={index}>
-                                <InputGroup>
-                                  <InputGroupInput
-                                    value={item.label}
-                                    className="bg-background"
-                                    autoComplete="off"
-                                    placeholder={`Option ${index + 1}`}
-                                    onChange={(e) => {
-                                      const updatedItems = [
-                                        ...(selectedElement.radioGroupOptions
-                                          ?.items || []),
-                                      ];
+                          {fieldElement.radioGroupOptions?.items.map((item) => (
+                            <div key={item.value}>
+                              <InputGroup>
+                                <InputGroupInput
+                                  value={item.label}
+                                  className="bg-background"
+                                  autoComplete="off"
+                                  placeholder={`Option ${item.label}`}
+                                  onChange={(e) => {
+                                    const updatedItems = [
+                                      ...(fieldElement.radioGroupOptions
+                                        ?.items || []),
+                                    ];
 
-                                      updatedItems[index] = {
-                                        label: e.target.value,
-                                        value: toCamelCase(e.target.value),
-                                      };
+                                    const nextIndex = updatedItems.findIndex(
+                                      (entry) => entry.value === item.value,
+                                    );
 
-                                      updateElement(selectedElement.id, {
+                                    if (nextIndex === -1) return;
+
+                                    updatedItems[nextIndex] = {
+                                      label: e.target.value,
+                                      value: toCamelCase(e.target.value),
+                                    };
+
+                                    updateNode(fieldElement.id, {
+                                      radioGroupOptions: {
+                                        items: updatedItems,
+                                      },
+                                    });
+                                  }}
+                                />
+                                <InputGroupAddon align="inline-end">
+                                  <InputGroupButton
+                                    size="icon-xs"
+                                    onClick={() => {
+                                      const updatedItems =
+                                        fieldElement.radioGroupOptions?.items.filter(
+                                          (entry) => entry.value !== item.value,
+                                        ) || [];
+
+                                      updateNode(fieldElement.id, {
                                         radioGroupOptions: {
                                           items: updatedItems,
                                         },
                                       });
                                     }}
-                                  />
-                                  <InputGroupAddon align="inline-end">
-                                    <InputGroupButton
-                                      size="icon-xs"
-                                      onClick={() => {
-                                        const updatedItems =
-                                          selectedElement.radioGroupOptions?.items.filter(
-                                            (_, i) => i !== index,
-                                          ) || [];
-
-                                        updateElement(selectedElement.id, {
-                                          radioGroupOptions: {
-                                            items: updatedItems,
-                                          },
-                                        });
-                                      }}
-                                    >
-                                      <Trash2Icon />
-                                    </InputGroupButton>
-                                  </InputGroupAddon>
-                                </InputGroup>
-                              </div>
-                            ),
-                          )}
+                                  >
+                                    <Trash2Icon />
+                                  </InputGroupButton>
+                                </InputGroupAddon>
+                              </InputGroup>
+                            </div>
+                          ))}
                         </div>
                         <Button
                           variant="outline"
@@ -772,9 +763,9 @@ export const PropertiesSidebar = ({
                           size="sm"
                           onClick={() => {
                             const currentItems =
-                              selectedElement.radioGroupOptions?.items || [];
+                              fieldElement.radioGroupOptions?.items || [];
 
-                            updateElement(selectedElement.id, {
+                            updateNode(fieldElement.id, {
                               radioGroupOptions: {
                                 items: [
                                   ...currentItems,
@@ -794,7 +785,7 @@ export const PropertiesSidebar = ({
                   </SidebarGroup>
                 </>
               )}
-              {selectedElement.type === "select" && (
+              {fieldElement.type === "select" && (
                 <>
                   <SidebarSeparator className="mx-0" />
                   <SidebarGroup>
@@ -807,14 +798,14 @@ export const PropertiesSidebar = ({
                           </Label>
                           <Input
                             id="select-label"
-                            value={selectedElement.options?.selectLabel}
+                            value={fieldElement.options?.selectLabel}
                             className="bg-background"
                             onChange={(e) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 options: {
                                   selectLabel: e.target.value,
                                   selectItems:
-                                    selectedElement.options?.selectItems || [],
+                                    fieldElement.options?.selectItems || [],
                                 },
                               })
                             }
@@ -826,67 +817,71 @@ export const PropertiesSidebar = ({
                           <div className="flex items-center justify-between">
                             <Label className="text-xs">Select Items</Label>
                             <p className="text-xs text-muted-foreground">
-                              {selectedElement.options?.selectItems.length}{" "}
-                              Items
+                              {fieldElement.options?.selectItems.length} Items
                             </p>
                           </div>
                           <div className="space-y-2">
-                            {selectedElement.options?.selectItems.map(
-                              (item, index) => (
-                                <div key={index}>
-                                  <InputGroup>
-                                    <InputGroupInput
-                                      value={item.label}
-                                      className="bg-background"
-                                      autoComplete="off"
-                                      placeholder={`Option ${index + 1}`}
-                                      onChange={(e) => {
-                                        const updatedItems = [
-                                          ...(selectedElement.options
-                                            ?.selectItems || []),
-                                        ];
+                            {fieldElement.options?.selectItems.map((item) => (
+                              <div key={item.value}>
+                                <InputGroup>
+                                  <InputGroupInput
+                                    value={item.label}
+                                    className="bg-background"
+                                    autoComplete="off"
+                                    placeholder={`Option ${item.label}`}
+                                    onChange={(e) => {
+                                      const updatedItems = [
+                                        ...(fieldElement.options?.selectItems ||
+                                          []),
+                                      ];
 
-                                        updatedItems[index] = {
-                                          label: e.target.value,
-                                          value: toCamelCase(e.target.value),
-                                        };
+                                      const nextIndex = updatedItems.findIndex(
+                                        (entry) => entry.value === item.value,
+                                      );
 
-                                        updateElement(selectedElement.id, {
+                                      if (nextIndex === -1) return;
+
+                                      updatedItems[nextIndex] = {
+                                        label: e.target.value,
+                                        value: toCamelCase(e.target.value),
+                                      };
+
+                                      updateNode(fieldElement.id, {
+                                        options: {
+                                          selectLabel:
+                                            fieldElement.options?.selectLabel ||
+                                            "",
+                                          selectItems: updatedItems,
+                                        },
+                                      });
+                                    }}
+                                  />
+                                  <InputGroupAddon align="inline-end">
+                                    <InputGroupButton
+                                      size="icon-xs"
+                                      onClick={() => {
+                                        const updatedItems =
+                                          fieldElement.options?.selectItems.filter(
+                                            (entry) =>
+                                              entry.value !== item.value,
+                                          ) || [];
+
+                                        updateNode(fieldElement.id, {
                                           options: {
                                             selectLabel:
-                                              selectedElement.options
+                                              fieldElement.options
                                                 ?.selectLabel || "",
                                             selectItems: updatedItems,
                                           },
                                         });
                                       }}
-                                    />
-                                    <InputGroupAddon align="inline-end">
-                                      <InputGroupButton
-                                        size="icon-xs"
-                                        onClick={() => {
-                                          const updatedItems =
-                                            selectedElement.options?.selectItems.filter(
-                                              (_, i) => i !== index,
-                                            ) || [];
-
-                                          updateElement(selectedElement.id, {
-                                            options: {
-                                              selectLabel:
-                                                selectedElement.options
-                                                  ?.selectLabel || "",
-                                              selectItems: updatedItems,
-                                            },
-                                          });
-                                        }}
-                                      >
-                                        <Trash2Icon />
-                                      </InputGroupButton>
-                                    </InputGroupAddon>
-                                  </InputGroup>
-                                </div>
-                              ),
-                            )}
+                                    >
+                                      <Trash2Icon />
+                                    </InputGroupButton>
+                                  </InputGroupAddon>
+                                </InputGroup>
+                              </div>
+                            ))}
                           </div>
                           <Button
                             variant="outline"
@@ -894,12 +889,12 @@ export const PropertiesSidebar = ({
                             size="sm"
                             onClick={() => {
                               const currentItems =
-                                selectedElement.options?.selectItems || [];
+                                fieldElement.options?.selectItems || [];
 
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 options: {
                                   selectLabel:
-                                    selectedElement.options?.selectLabel || "",
+                                    fieldElement.options?.selectLabel || "",
                                   selectItems: [
                                     ...currentItems,
                                     {
@@ -929,7 +924,7 @@ export const PropertiesSidebar = ({
                         Name
                       </Label>
                       <Input
-                        value={selectedElement.name}
+                        value={fieldElement.name}
                         className="bg-background"
                         disabled
                       />
@@ -940,7 +935,7 @@ export const PropertiesSidebar = ({
                     <div className="space-y-2">
                       <Label className="text-xs">Field ID</Label>
                       <Input
-                        value={selectedElement.id}
+                        value={fieldElement.id}
                         className="bg-background"
                         disabled
                       />

@@ -1,19 +1,19 @@
+import type {
+  ControllerFieldState,
+  ControllerRenderProps,
+  FieldValues,
+} from "react-hook-form";
+import { DatePicker } from "@/components/ui/date-picker";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldLabel,
 } from "@/components/ui/field";
-import { DatePicker } from "@/components/ui/date-picker";
-import type { FormElement } from "@/types/form-builder";
-import type {
-  ControllerFieldState,
-  ControllerRenderProps,
-  FieldValues,
-} from "react-hook-form";
+import type { FieldElement } from "@/types/form-builder";
 
 interface DatePickerInputElementProps {
-  element: FormElement;
+  element: FieldElement;
   field: ControllerRenderProps<FieldValues, string>;
   fieldState: ControllerFieldState;
 }

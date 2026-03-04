@@ -1,24 +1,24 @@
+import { create } from "zustand";
 import { generateId } from "@/lib/utils";
-import {
+import type {
+  BuilderElement,
   Form,
-  FormElement,
   UpdateForm,
   UpdateFormElement,
 } from "@/types/form-builder";
-import { create } from "zustand";
 
 interface State {
   forms: Form[];
   currentFormIndex: number;
-  selectedElement: FormElement | null;
+  selectedElementId: string | null;
   isPreviewMode: boolean;
 }
 
 interface Actions {
-  setSelectedElement: (element: FormElement | null) => void;
-  addElement: (element: FormElement) => void;
-  updateElement: (elementId: string, updatedElement: UpdateFormElement) => void;
-  deleteElement: (elementId: string) => void;
+  setSelectedElementId: (elementId: string | null) => void;
+  insertNode: (element: BuilderElement) => void;
+  updateNode: (elementId: string, updatedElement: UpdateFormElement) => void;
+  removeNode: (elementId: string) => void;
   setCurrentFormIndex: (index: number) => void;
   addForm: () => void;
   updateForm: (updatedForm: UpdateForm) => void;
@@ -37,12 +37,12 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
     },
   ],
   currentFormIndex: 0,
-  selectedElement: null,
+  selectedElementId: null,
   isPreviewMode: false,
-  setSelectedElement: (element) => {
-    set({ selectedElement: element });
+  setSelectedElementId: (elementId) => {
+    set({ selectedElementId: elementId });
   },
-  addElement: (element) => {
+  insertNode: (element) => {
     const { forms, currentFormIndex } = get();
     const updatedForms = forms.map((form, index) =>
       index === currentFormIndex
@@ -52,15 +52,20 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
 
     set({ forms: updatedForms });
   },
-  updateElement: (elementId, updatedElement) => {
-    const { forms, currentFormIndex, selectedElement } = get();
+  updateNode: (elementId, updatedElement) => {
+    const { forms, currentFormIndex, selectedElementId } = get();
     const updatedForms = forms.map((form, index) =>
       index === currentFormIndex
         ? {
             ...form,
             elements: form.elements.map((element) =>
               element.id === elementId
-                ? { ...element, ...updatedElement }
+                ? ({
+                    ...element,
+                    ...updatedElement,
+                    kind: element.kind,
+                    type: element.type,
+                  } as BuilderElement)
                 : element,
             ),
           }
@@ -69,14 +74,12 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
 
     set({
       forms: updatedForms,
-      selectedElement:
-        selectedElement?.id === elementId
-          ? { ...selectedElement, ...updatedElement }
-          : selectedElement,
+      selectedElementId:
+        selectedElementId === elementId ? elementId : selectedElementId,
     });
   },
-  deleteElement: (elementId) => {
-    const { forms, currentFormIndex, selectedElement } = get();
+  removeNode: (elementId) => {
+    const { forms, currentFormIndex, selectedElementId } = get();
     const updatedForms = forms.map((form, index) =>
       index === currentFormIndex
         ? {
@@ -90,12 +93,12 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
 
     set({
       forms: updatedForms,
-      selectedElement:
-        selectedElement?.id === elementId ? null : selectedElement,
+      selectedElementId:
+        selectedElementId === elementId ? null : selectedElementId,
     });
   },
   setCurrentFormIndex: (index) => {
-    set({ currentFormIndex: index, selectedElement: null });
+    set({ currentFormIndex: index, selectedElementId: null });
   },
   addForm: () => {
     const { forms } = get();
@@ -109,7 +112,7 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
     set({
       forms: [...forms, newForm],
       currentFormIndex: forms.length,
-      selectedElement: null,
+      selectedElementId: null,
     });
   },
   updateForm: (updatedForm) => {
@@ -135,7 +138,7 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
     set({
       forms: updatedForms,
       currentFormIndex: newCurrentFormIndex,
-      selectedElement: null,
+      selectedElementId: null,
     });
   },
   clearAll: () => {
@@ -144,7 +147,7 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
         { id: generateId(), title: "Step 1", description: "", elements: [] },
       ],
       currentFormIndex: 0,
-      selectedElement: null,
+      selectedElementId: null,
     });
   },
   togglePreviewMode: () => {

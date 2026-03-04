@@ -1,7 +1,9 @@
-import type { FormElement, FormElementType } from "@/types/form-builder";
+import { getFieldCodegen } from "@/lib/builder/field-codegen";
+import type { BuilderElement } from "@/types/form-builder";
+import { isFieldElement } from "@/types/form-builder";
 
 export const generateImports = (
-  elements: FormElement[],
+  elements: BuilderElement[],
   isMultiForm: boolean,
 ) => {
   const importDefaultSet = new Set([
@@ -25,50 +27,15 @@ export const generateImports = (
     importDefaultSet.add('import { useState } from "react"');
   }
 
-  const dynamicImports: Record<FormElementType, string[]> = {
-    text: ['import { Input } from "@/components/ui/input"'],
-    checkbox: [
-      'import { Checkbox } from "@/components/ui/checkbox"',
-      'import { FieldContent } from "@/components/ui/field"',
-    ],
-    switch: [
-      'import { Switch } from "@/components/ui/switch"',
-      'import { FieldContent } from "@/components/ui/field"',
-    ],
-    textarea: ['import { Textarea } from "@/components/ui/textarea"'],
-    select: [
-      'import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"',
-    ],
-    password: [
-      'import { PasswordInput } from "@/components/ui/password-input"',
-    ],
-    file: ['import { FileInput } from "@/components/ui/file-input"'],
-    "date-picker": ['import { DatePicker } from "@/components/ui/date-picker"'],
-    "input-otp": [
-      'import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp"',
-    ],
-    email: ['import { EmailInput } from "@/components/ui/email-input"'],
-    "rich-text-editor": [
-      'import { RichTextEditor } from "@/components/ui/editor/rich-text-editor"',
-    ],
-    slider: ['import { Slider } from "@/components/ui/slider"'],
-    "phone-input": [
-      'import { PhoneInput } from "@/components/ui/phone-input"',
-      'import { isValidPhoneNumber } from "react-phone-number-input"',
-    ],
-    "radio-group": [
-      'import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"',
-      'import { FieldContent, FieldSet, FieldLegend, FieldTitle } from "@/components/ui/field"',
-    ],
-  };
+  const fieldElements = elements.flat().filter(isFieldElement);
 
-  const proccessImports = (element: FormElement) => {
-    const newImports = dynamicImports[element.type];
+  for (const element of fieldElements) {
+    const { imports } = getFieldCodegen(element.type);
 
-    newImports.map((newImp) => importDefaultSet.add(newImp));
-  };
-
-  elements.flat().forEach(proccessImports);
+    for (const newImp of imports) {
+      importDefaultSet.add(newImp);
+    }
+  }
 
   return importDefaultSet;
 };

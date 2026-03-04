@@ -1,3 +1,8 @@
+import type {
+  ControllerFieldState,
+  ControllerRenderProps,
+  FieldValues,
+} from "react-hook-form";
 import { EmailInput } from "@/components/ui/email-input";
 import {
   Field,
@@ -5,15 +10,10 @@ import {
   FieldError,
   FieldLabel,
 } from "@/components/ui/field";
-import { FormElement } from "@/types/form-builder";
-import {
-  ControllerFieldState,
-  ControllerRenderProps,
-  FieldValues,
-} from "react-hook-form";
+import type { FieldElement } from "@/types/form-builder";
 
 interface EmailInputElementProps {
-  element: FormElement;
+  element: FieldElement;
   field: ControllerRenderProps<FieldValues, string>;
   fieldState: ControllerFieldState;
 }

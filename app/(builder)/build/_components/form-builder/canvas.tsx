@@ -1,3 +1,5 @@
+import { GripIcon, Trash2Icon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -12,61 +14,27 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import type { Form, FormElement, FormElementType } from "@/types/form-builder";
-import { GripIcon, Trash2Icon } from "lucide-react";
+import { getFieldRegistryItem } from "@/lib/builder/registry";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import {
-  TextIcon,
-  EnvelopeClosedIcon,
-  SwitchIcon,
-  LockClosedIcon,
-  ChevronDownIcon,
-  UploadIcon,
-  CheckboxIcon,
-  TextAlignLeftIcon,
-  TextAlignJustifyIcon,
-  CalendarIcon,
-  MagicWandIcon,
-  SliderIcon,
-  FrameIcon,
-  RadiobuttonIcon,
-} from "@radix-ui/react-icons";
-import type { ForwardRefExoticComponent, RefAttributes } from "react";
-import type { IconProps } from "@radix-ui/react-icons/dist/types";
+import type { BuilderElement, Form } from "@/types/form-builder";
+import { isFieldElement } from "@/types/form-builder";
 
 interface CanvasProps {
   currentForm: Form;
-  deleteElement: (elementId: string) => void;
-  setSelectedElement: (element: FormElement | null) => void;
-  selectedElement: FormElement | null;
+  removeNode: (elementId: string) => void;
+  setSelectedElementId: (elementId: string | null) => void;
+  selectedElementId: string | null;
 }
 
 export const Canvas = ({
   currentForm,
-  deleteElement,
-  setSelectedElement,
-  selectedElement,
+  removeNode,
+  setSelectedElementId,
+  selectedElementId,
 }: CanvasProps) => {
-  const formElementIcons: Record<
-    FormElementType,
-    ForwardRefExoticComponent<IconProps & RefAttributes<SVGSVGElement>>
-  > = {
-    text: TextIcon,
-    email: EnvelopeClosedIcon,
-    textarea: TextAlignJustifyIcon,
-    checkbox: CheckboxIcon,
-    switch: SwitchIcon,
-    password: LockClosedIcon,
-    select: ChevronDownIcon,
-    file: UploadIcon,
-    "rich-text-editor": TextAlignLeftIcon,
-    "date-picker": CalendarIcon,
-    "input-otp": MagicWandIcon,
-    slider: SliderIcon,
-    "phone-input": FrameIcon,
-    "radio-group": RadiobuttonIcon,
-  };
+  const selectedElement = currentForm.elements.find(
+    (element) => element.id === selectedElementId,
+  ) as BuilderElement | undefined;
 
   return (
     <div className="rounded-md min-h-[calc(100vh-9rem)] border-2 border-dashed bg-sidebar">
@@ -92,17 +60,20 @@ export const Canvas = ({
             <CardContent>
               <div className="space-y-4">
                 {currentForm.elements.map((element) => {
-                  const IconElement = formElementIcons[element.type];
+                  if (!isFieldElement(element)) return null;
+
+                  const IconElement = getFieldRegistryItem(element.type).icon;
                   const isSelected = selectedElement?.id === element.id;
 
                   return (
-                    <div
+                    <button
+                      type="button"
                       className={cn(
-                        "border rounded-md p-3 hover:border-primary",
+                        "border rounded-md p-3 cursor-pointer hover:border-primary w-full text-left",
                         isSelected && "border-primary bg-accent/30",
                       )}
                       key={element.id}
-                      onClick={() => setSelectedElement(element)}
+                      onClick={() => setSelectedElementId(element.id)}
                     >
                       <div className="flex items-center space-x-2">
                         <div className="border border-dashed bg-background/50 p-1 rounded-sm">
@@ -114,17 +85,17 @@ export const Canvas = ({
                         {isSelected && (
                           <Button
                             size="icon-sm"
-                            className="ml-auto bg-destructive/10 text-destructive hover:bg-destructive/10"
+                            className="ml-auto bg-destructive/20 text-destructive hover:bg-destructive/20"
                             onClick={(e) => {
                               e.stopPropagation();
-                              deleteElement(element.id);
+                              removeNode(element.id);
                             }}
                           >
                             <Trash2Icon />
                           </Button>
                         )}
                       </div>
-                    </div>
+                    </button>
                   );
                 })}
               </div>

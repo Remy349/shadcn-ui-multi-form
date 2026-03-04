@@ -1,45 +1,25 @@
-import { Form } from "@/types/form-builder";
+import { type Form, isFieldElement } from "@/types/form-builder";
 import { generateZodSchema } from "../schema-generator";
-import { generateZodSchemaCode } from "./generate-schema-code";
 import { generateFormElements } from "./generate-form-elements";
-
-const serializeValue = (value: unknown): string => {
-  if (value === undefined) return "undefined";
-  if (value === null) return "null";
-  if (typeof value === "string") return JSON.stringify(value);
-  if (typeof value === "number" || typeof value === "boolean")
-    return String(value);
-  if (Array.isArray(value)) return `[${value.map(serializeValue).join(", ")}]`;
-  if (typeof value === "object") {
-    const entries = Object.entries(value as Record<string, unknown>)
-      .map(([k, v]) => `${JSON.stringify(k)}: ${serializeValue(v)}`)
-      .join(", ");
-    return `{ ${entries} }`;
-  }
-  return "undefined";
-};
-
-const serializeDefaultValues = (defaults: Record<string, unknown>): string => {
-  const entries = Object.entries(defaults)
-    .map(([k, v]) => `  ${k}: ${serializeValue(v)}`)
-    .join(",\n");
-  return `{\n${entries}\n}`;
-};
+import { generateZodSchemaCode } from "./generate-schema-code";
+import { serializeDefaultValues } from "./serialize";
 
 export const generateMultiFormTemplate = (forms: Form[]) => {
   const allElements = forms.flatMap((form) => form.elements);
-  const { defaultValues } = generateZodSchema(allElements);
+  const allFieldElements = allElements.filter(isFieldElement);
+  const { defaultValues } = generateZodSchema(allFieldElements);
   const defaultValuesCode = serializeDefaultValues(defaultValues);
 
   const stepsMetadata = forms.map((form) => ({
     title: form.title,
     description: form.description,
-    fields: form.elements.map((element) => element.name),
+    fields: form.elements.filter(isFieldElement).map((element) => element.name),
   }));
 
   const stepsFormElements = forms
     .map((form, index) => {
       const elementsCode = form.elements
+        .filter(isFieldElement)
         .map((element) => generateFormElements(element))
         .join("\n");
 
@@ -56,7 +36,7 @@ export const generateMultiFormTemplate = (forms: Form[]) => {
     .join("\n");
 
   return `
-${generateZodSchemaCode(allElements)}
+${generateZodSchemaCode(allFieldElements)}
 
 export const MultiForm = () => {
   const steps = ${JSON.stringify(stepsMetadata, null, 2)}
