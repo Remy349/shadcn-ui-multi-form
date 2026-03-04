@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GripIcon } from "lucide-react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,10 +20,11 @@ import {
 } from "@/components/ui/empty";
 import { Field, FieldGroup } from "@/components/ui/field";
 import { Spinner } from "@/components/ui/spinner";
+import { buildRenderPlan } from "@/lib/builder/render-plan";
 import { generateZodSchema } from "@/lib/schema-generator";
 import type { Form } from "@/types/form-builder";
-import { isFieldElement } from "@/types/form-builder";
 import { renderPreviewElement } from "./render-element";
+import { createControllerRenderer, renderPreviewNode } from "./render-node";
 
 interface SingleFormPreviewProps {
   currentForm: Form;
@@ -67,18 +68,28 @@ export const SingleFormPreview = ({ currentForm }: SingleFormPreviewProps) => {
           </Empty>
         ) : (
           <form id="form-preview" onSubmit={form.handleSubmit(onSubmit)}>
-            <FieldGroup>
-              {currentForm.elements.filter(isFieldElement).map((element) => (
-                <Controller
-                  key={element.id}
-                  name={element.name}
-                  control={form.control}
-                  render={({ field, fieldState }) =>
-                    renderPreviewElement(element, field, fieldState)
-                  }
-                />
-              ))}
-            </FieldGroup>
+            {(() => {
+              const { roots, fieldById } = buildRenderPlan(
+                currentForm.elements,
+              );
+              const getController = createControllerRenderer(
+                form.control,
+                renderPreviewElement,
+              );
+
+              return (
+                <FieldGroup>
+                  {roots.map((element) => (
+                    <div key={element.id}>
+                      {renderPreviewNode(element, {
+                        fieldById,
+                        getController,
+                      })}
+                    </div>
+                  ))}
+                </FieldGroup>
+              );
+            })()}
           </form>
         )}
       </CardContent>

@@ -38,29 +38,92 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { Switch } from "@/components/ui/switch";
+import { getLayoutRegistryItem } from "@/lib/builder/layout-registry";
 import { getFieldRegistryItem } from "@/lib/builder/registry";
 import { toCamelCase } from "@/lib/utils";
 import type {
   BuilderElement,
   FieldElementType,
+  LayoutElement,
+  LayoutElementType,
   UpdateFormElement,
 } from "@/types/form-builder";
-import { isFieldElement } from "@/types/form-builder";
+import { isFieldElement, isLayoutElement } from "@/types/form-builder";
 
 interface PropertiesSidebarProps {
   selectedElement: BuilderElement | null;
+  elements: BuilderElement[];
   updateNode: (elementId: string, updatedElement: UpdateFormElement) => void;
 }
 
 export const PropertiesSidebar = ({
   selectedElement,
+  elements,
   updateNode,
 }: PropertiesSidebarProps) => {
   const fieldElement =
     selectedElement && isFieldElement(selectedElement) ? selectedElement : null;
+  const layoutElement =
+    selectedElement && isLayoutElement(selectedElement)
+      ? selectedElement
+      : null;
 
   const elementTypeLabel = (type: FieldElementType) => {
     return getFieldRegistryItem(type).label;
+  };
+
+  const layoutTypeLabel = (type: LayoutElementType) => {
+    return getLayoutRegistryItem(type).label;
+  };
+
+  const fieldElements = elements.filter(isFieldElement);
+  const layoutElements = elements.filter(isLayoutElement);
+  const fieldById = new Map(
+    fieldElements.map((element) => [element.id, element]),
+  );
+  const referencedFieldIds = new Set(
+    layoutElements.flatMap((element) =>
+      element.type === "two-columns"
+        ? [...element.columns.left, ...element.columns.right]
+        : [],
+    ),
+  );
+  const availableFieldElements = fieldElements
+    .filter((element) => !referencedFieldIds.has(element.id))
+    .sort((a, b) => a.label.localeCompare(b.label));
+
+  const handleAddColumnItem = (
+    layout: LayoutElement,
+    column: "left" | "right",
+    fieldId: string,
+  ) => {
+    if (layout.type !== "two-columns") return;
+
+    const current = layout.columns[column];
+
+    if (current.includes(fieldId)) return;
+
+    updateNode(layout.id, {
+      columns: {
+        ...layout.columns,
+        [column]: [...current, fieldId],
+      },
+    });
+  };
+
+  const handleRemoveColumnItem = (
+    layout: LayoutElement,
+    column: "left" | "right",
+    fieldId: string,
+  ) => {
+    if (layout.type !== "two-columns") return;
+
+    updateNode(layout.id, {
+      columns: {
+        ...layout.columns,
+        [column]: layout.columns[column].filter((id) => id !== fieldId),
+      },
+    });
   };
 
   return (
@@ -79,7 +142,7 @@ export const PropertiesSidebar = ({
         </div>
       </SidebarHeader>
       <SidebarSeparator className="mx-0" />
-      <ScrollArea className="h-[calc(100svh-71px)]">
+      <ScrollArea className="h-[calc(100svh-5rem)]">
         <SidebarContent>
           {fieldElement ? (
             <>
@@ -946,6 +1009,198 @@ export const PropertiesSidebar = ({
                   </div>
                 </SidebarGroupContent>
               </SidebarGroup>
+            </>
+          ) : layoutElement ? (
+            <>
+              <SidebarGroup>
+                <SidebarGroupLabel>Element Type</SidebarGroupLabel>
+                <SidebarGroupContent className="px-2">
+                  <Input
+                    className="bg-background"
+                    value={layoutTypeLabel(layoutElement.type)}
+                    disabled
+                  />
+                </SidebarGroupContent>
+              </SidebarGroup>
+              {layoutElement.type === "separator" && (
+                <>
+                  <SidebarSeparator className="mx-0" />
+                  <SidebarGroup>
+                    <SidebarGroupLabel>Separator Label</SidebarGroupLabel>
+                    <SidebarGroupContent className="px-2">
+                      <div className="space-y-2">
+                        <Label className="text-xs" htmlFor="separator-label">
+                          Label (Optional)
+                        </Label>
+                        <Input
+                          id="separator-label"
+                          value={layoutElement.label ?? ""}
+                          className="bg-background"
+                          onChange={(e) =>
+                            updateNode(layoutElement.id, {
+                              label: e.target.value,
+                            })
+                          }
+                          autoComplete="off"
+                          placeholder="Enter separator label"
+                        />
+                      </div>
+                    </SidebarGroupContent>
+                  </SidebarGroup>
+                </>
+              )}
+              {layoutElement.type === "two-columns" && (
+                <>
+                  <SidebarSeparator className="mx-0" />
+                  <SidebarGroup>
+                    <SidebarGroupLabel>Columns</SidebarGroupLabel>
+                    <SidebarGroupContent className="px-2">
+                      <div className="space-y-6">
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <Label className="text-xs">Left Column</Label>
+                            <span className="text-xs text-muted-foreground">
+                              {layoutElement.columns.left.length} items
+                            </span>
+                          </div>
+                          {layoutElement.columns.left.length > 0 ? (
+                            <div className="space-y-2">
+                              {layoutElement.columns.left.map((fieldId) => {
+                                const field = fieldById.get(fieldId);
+                                const label = field?.label ?? fieldId;
+
+                                return (
+                                  <InputGroup key={fieldId}>
+                                    <InputGroupInput
+                                      value={label}
+                                      className="bg-background"
+                                      disabled
+                                    />
+                                    <InputGroupAddon align="inline-end">
+                                      <InputGroupButton
+                                        size="icon-xs"
+                                        onClick={() =>
+                                          handleRemoveColumnItem(
+                                            layoutElement,
+                                            "left",
+                                            fieldId,
+                                          )
+                                        }
+                                      >
+                                        <Trash2Icon />
+                                      </InputGroupButton>
+                                    </InputGroupAddon>
+                                  </InputGroup>
+                                );
+                              })}
+                            </div>
+                          ) : (
+                            <p className="text-xs text-muted-foreground">
+                              No fields assigned yet.
+                            </p>
+                          )}
+                          <Select
+                            value=""
+                            onValueChange={(value) => {
+                              if (!value) return;
+                              handleAddColumnItem(layoutElement, "left", value);
+                            }}
+                          >
+                            <SelectTrigger className="bg-background w-full">
+                              <SelectValue placeholder="Add field to left column" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {availableFieldElements.length === 0 ? (
+                                <SelectItem value="" disabled>
+                                  No available fields
+                                </SelectItem>
+                              ) : (
+                                availableFieldElements.map((field) => (
+                                  <SelectItem key={field.id} value={field.id}>
+                                    {field.label}
+                                  </SelectItem>
+                                ))
+                              )}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <Label className="text-xs">Right Column</Label>
+                            <span className="text-xs text-muted-foreground">
+                              {layoutElement.columns.right.length} items
+                            </span>
+                          </div>
+                          {layoutElement.columns.right.length > 0 ? (
+                            <div className="space-y-2">
+                              {layoutElement.columns.right.map((fieldId) => {
+                                const field = fieldById.get(fieldId);
+                                const label = field?.label ?? fieldId;
+
+                                return (
+                                  <InputGroup key={fieldId}>
+                                    <InputGroupInput
+                                      value={label}
+                                      className="bg-background"
+                                      disabled
+                                    />
+                                    <InputGroupAddon align="inline-end">
+                                      <InputGroupButton
+                                        size="icon-xs"
+                                        onClick={() =>
+                                          handleRemoveColumnItem(
+                                            layoutElement,
+                                            "right",
+                                            fieldId,
+                                          )
+                                        }
+                                      >
+                                        <Trash2Icon />
+                                      </InputGroupButton>
+                                    </InputGroupAddon>
+                                  </InputGroup>
+                                );
+                              })}
+                            </div>
+                          ) : (
+                            <p className="text-xs text-muted-foreground">
+                              No fields assigned yet.
+                            </p>
+                          )}
+                          <Select
+                            value=""
+                            onValueChange={(value) => {
+                              if (!value) return;
+                              handleAddColumnItem(
+                                layoutElement,
+                                "right",
+                                value,
+                              );
+                            }}
+                          >
+                            <SelectTrigger className="bg-background w-full">
+                              <SelectValue placeholder="Add field to right column" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {availableFieldElements.length === 0 ? (
+                                <SelectItem value="" disabled>
+                                  No available fields
+                                </SelectItem>
+                              ) : (
+                                availableFieldElements.map((field) => (
+                                  <SelectItem key={field.id} value={field.id}>
+                                    {field.label}
+                                  </SelectItem>
+                                ))
+                              )}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    </SidebarGroupContent>
+                  </SidebarGroup>
+                </>
+              )}
             </>
           ) : (
             <div className="min-h-[calc(100vh-71px)] flex items-center justify-center">

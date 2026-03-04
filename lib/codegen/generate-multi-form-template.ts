@@ -1,6 +1,6 @@
 import { type Form, isFieldElement } from "@/types/form-builder";
 import { generateZodSchema } from "../schema-generator";
-import { generateFormElements } from "./generate-form-elements";
+import { generateFormNodes } from "./generate-form-nodes";
 import { generateZodSchemaCode } from "./generate-schema-code";
 import { serializeDefaultValues } from "./serialize";
 
@@ -18,10 +18,7 @@ export const generateMultiFormTemplate = (forms: Form[]) => {
 
   const stepsFormElements = forms
     .map((form, index) => {
-      const elementsCode = form.elements
-        .filter(isFieldElement)
-        .map((element) => generateFormElements(element))
-        .join("\n");
+      const elementsCode = generateFormNodes(form.elements);
 
       return `
         case ${index}: {

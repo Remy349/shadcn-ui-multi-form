@@ -72,6 +72,7 @@ export const FormBuilder = () => {
               (element) => element.id === selectedElementId,
             ) ?? null
           }
+          elements={currentForm.elements}
           updateNode={updateNode}
         />
       )}

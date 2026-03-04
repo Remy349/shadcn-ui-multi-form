@@ -1,6 +1,6 @@
 import { type Form, isFieldElement } from "@/types/form-builder";
 import { generateZodSchema } from "../schema-generator";
-import { generateFormElements } from "./generate-form-elements";
+import { generateFormNodes } from "./generate-form-nodes";
 import { generateZodSchemaCode } from "./generate-schema-code";
 import { serializeDefaultValues } from "./serialize";
 
@@ -8,6 +8,8 @@ export const generateSingleFormTemplate = (form: Form) => {
   const fieldElements = form.elements.filter(isFieldElement);
   const { defaultValues } = generateZodSchema(fieldElements);
   const defaultValuesCode = serializeDefaultValues(defaultValues);
+
+  const formNodes = generateFormNodes(form.elements);
 
   return `
 ${generateZodSchemaCode(fieldElements)}
@@ -35,7 +37,7 @@ export const SingleForm = () => {
       <CardContent>
         <form id="single-form" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
-            ${fieldElements.map((element) => generateFormElements(element)).join("\n")}
+            ${formNodes}
           </FieldGroup>
         </form>
       </CardContent>

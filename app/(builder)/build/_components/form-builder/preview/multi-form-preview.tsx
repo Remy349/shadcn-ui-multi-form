@@ -1,5 +1,4 @@
 import { ChevronLeft, ChevronRight, GripIcon } from "lucide-react";
-import { Controller } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,9 +20,10 @@ import { Field, FieldGroup } from "@/components/ui/field";
 import { Progress } from "@/components/ui/progress";
 import { Spinner } from "@/components/ui/spinner";
 import { useMultiStepForm } from "@/hooks/use-multi-step-form";
+import { buildRenderPlan } from "@/lib/builder/render-plan";
 import type { Form } from "@/types/form-builder";
-import { isFieldElement } from "@/types/form-builder";
 import { renderPreviewElement } from "./render-element";
+import { createControllerRenderer, renderPreviewNode } from "./render-node";
 
 interface MultiFormPreviewProps {
   forms: Form[];
@@ -78,18 +78,28 @@ export const MultiFormPreview = ({ forms }: MultiFormPreviewProps) => {
           </Empty>
         ) : (
           <form id="form-preview" onSubmit={form.handleSubmit(onSubmit)}>
-            <FieldGroup>
-              {currentForm.elements.filter(isFieldElement).map((element) => (
-                <Controller
-                  key={element.id}
-                  name={element.name}
-                  control={form.control}
-                  render={({ field, fieldState }) =>
-                    renderPreviewElement(element, field, fieldState)
-                  }
-                />
-              ))}
-            </FieldGroup>
+            {(() => {
+              const { roots, fieldById } = buildRenderPlan(
+                currentForm.elements,
+              );
+              const getController = createControllerRenderer(
+                form.control,
+                renderPreviewElement,
+              );
+
+              return (
+                <FieldGroup>
+                  {roots.map((element) => (
+                    <div key={element.id}>
+                      {renderPreviewNode(element, {
+                        fieldById,
+                        getController,
+                      })}
+                    </div>
+                  ))}
+                </FieldGroup>
+              );
+            })()}
           </form>
         )}
       </CardContent>

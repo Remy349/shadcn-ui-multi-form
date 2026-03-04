@@ -1,6 +1,6 @@
 import { getFieldCodegen } from "@/lib/builder/field-codegen";
 import type { BuilderElement } from "@/types/form-builder";
-import { isFieldElement } from "@/types/form-builder";
+import { isFieldElement, isLayoutElement } from "@/types/form-builder";
 
 export const generateImports = (
   elements: BuilderElement[],
@@ -28,6 +28,7 @@ export const generateImports = (
   }
 
   const fieldElements = elements.flat().filter(isFieldElement);
+  const layoutElements = elements.flat().filter(isLayoutElement);
 
   for (const element of fieldElements) {
     const { imports } = getFieldCodegen(element.type);
@@ -35,6 +36,12 @@ export const generateImports = (
     for (const newImp of imports) {
       importDefaultSet.add(newImp);
     }
+  }
+
+  if (layoutElements.some((element) => element.type === "separator")) {
+    importDefaultSet.add(
+      'import { FieldSeparator } from "@/components/ui/field"',
+    );
   }
 
   return importDefaultSet;

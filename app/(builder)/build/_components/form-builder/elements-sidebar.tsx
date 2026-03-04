@@ -14,15 +14,18 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
+import { getAllLayoutRegistryItems } from "@/lib/builder/layout-registry";
 import { getAllFieldRegistryItems } from "@/lib/builder/registry";
-import type { FieldElement } from "@/types/form-builder";
+import type { BuilderElement, FieldElement } from "@/types/form-builder";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface ElementsSidebarProps {
-  insertNode: (element: FieldElement) => void;
+  insertNode: (element: BuilderElement) => void;
 }
 
 export const ElementsSidebar = ({ insertNode }: ElementsSidebarProps) => {
   const elements = getAllFieldRegistryItems();
+  const layouts = getAllLayoutRegistryItems();
 
   const handleAddElement = (type: FieldElement["type"]) => {
     const newElement = elements.find((element) => element.type === type);
@@ -30,6 +33,14 @@ export const ElementsSidebar = ({ insertNode }: ElementsSidebarProps) => {
     if (!newElement) return;
 
     insertNode(newElement.createDefault());
+  };
+
+  const handleAddLayout = (type: (typeof layouts)[number]["type"]) => {
+    const newLayout = layouts.find((layout) => layout.type === type);
+
+    if (!newLayout) return;
+
+    insertNode(newLayout.createDefault());
   };
 
   return (
@@ -48,34 +59,61 @@ export const ElementsSidebar = ({ insertNode }: ElementsSidebarProps) => {
         </div>
       </SidebarHeader>
       <SidebarSeparator className="mx-0" />
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Input Fields</SidebarGroupLabel>
-          <SidebarGroupContent className="px-2">
-            <SidebarMenu>
-              {elements
-                .sort((a, b) => a.label.localeCompare(b.label))
-                .map((element) => {
-                  const IconComponent = element.icon;
+      <ScrollArea className="h-[calc(100svh-8.5rem)]">
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>Layout Elements</SidebarGroupLabel>
+            <SidebarGroupContent className="px-2">
+              <SidebarMenu>
+                {layouts
+                  .sort((a, b) => a.label.localeCompare(b.label))
+                  .map((layout) => {
+                    const IconComponent = layout.icon;
 
-                  return (
-                    <SidebarMenuItem key={element.type}>
-                      <SidebarMenuButton
-                        onClick={() => handleAddElement(element.type)}
-                      >
-                        <div className="border-dashed rounded-sm border p-1 bg-background/50">
-                          <IconComponent />
-                        </div>
-                        <span className="font-medium">{element.label}</span>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  );
-                })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarFooter>
+                    return (
+                      <SidebarMenuItem key={layout.type}>
+                        <SidebarMenuButton
+                          onClick={() => handleAddLayout(layout.type)}
+                        >
+                          <div className="border-dashed rounded-sm border p-1 bg-background/50">
+                            <IconComponent />
+                          </div>
+                          <span className="font-medium">{layout.label}</span>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    );
+                  })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+          <SidebarGroup>
+            <SidebarGroupLabel>Input Elements</SidebarGroupLabel>
+            <SidebarGroupContent className="px-2">
+              <SidebarMenu>
+                {elements
+                  .sort((a, b) => a.label.localeCompare(b.label))
+                  .map((element) => {
+                    const IconComponent = element.icon;
+
+                    return (
+                      <SidebarMenuItem key={element.type}>
+                        <SidebarMenuButton
+                          onClick={() => handleAddElement(element.type)}
+                        >
+                          <div className="border-dashed rounded-sm border p-1 bg-background/50">
+                            <IconComponent />
+                          </div>
+                          <span className="font-medium">{element.label}</span>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    );
+                  })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+      </ScrollArea>
+      <SidebarFooter className="border-t">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>

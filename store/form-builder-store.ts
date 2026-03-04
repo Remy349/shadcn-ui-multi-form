@@ -6,6 +6,31 @@ import type {
   UpdateForm,
   UpdateFormElement,
 } from "@/types/form-builder";
+import { isFieldElement, isLayoutElement } from "@/types/form-builder";
+
+const sanitizeLayoutColumns = (
+  element: BuilderElement,
+  fieldIds: Set<string>,
+): BuilderElement => {
+  if (!isLayoutElement(element) || element.type !== "two-columns") {
+    return element;
+  }
+
+  const unique = (ids: string[]) => Array.from(new Set(ids));
+  const filterKnownFields = (ids: string[]) =>
+    ids.filter((id) => fieldIds.has(id));
+
+  const left = filterKnownFields(unique(element.columns.left));
+  const right = filterKnownFields(unique(element.columns.right));
+
+  return {
+    ...element,
+    columns: {
+      left,
+      right,
+    },
+  };
+};
 
 interface State {
   forms: Form[];
@@ -58,16 +83,28 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
       index === currentFormIndex
         ? {
             ...form,
-            elements: form.elements.map((element) =>
-              element.id === elementId
-                ? ({
-                    ...element,
-                    ...updatedElement,
-                    kind: element.kind,
-                    type: element.type,
-                  } as BuilderElement)
-                : element,
-            ),
+            elements: (() => {
+              const nextElements = form.elements.map((element) =>
+                element.id === elementId
+                  ? ({
+                      ...element,
+                      ...updatedElement,
+                      kind: element.kind,
+                      type: element.type,
+                    } as BuilderElement)
+                  : element,
+              );
+
+              const fieldIds = new Set(
+                nextElements
+                  .filter(isFieldElement)
+                  .map((element) => element.id),
+              );
+
+              return nextElements.map((element) =>
+                sanitizeLayoutColumns(element, fieldIds),
+              );
+            })(),
           }
         : form,
     );
@@ -84,9 +121,19 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
       index === currentFormIndex
         ? {
             ...form,
-            elements: form.elements.filter(
-              (element) => element.id !== elementId,
-            ),
+            elements: (() => {
+              const filtered = form.elements.filter(
+                (element) => element.id !== elementId,
+              );
+
+              const fieldIds = new Set(
+                filtered.filter(isFieldElement).map((element) => element.id),
+              );
+
+              return filtered.map((element) =>
+                sanitizeLayoutColumns(element, fieldIds),
+              );
+            })(),
           }
         : form,
     );
