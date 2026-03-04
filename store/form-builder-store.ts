@@ -75,7 +75,7 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
         : form,
     );
 
-    set({ forms: updatedForms });
+    set({ forms: updatedForms, selectedElementId: null });
   },
   updateNode: (elementId, updatedElement) => {
     const { forms, currentFormIndex, selectedElementId } = get();

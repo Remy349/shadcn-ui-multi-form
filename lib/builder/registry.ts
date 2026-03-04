@@ -54,6 +54,7 @@ const buildBaseField = (
   const name = overrides.name ?? toCamelCase(`${type} field ${generateId()}`);
 
   return {
+    ...overrides,
     id,
     kind: "field",
     type,
@@ -65,7 +66,6 @@ const buildBaseField = (
     required: false,
     minLength: 0,
     maxLength: 255,
-    ...overrides,
   };
 };
 
