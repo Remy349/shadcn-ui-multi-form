@@ -1,6 +1,9 @@
 "use client";
 
 import { ArrowLeftIcon, ChevronDownIcon } from "lucide-react";
+import type { Route } from "next";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   ButtonGroup,
@@ -13,9 +16,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Link from "next/link";
-import type { Route } from "next";
-import { usePathname } from "next/navigation";
 
 interface LinkComponent {
   href: string;
@@ -29,6 +29,7 @@ const linksComponents: LinkComponent[] = [
   { href: "/components/email-input", label: "Email Input" },
   { href: "/components/date-picker", label: "Date Picker" },
   { href: "/components/phone-input", label: "Phone Input" },
+  { href: "/components/signature-input", label: "Signature Input" },
 ];
 
 export const NavigationControls = () => {

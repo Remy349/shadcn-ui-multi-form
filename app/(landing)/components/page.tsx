@@ -3,17 +3,18 @@ import {
   EnvelopeClosedIcon,
   FrameIcon,
   LockClosedIcon,
+  Pencil2Icon,
   TextAlignLeftIcon,
   UploadIcon,
 } from "@radix-ui/react-icons";
 import type { Metadata } from "next";
+import Link from "next/link";
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Components",
@@ -126,6 +127,21 @@ export default function ComponentsPage() {
                 <CardDescription>
                   Phone number input with country support, formatting, and
                   validation.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </Link>
+          <Link href="/components/signature-input">
+            <Card className="shadow-none border border-dashed hover:border-primary">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle>Signature Input</CardTitle>
+                  <div className="bg-muted rounded-md p-1.5 border">
+                    <Pencil2Icon className="size-4" />
+                  </div>
+                </div>
+                <CardDescription>
+                  Capture signatures with a smooth canvas-based input.
                 </CardDescription>
               </CardHeader>
             </Card>
