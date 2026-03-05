@@ -14,11 +14,11 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { Separator } from "@/components/ui/separator";
 import { getLayoutRegistryItem } from "@/lib/builder/layout-registry";
 import { getFieldRegistryItem } from "@/lib/builder/registry";
+import { buildRenderPlan } from "@/lib/builder/render-plan";
 import { cn } from "@/lib/utils";
-import type { BuilderElement, Form, LayoutElement } from "@/types/form-builder";
+import type { BuilderElement, FieldElement, Form } from "@/types/form-builder";
 import { isFieldElement, isLayoutElement } from "@/types/form-builder";
 
 interface CanvasProps {
@@ -37,6 +37,43 @@ export const Canvas = ({
   const selectedElement = currentForm.elements.find(
     (element) => element.id === selectedElementId,
   ) as BuilderElement | undefined;
+  const { roots, fieldById } = buildRenderPlan(currentForm.elements);
+
+  const renderFieldItem = (element: FieldElement) => {
+    const IconElement = getFieldRegistryItem(element.type).icon;
+    const isSelected = selectedElement?.id === element.id;
+
+    return (
+      <button
+        type="button"
+        className={cn(
+          "border rounded-md p-3 cursor-pointer hover:border-primary w-full text-left",
+          isSelected && "border-primary bg-accent/30",
+        )}
+        key={element.id}
+        onClick={() => setSelectedElementId(element.id)}
+      >
+        <div className="flex items-center space-x-2">
+          <div className="border border-dashed bg-background/50 p-1 rounded-sm">
+            <IconElement className="size-4" />
+          </div>
+          <span className="font-medium text-sm">{element.label}</span>
+          {isSelected && (
+            <Button
+              size="icon-sm"
+              className="ml-auto bg-destructive/20 text-destructive hover:bg-destructive/20"
+              onClick={(event) => {
+                event.stopPropagation();
+                removeNode(element.id);
+              }}
+            >
+              <Trash2Icon />
+            </Button>
+          )}
+        </div>
+      </button>
+    );
+  };
 
   return (
     <div className="rounded-md min-h-[calc(100vh-9rem)] border-2 border-dashed bg-sidebar">
@@ -61,129 +98,131 @@ export const Canvas = ({
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {currentForm.elements.map((element) => {
+                {roots.map((element) => {
                   if (isFieldElement(element)) {
-                    const IconElement = getFieldRegistryItem(element.type).icon;
-                    const isSelected = selectedElement?.id === element.id;
+                    return renderFieldItem(element);
+                  }
+
+                  if (!isLayoutElement(element)) {
+                    return null;
+                  }
+
+                  const registryItem = getLayoutRegistryItem(element.type);
+                  const IconElement = registryItem.icon;
+                  const isSelected = selectedElement?.id === element.id;
+                  const label =
+                    element.type === "separator" && element.label?.trim()
+                      ? element.label.trim()
+                      : registryItem.label;
+
+                  if (element.type === "two-columns") {
+                    const leftElements = element.columns.left
+                      .map((id) => fieldById.get(id))
+                      .filter(Boolean) as FieldElement[];
+                    const rightElements = element.columns.right
+                      .map((id) => fieldById.get(id))
+                      .filter(Boolean) as FieldElement[];
 
                     return (
-                      <button
-                        type="button"
+                      <div
+                        key={element.id}
                         className={cn(
-                          "border rounded-md p-3 cursor-pointer hover:border-primary w-full text-left",
+                          "border rounded-md p-3 cursor-pointer space-y-4",
                           isSelected && "border-primary bg-accent/30",
                         )}
-                        key={element.id}
-                        onClick={() => setSelectedElementId(element.id)}
                       >
-                        <div className="flex items-center space-x-2">
-                          <div className="border border-dashed bg-background/50 p-1 rounded-sm">
-                            <IconElement className="size-4" />
+                        <button
+                          type="button"
+                          className="w-full text-left"
+                          onClick={() => setSelectedElementId(element.id)}
+                        >
+                          <div className="flex items-center space-x-2">
+                            <div className="border border-dashed bg-background/50 p-1 rounded-sm">
+                              <IconElement className="size-4" />
+                            </div>
+                            <span className="font-medium text-sm">{label}</span>
+                            {isSelected && (
+                              <Button
+                                size="icon-sm"
+                                className="ml-auto bg-destructive/20 text-destructive hover:bg-destructive/20"
+                                onClick={(event) => {
+                                  event.stopPropagation();
+                                  removeNode(element.id);
+                                }}
+                              >
+                                <Trash2Icon />
+                              </Button>
+                            )}
                           </div>
-                          <span className="font-medium text-sm">
-                            {element.label}
-                          </span>
-                          {isSelected && (
-                            <Button
-                              size="icon-sm"
-                              className="ml-auto bg-destructive/20 text-destructive hover:bg-destructive/20"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                removeNode(element.id);
-                              }}
-                            >
-                              <Trash2Icon />
-                            </Button>
-                          )}
+                        </button>
+                        <div className="grid gap-4 md:grid-cols-2">
+                          <div className="space-y-2">
+                            {leftElements.length > 0 ? (
+                              leftElements.map((field) => (
+                                <div key={field.id}>
+                                  {renderFieldItem(field)}
+                                </div>
+                              ))
+                            ) : (
+                              <div className="border border-dashed rounded-md p-3 text-xs text-muted-foreground">
+                                Left column is empty
+                              </div>
+                            )}
+                          </div>
+                          <div className="space-y-2">
+                            {rightElements.length > 0 ? (
+                              rightElements.map((field) => (
+                                <div key={field.id}>
+                                  {renderFieldItem(field)}
+                                </div>
+                              ))
+                            ) : (
+                              <div className="border border-dashed rounded-md p-3 text-xs text-muted-foreground">
+                                Right column is empty
+                              </div>
+                            )}
+                          </div>
                         </div>
-                      </button>
+                      </div>
                     );
                   }
 
-                  if (isLayoutElement(element)) {
-                    const registryItem = getLayoutRegistryItem(element.type);
-                    const IconElement = registryItem.icon;
-                    const isSelected = selectedElement?.id === element.id;
-
-                    return (
-                      <button
-                        type="button"
-                        className={cn(
-                          "border rounded-md p-3 cursor-pointer hover:border-primary w-full text-left",
-                          isSelected && "border-primary bg-accent/30",
+                  return (
+                    <button
+                      type="button"
+                      className={cn(
+                        "border rounded-md p-3 cursor-pointer hover:border-primary w-full text-left",
+                        isSelected && "border-primary bg-accent/30",
+                      )}
+                      key={element.id}
+                      onClick={() => setSelectedElementId(element.id)}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <div className="border border-dashed bg-background/50 p-1 rounded-sm">
+                          <IconElement className="size-4" />
+                        </div>
+                        <span className="font-medium text-sm">{label}</span>
+                        {isSelected && (
+                          <Button
+                            size="icon-sm"
+                            className="ml-auto bg-destructive/20 text-destructive hover:bg-destructive/20"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              removeNode(element.id);
+                            }}
+                          >
+                            <Trash2Icon />
+                          </Button>
                         )}
-                        key={element.id}
-                        onClick={() => setSelectedElementId(element.id)}
-                      >
-                        <div className="flex items-center space-x-2">
-                          <div className="border border-dashed bg-background/50 p-1 rounded-sm">
-                            <IconElement className="size-4" />
-                          </div>
-                          <span className="font-medium text-sm">
-                            {registryItem.label}
-                          </span>
-                          {isSelected && (
-                            <Button
-                              size="icon-sm"
-                              className="ml-auto bg-destructive/20 text-destructive hover:bg-destructive/20"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                removeNode(element.id);
-                              }}
-                            >
-                              <Trash2Icon />
-                            </Button>
-                          )}
-                        </div>
-                        <div className="mt-3">
-                          {renderLayoutPreview(element)}
-                        </div>
-                      </button>
-                    );
-                  }
-
-                  return null;
+                      </div>
+                    </button>
+                  );
                 })}
               </div>
             </CardContent>
           </Card>
         </div>
       )}
-    </div>
-  );
-};
-
-const renderLayoutPreview = (element: LayoutElement) => {
-  if (element.type === "separator") {
-    const label = element.label?.trim();
-
-    return (
-      <div className="space-y-2">
-        {label ? (
-          <span className="text-xs text-muted-foreground">{label}</span>
-        ) : null}
-        <Separator />
-      </div>
-    );
-  }
-
-  const leftCount = element.columns.left.length;
-  const rightCount = element.columns.right.length;
-
-  return (
-    <div className="grid grid-cols-2 gap-3">
-      <div className="rounded-md border border-dashed bg-background/40 p-2">
-        <p className="text-xs text-muted-foreground">Left column</p>
-        <p className="text-[11px] text-muted-foreground">
-          {leftCount} item{leftCount === 1 ? "" : "s"}
-        </p>
-      </div>
-      <div className="rounded-md border border-dashed bg-background/40 p-2">
-        <p className="text-xs text-muted-foreground">Right column</p>
-        <p className="text-[11px] text-muted-foreground">
-          {rightCount} item{rightCount === 1 ? "" : "s"}
-        </p>
-      </div>
     </div>
   );
 };

@@ -100,13 +100,12 @@ export const PropertiesSidebar = ({
     if (layout.type !== "two-columns") return;
 
     const current = layout.columns[column];
-
-    if (current.includes(fieldId)) return;
+    const nextValue = current[0] === fieldId ? current : [fieldId];
 
     updateNode(layout.id, {
       columns: {
         ...layout.columns,
-        [column]: [...current, fieldId],
+        [column]: nextValue,
       },
     });
   };
@@ -1065,34 +1064,36 @@ export const PropertiesSidebar = ({
                           </div>
                           {layoutElement.columns.left.length > 0 ? (
                             <div className="space-y-2">
-                              {layoutElement.columns.left.map((fieldId) => {
-                                const field = fieldById.get(fieldId);
-                                const label = field?.label ?? fieldId;
+                              {layoutElement.columns.left
+                                .slice(0, 1)
+                                .map((fieldId) => {
+                                  const field = fieldById.get(fieldId);
+                                  const label = field?.label ?? fieldId;
 
-                                return (
-                                  <InputGroup key={fieldId}>
-                                    <InputGroupInput
-                                      value={label}
-                                      className="bg-background"
-                                      disabled
-                                    />
-                                    <InputGroupAddon align="inline-end">
-                                      <InputGroupButton
-                                        size="icon-xs"
-                                        onClick={() =>
-                                          handleRemoveColumnItem(
-                                            layoutElement,
-                                            "left",
-                                            fieldId,
-                                          )
-                                        }
-                                      >
-                                        <Trash2Icon />
-                                      </InputGroupButton>
-                                    </InputGroupAddon>
-                                  </InputGroup>
-                                );
-                              })}
+                                  return (
+                                    <InputGroup key={fieldId}>
+                                      <InputGroupInput
+                                        value={label}
+                                        className="bg-background"
+                                        disabled
+                                      />
+                                      <InputGroupAddon align="inline-end">
+                                        <InputGroupButton
+                                          size="icon-xs"
+                                          onClick={() =>
+                                            handleRemoveColumnItem(
+                                              layoutElement,
+                                              "left",
+                                              fieldId,
+                                            )
+                                          }
+                                        >
+                                          <Trash2Icon />
+                                        </InputGroupButton>
+                                      </InputGroupAddon>
+                                    </InputGroup>
+                                  );
+                                })}
                             </div>
                           ) : (
                             <p className="text-xs text-muted-foreground">
@@ -1111,7 +1112,7 @@ export const PropertiesSidebar = ({
                             </SelectTrigger>
                             <SelectContent>
                               {availableFieldElements.length === 0 ? (
-                                <SelectItem value="" disabled>
+                                <SelectItem value="__empty" disabled>
                                   No available fields
                                 </SelectItem>
                               ) : (
@@ -1133,34 +1134,36 @@ export const PropertiesSidebar = ({
                           </div>
                           {layoutElement.columns.right.length > 0 ? (
                             <div className="space-y-2">
-                              {layoutElement.columns.right.map((fieldId) => {
-                                const field = fieldById.get(fieldId);
-                                const label = field?.label ?? fieldId;
+                              {layoutElement.columns.right
+                                .slice(0, 1)
+                                .map((fieldId) => {
+                                  const field = fieldById.get(fieldId);
+                                  const label = field?.label ?? fieldId;
 
-                                return (
-                                  <InputGroup key={fieldId}>
-                                    <InputGroupInput
-                                      value={label}
-                                      className="bg-background"
-                                      disabled
-                                    />
-                                    <InputGroupAddon align="inline-end">
-                                      <InputGroupButton
-                                        size="icon-xs"
-                                        onClick={() =>
-                                          handleRemoveColumnItem(
-                                            layoutElement,
-                                            "right",
-                                            fieldId,
-                                          )
-                                        }
-                                      >
-                                        <Trash2Icon />
-                                      </InputGroupButton>
-                                    </InputGroupAddon>
-                                  </InputGroup>
-                                );
-                              })}
+                                  return (
+                                    <InputGroup key={fieldId}>
+                                      <InputGroupInput
+                                        value={label}
+                                        className="bg-background"
+                                        disabled
+                                      />
+                                      <InputGroupAddon align="inline-end">
+                                        <InputGroupButton
+                                          size="icon-xs"
+                                          onClick={() =>
+                                            handleRemoveColumnItem(
+                                              layoutElement,
+                                              "right",
+                                              fieldId,
+                                            )
+                                          }
+                                        >
+                                          <Trash2Icon />
+                                        </InputGroupButton>
+                                      </InputGroupAddon>
+                                    </InputGroup>
+                                  );
+                                })}
                             </div>
                           ) : (
                             <p className="text-xs text-muted-foreground">
@@ -1183,7 +1186,7 @@ export const PropertiesSidebar = ({
                             </SelectTrigger>
                             <SelectContent>
                               {availableFieldElements.length === 0 ? (
-                                <SelectItem value="" disabled>
+                                <SelectItem value="__empty" disabled>
                                   No available fields
                                 </SelectItem>
                               ) : (
