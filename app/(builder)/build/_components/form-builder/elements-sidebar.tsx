@@ -1,6 +1,8 @@
 import { LayersIcon } from "@radix-ui/react-icons";
 import { ComponentIcon, LogOutIcon } from "lucide-react";
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Sidebar,
   SidebarContent,
@@ -17,7 +19,6 @@ import {
 import { getAllLayoutRegistryItems } from "@/lib/builder/layout-registry";
 import { getAllFieldRegistryItems } from "@/lib/builder/registry";
 import type { BuilderElement, FieldElement } from "@/types/form-builder";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface ElementsSidebarProps {
   insertNode: (element: BuilderElement) => void;
@@ -79,6 +80,14 @@ export const ElementsSidebar = ({ insertNode }: ElementsSidebarProps) => {
                             <IconComponent />
                           </div>
                           <span className="font-medium">{layout.label}</span>
+                          {layout.isNew && (
+                            <Badge
+                              variant="default"
+                              className="ml-auto text-[0.58rem] bg-emerald-100 text-emerald-800"
+                            >
+                              New
+                            </Badge>
+                          )}
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     );
@@ -104,6 +113,14 @@ export const ElementsSidebar = ({ insertNode }: ElementsSidebarProps) => {
                             <IconComponent />
                           </div>
                           <span className="font-medium">{element.label}</span>
+                          {element.isNew && (
+                            <Badge
+                              variant="default"
+                              className="ml-auto text-[0.58rem] bg-emerald-100 text-emerald-800"
+                            >
+                              New
+                            </Badge>
+                          )}
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     );

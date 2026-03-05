@@ -14,6 +14,7 @@ export type LayoutRegistryItem = {
   label: string;
   icon: LayoutIcon;
   createDefault: (id?: string) => LayoutElement;
+  isNew?: boolean;
 };
 
 export type LayoutIcon = ForwardRefExoticComponent<
@@ -43,12 +44,14 @@ export const layoutRegistry: Record<LayoutElementType, LayoutRegistryItem> = {
     label: "Two Columns",
     icon: ViewVerticalIcon,
     createDefault: createTwoColumnsLayout,
+    isNew: true,
   },
   separator: {
     type: "separator",
     label: "Separator",
     icon: DividerHorizontalIcon,
     createDefault: createSeparatorLayout,
+    isNew: true,
   },
 } as const;
 

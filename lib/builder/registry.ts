@@ -39,6 +39,7 @@ export type FieldRegistryItem = {
   buildSchema: (element: FieldElement) => FieldSchemaResult;
   preview?: unknown;
   codegen?: unknown;
+  isNew?: boolean;
 };
 
 export type FieldIcon = ForwardRefExoticComponent<
