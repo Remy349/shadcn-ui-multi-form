@@ -12,7 +12,8 @@ export type FieldElementType =
   | "input-otp"
   | "slider"
   | "phone-input"
-  | "radio-group";
+  | "radio-group"
+  | "signature";
 
 export type LayoutElementType = "two-columns" | "separator";
 
@@ -60,6 +61,12 @@ export interface FieldElement extends BuilderElementBase {
       label: string;
       value: string;
     }[];
+  };
+  signatureConfig?: {
+    height?: number;
+    penColor?: string;
+    backgroundColor?: string;
+    strokeWidth?: number;
   };
 }
 

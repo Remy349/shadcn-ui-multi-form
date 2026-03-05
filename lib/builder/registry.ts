@@ -6,6 +6,7 @@ import {
   FrameIcon,
   LockClosedIcon,
   MagicWandIcon,
+  Pencil2Icon,
   RadiobuttonIcon,
   SliderIcon,
   SwitchIcon,
@@ -421,6 +422,32 @@ export const fieldRegistry: Record<FieldElementType, FieldRegistryItem> = {
 
       return { schema: fieldSchema, defaultValue };
     },
+  },
+  signature: {
+    type: "signature",
+    label: "Signature",
+    icon: Pencil2Icon,
+    createDefault: (id) =>
+      buildBaseField("signature", "Signature", {
+        id,
+        signatureConfig: {
+          height: 160,
+          penColor: "#0f172a",
+          backgroundColor: "#ffffff",
+          strokeWidth: 2,
+        },
+      }),
+    buildSchema: (element) => {
+      let fieldSchema = z.string();
+      const defaultValue = "";
+
+      if (element.required) {
+        fieldSchema = fieldSchema.min(1, `${element.label} is required`);
+      }
+
+      return { schema: fieldSchema, defaultValue };
+    },
+    isNew: true,
   },
 } as const;
 

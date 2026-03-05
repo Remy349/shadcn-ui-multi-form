@@ -15,6 +15,7 @@ import { PhoneInputElement } from "./form-elements/phone-input-element";
 import { RadioGroupInputElement } from "./form-elements/radio-group-input-element";
 import { RichTextEditorInputElement } from "./form-elements/rich-text-editor-input-element";
 import { SelectInputElement } from "./form-elements/select-input-element";
+import { SignatureInputElement } from "./form-elements/signature-input-element";
 import { SliderInputElement } from "./form-elements/slider-input-element";
 import { SwitchInputElement } from "./form-elements/switch-input-element";
 import { TextInputElement } from "./form-elements/text-input-element";
@@ -112,6 +113,13 @@ const fieldPreviewRenderers = {
   ),
   "radio-group": (element, field, fieldState) => (
     <RadioGroupInputElement
+      element={element}
+      field={field}
+      fieldState={fieldState}
+    />
+  ),
+  signature: (element, field, fieldState) => (
+    <SignatureInputElement
       element={element}
       field={field}
       fieldState={fieldState}

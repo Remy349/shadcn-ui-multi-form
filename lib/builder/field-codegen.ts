@@ -380,6 +380,27 @@ const elementRenderers: Record<
     </Field>
   )}
  />`,
+  signature: (element) => `
+<Controller
+  name="${element.name}"
+  control={form.control}
+  render={({ field, fieldState }) => (
+    <Field data-invalid={fieldState.invalid}>
+      ${getFieldLabel(element.name, element.label)}
+      <SignatureInput
+        value={field.value}
+        onChange={field.onChange}
+        disabled={${element.disabled}}
+        height={${element.signatureConfig?.height}}
+        penColor="${element.signatureConfig?.penColor}"
+        backgroundColor="${element.signatureConfig?.backgroundColor}"
+        strokeWidth={${element.signatureConfig?.strokeWidth}}
+      />
+      ${getFieldDescription(element.description)}
+      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+    </Field>
+  )}
+ />`,
 };
 
 const schemaRenderers: Record<
@@ -601,6 +622,15 @@ const schemaRenderers: Record<
 
     return fieldSchema;
   },
+  signature: (element) => {
+    let fieldSchema = "z.string()";
+
+    if (element.required) {
+      fieldSchema += `.min(1, "${element.label} is required")`;
+    }
+
+    return fieldSchema;
+  },
 };
 
 const importRegistry: Record<FieldElementType, string[]> = {
@@ -631,6 +661,9 @@ const importRegistry: Record<FieldElementType, string[]> = {
   "phone-input": [
     'import { PhoneInput } from "@/components/ui/phone-input"',
     'import { isValidPhoneNumber } from "react-phone-number-input"',
+  ],
+  signature: [
+    'import { SignatureInput } from "@/components/ui/signature-input"',
   ],
   "radio-group": [
     'import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"',

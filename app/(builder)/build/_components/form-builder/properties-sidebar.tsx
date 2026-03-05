@@ -186,6 +186,7 @@ export const PropertiesSidebar = ({
                       "input-otp",
                       "slider",
                       "radio-group",
+                      "signature",
                     ].includes(fieldElement.type) && (
                       <div className="space-y-2">
                         <Label className="text-xs" htmlFor="placeholder">
@@ -225,6 +226,109 @@ export const PropertiesSidebar = ({
                   </div>
                 </SidebarGroupContent>
               </SidebarGroup>
+              {fieldElement.type === "signature" && (
+                <>
+                  <SidebarSeparator className="mx-0" />
+                  <SidebarGroup>
+                    <SidebarGroupLabel>Signature Settings</SidebarGroupLabel>
+                    <SidebarGroupContent className="px-2">
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <Label className="text-xs" htmlFor="signature-height">
+                            Height (px)
+                          </Label>
+                          <Input
+                            id="signature-height"
+                            type="number"
+                            min={80}
+                            value={fieldElement.signatureConfig?.height ?? 160}
+                            className="bg-background"
+                            onChange={(e) =>
+                              updateNode(fieldElement.id, {
+                                signatureConfig: {
+                                  ...fieldElement.signatureConfig,
+                                  height: Number(e.target.value),
+                                },
+                              })
+                            }
+                            autoComplete="off"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-xs" htmlFor="signature-stroke">
+                            Stroke Width
+                          </Label>
+                          <Input
+                            id="signature-stroke"
+                            type="number"
+                            min={1}
+                            value={
+                              fieldElement.signatureConfig?.strokeWidth ?? 2
+                            }
+                            className="bg-background"
+                            onChange={(e) =>
+                              updateNode(fieldElement.id, {
+                                signatureConfig: {
+                                  ...fieldElement.signatureConfig,
+                                  strokeWidth: Number(e.target.value),
+                                },
+                              })
+                            }
+                            autoComplete="off"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-xs" htmlFor="signature-pen">
+                            Pen Color
+                          </Label>
+                          <Input
+                            id="signature-pen"
+                            type="color"
+                            value={
+                              fieldElement.signatureConfig?.penColor ??
+                              "#0f172a"
+                            }
+                            className="bg-background h-9 p-1"
+                            onChange={(e) =>
+                              updateNode(fieldElement.id, {
+                                signatureConfig: {
+                                  ...fieldElement.signatureConfig,
+                                  penColor: e.target.value,
+                                },
+                              })
+                            }
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label
+                            className="text-xs"
+                            htmlFor="signature-background"
+                          >
+                            Background Color
+                          </Label>
+                          <Input
+                            id="signature-background"
+                            type="color"
+                            value={
+                              fieldElement.signatureConfig?.backgroundColor ??
+                              "#ffffff"
+                            }
+                            className="bg-background h-9 p-1"
+                            onChange={(e) =>
+                              updateNode(fieldElement.id, {
+                                signatureConfig: {
+                                  ...fieldElement.signatureConfig,
+                                  backgroundColor: e.target.value,
+                                },
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+                    </SidebarGroupContent>
+                  </SidebarGroup>
+                </>
+              )}
               <SidebarSeparator className="mx-0" />
               <SidebarGroup>
                 <SidebarGroupLabel>Validation</SidebarGroupLabel>
@@ -261,6 +365,7 @@ export const PropertiesSidebar = ({
                       "slider",
                       "phone-input",
                       "radio-group",
+                      "signature",
                     ].includes(fieldElement.type) && (
                       <>
                         <div className="space-y-2">
