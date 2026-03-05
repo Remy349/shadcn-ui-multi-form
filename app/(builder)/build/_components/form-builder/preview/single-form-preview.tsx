@@ -1,3 +1,7 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { GripIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -7,26 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Field, FieldGroup } from "@/components/ui/field";
-import { Spinner } from "@/components/ui/spinner";
-import type { Form, FormElement, FormElementType } from "@/types/form-builder";
-import {
-  Controller,
-  ControllerFieldState,
-  ControllerRenderProps,
-  FieldValues,
-  useForm,
-} from "react-hook-form";
-import { toast } from "sonner";
-import { TextInputElement } from "./form-elements/text-input-element";
-import { EmailInputElement } from "./form-elements/email-input-element";
-import { generateZodSchema } from "@/lib/schema-generator";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { PasswordInputElement } from "./form-elements/password-input-element";
-import { TextareaInputElement } from "./form-elements/textarea-input-element";
-import { SwitchInputElement } from "./form-elements/switch-input-element";
-import { CheckboxInputElement } from "./form-elements/checkbox-input-element";
-import { SelectInputElement } from "./form-elements/select-input-element";
 import {
   Empty,
   EmptyDescription,
@@ -34,14 +18,13 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { GripIcon } from "lucide-react";
-import { FileInputElement } from "./form-elements/file-input-element";
-import { RichTextEditorInputElement } from "./form-elements/rich-text-editor-input-element";
-import { DatePickerInputElement } from "./form-elements/date-picker-input-element";
-import { InputOTPInputElement } from "./form-elements/input-otp-input-element";
-import { SliderInputElement } from "./form-elements/slider-input-element";
-import { PhoneInputElement } from "./form-elements/phone-input-element";
-import { RadioGroupInputElement } from "./form-elements/radio-group-input-element";
+import { Field, FieldGroup } from "@/components/ui/field";
+import { Spinner } from "@/components/ui/spinner";
+import { buildRenderPlan } from "@/lib/builder/render-plan";
+import { generateZodSchema } from "@/lib/schema-generator";
+import type { Form } from "@/types/form-builder";
+import { renderPreviewElement } from "./render-element";
+import { createControllerRenderer, renderPreviewNode } from "./render-node";
 
 interface SingleFormPreviewProps {
   currentForm: Form;
@@ -61,115 +44,6 @@ export const SingleFormPreview = ({ currentForm }: SingleFormPreviewProps) => {
     toast.success("Form successfully submitted");
 
     console.log(values);
-  };
-
-  const renderFormElement = (
-    element: FormElement,
-    field: ControllerRenderProps<FieldValues, string>,
-    fieldState: ControllerFieldState,
-  ) => {
-    const elementComponent: Record<FormElementType, React.ReactElement> = {
-      text: (
-        <TextInputElement
-          element={element}
-          field={field}
-          fieldState={fieldState}
-        />
-      ),
-      email: (
-        <EmailInputElement
-          element={element}
-          field={field}
-          fieldState={fieldState}
-        />
-      ),
-      password: (
-        <PasswordInputElement
-          element={element}
-          field={field}
-          fieldState={fieldState}
-        />
-      ),
-      textarea: (
-        <TextareaInputElement
-          element={element}
-          field={field}
-          fieldState={fieldState}
-        />
-      ),
-      switch: (
-        <SwitchInputElement
-          element={element}
-          field={field}
-          fieldState={fieldState}
-        />
-      ),
-      checkbox: (
-        <CheckboxInputElement
-          element={element}
-          field={field}
-          fieldState={fieldState}
-        />
-      ),
-      select: (
-        <SelectInputElement
-          element={element}
-          field={field}
-          fieldState={fieldState}
-        />
-      ),
-      file: (
-        <FileInputElement
-          element={element}
-          field={field}
-          fieldState={fieldState}
-        />
-      ),
-      "rich-text-editor": (
-        <RichTextEditorInputElement
-          element={element}
-          field={field}
-          fieldState={fieldState}
-        />
-      ),
-      "date-picker": (
-        <DatePickerInputElement
-          element={element}
-          field={field}
-          fieldState={fieldState}
-        />
-      ),
-      "input-otp": (
-        <InputOTPInputElement
-          element={element}
-          field={field}
-          fieldState={fieldState}
-        />
-      ),
-      slider: (
-        <SliderInputElement
-          element={element}
-          field={field}
-          fieldState={fieldState}
-        />
-      ),
-      "phone-input": (
-        <PhoneInputElement
-          element={element}
-          field={field}
-          fieldState={fieldState}
-        />
-      ),
-      "radio-group": (
-        <RadioGroupInputElement
-          element={element}
-          field={field}
-          fieldState={fieldState}
-        />
-      ),
-    };
-
-    return elementComponent[element.type];
   };
 
   return (
@@ -194,18 +68,28 @@ export const SingleFormPreview = ({ currentForm }: SingleFormPreviewProps) => {
           </Empty>
         ) : (
           <form id="form-preview" onSubmit={form.handleSubmit(onSubmit)}>
-            <FieldGroup>
-              {currentForm.elements.map((element) => (
-                <Controller
-                  key={element.id}
-                  name={element.name}
-                  control={form.control}
-                  render={({ field, fieldState }) =>
-                    renderFormElement(element, field, fieldState)
-                  }
-                />
-              ))}
-            </FieldGroup>
+            {(() => {
+              const { roots, fieldById } = buildRenderPlan(
+                currentForm.elements,
+              );
+              const getController = createControllerRenderer(
+                form.control,
+                renderPreviewElement,
+              );
+
+              return (
+                <FieldGroup>
+                  {roots.map((element) => (
+                    <div key={element.id}>
+                      {renderPreviewNode(element, {
+                        fieldById,
+                        getController,
+                      })}
+                    </div>
+                  ))}
+                </FieldGroup>
+              );
+            })()}
           </form>
         )}
       </CardContent>

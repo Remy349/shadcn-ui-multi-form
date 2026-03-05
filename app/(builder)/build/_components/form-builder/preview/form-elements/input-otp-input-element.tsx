@@ -1,4 +1,14 @@
 import {
+  REGEXP_ONLY_CHARS,
+  REGEXP_ONLY_DIGITS,
+  REGEXP_ONLY_DIGITS_AND_CHARS,
+} from "input-otp";
+import type {
+  ControllerFieldState,
+  ControllerRenderProps,
+  FieldValues,
+} from "react-hook-form";
+import {
   Field,
   FieldDescription,
   FieldError,
@@ -9,20 +19,10 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import type { FormElement } from "@/types/form-builder";
-import {
-  REGEXP_ONLY_DIGITS_AND_CHARS,
-  REGEXP_ONLY_DIGITS,
-  REGEXP_ONLY_CHARS,
-} from "input-otp";
-import type {
-  ControllerFieldState,
-  ControllerRenderProps,
-  FieldValues,
-} from "react-hook-form";
+import type { FieldElement } from "@/types/form-builder";
 
 interface InputOTPInputElementProps {
-  element: FormElement;
+  element: FieldElement;
   field: ControllerRenderProps<FieldValues, string>;
   fieldState: ControllerFieldState;
 }

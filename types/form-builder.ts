@@ -1,4 +1,4 @@
-export type FormElementType =
+export type FieldElementType =
   | "text"
   | "email"
   | "textarea"
@@ -12,11 +12,18 @@ export type FormElementType =
   | "input-otp"
   | "slider"
   | "phone-input"
-  | "radio-group";
+  | "radio-group"
+  | "signature";
 
-export interface FormElement {
+export type LayoutElementType = "two-columns" | "separator";
+
+interface BuilderElementBase {
   id: string;
-  type: FormElementType;
+}
+
+export interface FieldElement extends BuilderElementBase {
+  kind: "field";
+  type: FieldElementType;
   label: string;
   name: string;
   placeholder?: string;
@@ -55,15 +62,48 @@ export interface FormElement {
       value: string;
     }[];
   };
+  signatureConfig?: {
+    height?: number;
+    penColor?: string;
+    backgroundColor?: string;
+    strokeWidth?: number;
+  };
 }
+
+export interface TwoColumnsLayoutElement extends BuilderElementBase {
+  kind: "layout";
+  type: "two-columns";
+  columns: {
+    left: string[];
+    right: string[];
+  };
+}
+
+export interface SeparatorLayoutElement extends BuilderElementBase {
+  kind: "layout";
+  type: "separator";
+  label?: string;
+}
+
+export type LayoutElement = TwoColumnsLayoutElement | SeparatorLayoutElement;
+
+export type BuilderElement = FieldElement | LayoutElement;
+
+export const isFieldElement = (
+  element: BuilderElement,
+): element is FieldElement => element.kind === "field";
+
+export const isLayoutElement = (
+  element: BuilderElement,
+): element is LayoutElement => element.kind === "layout";
 
 export interface Form {
   id: string;
   title: string;
   description?: string;
-  elements: FormElement[];
+  elements: BuilderElement[];
 }
 
-export type UpdateFormElement = Partial<FormElement>;
+export type UpdateFormElement = Partial<BuilderElement>;
 
 export type UpdateForm = Pick<Form, "title" | "description">;

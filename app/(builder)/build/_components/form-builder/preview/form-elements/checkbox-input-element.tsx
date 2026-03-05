@@ -1,3 +1,8 @@
+import type {
+  ControllerFieldState,
+  ControllerRenderProps,
+  FieldValues,
+} from "react-hook-form";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Field,
@@ -6,15 +11,10 @@ import {
   FieldError,
   FieldLabel,
 } from "@/components/ui/field";
-import { FormElement } from "@/types/form-builder";
-import {
-  ControllerFieldState,
-  ControllerRenderProps,
-  FieldValues,
-} from "react-hook-form";
+import type { FieldElement } from "@/types/form-builder";
 
 interface CheckboxInputElementProps {
-  element: FormElement;
+  element: FieldElement;
   field: ControllerRenderProps<FieldValues, string>;
   fieldState: ControllerFieldState;
 }

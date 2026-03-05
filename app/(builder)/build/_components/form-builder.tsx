@@ -1,29 +1,29 @@
 "use client";
 
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { ElementsSidebar } from "./form-builder/elements-sidebar";
-import { PropertiesSidebar } from "./form-builder/properties-sidebar";
-import { Canvas } from "./form-builder/canvas";
-import { useFormBuilderStore } from "@/store/form-builder-store";
-import { Toolbar } from "./form-builder/toolbar/toolbar";
-import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
+import { useFormBuilderStore } from "@/store/form-builder-store";
+import { Canvas } from "./form-builder/canvas";
+import { ElementsSidebar } from "./form-builder/elements-sidebar";
 import { Preview } from "./form-builder/preview";
+import { PropertiesSidebar } from "./form-builder/properties-sidebar";
+import { Toolbar } from "./form-builder/toolbar/toolbar";
 
 export const FormBuilder = () => {
   const {
     forms,
-    addElement,
+    insertNode,
     currentFormIndex,
-    updateElement,
-    deleteElement,
+    updateNode,
+    removeNode,
     setCurrentFormIndex,
     addForm,
     updateForm,
     deleteForm,
     clearAll,
-    setSelectedElement,
-    selectedElement,
+    setSelectedElementId,
+    selectedElementId,
     isPreviewMode,
     togglePreviewMode,
   } = useFormBuilderStore();
@@ -32,7 +32,7 @@ export const FormBuilder = () => {
 
   return (
     <SidebarProvider>
-      {!isPreviewMode && <ElementsSidebar addElement={addElement} />}
+      {!isPreviewMode && <ElementsSidebar insertNode={insertNode} />}
       <SidebarInset>
         <Toolbar
           currentForm={currentForm}
@@ -55,9 +55,9 @@ export const FormBuilder = () => {
             {!isPreviewMode ? (
               <Canvas
                 currentForm={currentForm}
-                deleteElement={deleteElement}
-                selectedElement={selectedElement}
-                setSelectedElement={setSelectedElement}
+                removeNode={removeNode}
+                selectedElementId={selectedElementId}
+                setSelectedElementId={setSelectedElementId}
               />
             ) : (
               <Preview forms={forms} />
@@ -67,8 +67,13 @@ export const FormBuilder = () => {
       </SidebarInset>
       {!isPreviewMode && (
         <PropertiesSidebar
-          selectedElement={selectedElement}
-          updateElement={updateElement}
+          selectedElement={
+            currentForm.elements.find(
+              (element) => element.id === selectedElementId,
+            ) ?? null
+          }
+          elements={currentForm.elements}
+          updateNode={updateNode}
         />
       )}
     </SidebarProvider>

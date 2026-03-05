@@ -1,9 +1,9 @@
-import { Form } from "@/types/form-builder";
-import { generateImports } from "./generate-imports";
-import { getFormTemplateType } from "../utils";
-import { generateSingleFormTemplate } from "./generate-single-form-template";
-import { generateMultiFormTemplate } from "./generate-multi-form-template";
+import { getFormTemplateType } from "@/lib/builder/utils";
+import type { Form } from "@/types/form-builder";
 import { formatCode } from "./formatter";
+import { generateImports } from "./generate-imports";
+import { generateMultiFormTemplate } from "./generate-multi-form-template";
+import { generateSingleFormTemplate } from "./generate-single-form-template";
 
 export const generateFormCode = async (forms: Form[]) => {
   let templateFormCode = "";

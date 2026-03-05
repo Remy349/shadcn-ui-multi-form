@@ -1,3 +1,9 @@
+import {
+  REGEXP_ONLY_CHARS,
+  REGEXP_ONLY_DIGITS,
+  REGEXP_ONLY_DIGITS_AND_CHARS,
+} from "input-otp";
+import { PlusIcon, Settings2Icon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Empty,
@@ -7,8 +13,21 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { Input } from "@/components/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Sidebar,
   SidebarContent,
@@ -19,60 +38,91 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { Switch } from "@/components/ui/switch";
+import { getLayoutRegistryItem } from "@/lib/builder/layout-registry";
+import { getFieldRegistryItem } from "@/lib/builder/registry";
 import { toCamelCase } from "@/lib/utils";
 import type {
-  FormElement,
-  FormElementType,
+  BuilderElement,
+  FieldElementType,
+  LayoutElement,
+  LayoutElementType,
   UpdateFormElement,
 } from "@/types/form-builder";
-import { PlusIcon, Settings2Icon, Trash2Icon } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  REGEXP_ONLY_DIGITS_AND_CHARS,
-  REGEXP_ONLY_CHARS,
-  REGEXP_ONLY_DIGITS,
-} from "input-otp";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from "@/components/ui/input-group";
+import { isFieldElement, isLayoutElement } from "@/types/form-builder";
 
 interface PropertiesSidebarProps {
-  selectedElement: FormElement | null;
-  updateElement: (elementId: string, updatedElement: UpdateFormElement) => void;
+  selectedElement: BuilderElement | null;
+  elements: BuilderElement[];
+  updateNode: (elementId: string, updatedElement: UpdateFormElement) => void;
 }
 
 export const PropertiesSidebar = ({
   selectedElement,
-  updateElement,
+  elements,
+  updateNode,
 }: PropertiesSidebarProps) => {
-  const elementTypeLabel = (type: FormElementType) => {
-    const labels: Record<FormElementType, string> = {
-      text: "Text",
-      email: "Email",
-      textarea: "Textarea",
-      checkbox: "Checkbox",
-      switch: "Switch",
-      password: "Password",
-      select: "Select",
-      file: "File",
-      "rich-text-editor": "Rich Text Editor",
-      "date-picker": "Date Picker",
-      "input-otp": "Input OTP",
-      slider: "Slider",
-      "phone-input": "Phone Input",
-      "radio-group": "Radio Group",
-    };
+  const fieldElement =
+    selectedElement && isFieldElement(selectedElement) ? selectedElement : null;
+  const layoutElement =
+    selectedElement && isLayoutElement(selectedElement)
+      ? selectedElement
+      : null;
 
-    return labels[type];
+  const elementTypeLabel = (type: FieldElementType) => {
+    return getFieldRegistryItem(type).label;
+  };
+
+  const layoutTypeLabel = (type: LayoutElementType) => {
+    return getLayoutRegistryItem(type).label;
+  };
+
+  const fieldElements = elements.filter(isFieldElement);
+  const layoutElements = elements.filter(isLayoutElement);
+  const fieldById = new Map(
+    fieldElements.map((element) => [element.id, element]),
+  );
+  const referencedFieldIds = new Set(
+    layoutElements.flatMap((element) =>
+      element.type === "two-columns"
+        ? [...element.columns.left, ...element.columns.right]
+        : [],
+    ),
+  );
+  const availableFieldElements = fieldElements
+    .filter((element) => !referencedFieldIds.has(element.id))
+    .sort((a, b) => a.label.localeCompare(b.label));
+
+  const handleAddColumnItem = (
+    layout: LayoutElement,
+    column: "left" | "right",
+    fieldId: string,
+  ) => {
+    if (layout.type !== "two-columns") return;
+
+    const current = layout.columns[column];
+    const nextValue = current[0] === fieldId ? current : [fieldId];
+
+    updateNode(layout.id, {
+      columns: {
+        ...layout.columns,
+        [column]: nextValue,
+      },
+    });
+  };
+
+  const handleRemoveColumnItem = (
+    layout: LayoutElement,
+    column: "left" | "right",
+    fieldId: string,
+  ) => {
+    if (layout.type !== "two-columns") return;
+
+    updateNode(layout.id, {
+      columns: {
+        ...layout.columns,
+        [column]: layout.columns[column].filter((id) => id !== fieldId),
+      },
+    });
   };
 
   return (
@@ -91,16 +141,16 @@ export const PropertiesSidebar = ({
         </div>
       </SidebarHeader>
       <SidebarSeparator className="mx-0" />
-      <ScrollArea className="h-[calc(100svh-71px)]">
+      <ScrollArea className="h-[calc(100svh-5rem)]">
         <SidebarContent>
-          {selectedElement ? (
+          {fieldElement ? (
             <>
               <SidebarGroup>
                 <SidebarGroupLabel>Element Type</SidebarGroupLabel>
                 <SidebarGroupContent className="px-2">
                   <Input
                     className="bg-background"
-                    value={elementTypeLabel(selectedElement.type)}
+                    value={elementTypeLabel(fieldElement.type)}
                     disabled
                   />
                 </SidebarGroupContent>
@@ -116,10 +166,10 @@ export const PropertiesSidebar = ({
                       </Label>
                       <Input
                         id="label"
-                        value={selectedElement.label}
+                        value={fieldElement.label}
                         className="bg-background"
                         onChange={(e) =>
-                          updateElement(selectedElement.id, {
+                          updateNode(fieldElement.id, {
                             label: e.target.value,
                             name: toCamelCase(e.target.value),
                           })
@@ -136,17 +186,18 @@ export const PropertiesSidebar = ({
                       "input-otp",
                       "slider",
                       "radio-group",
-                    ].includes(selectedElement.type) && (
+                      "signature",
+                    ].includes(fieldElement.type) && (
                       <div className="space-y-2">
                         <Label className="text-xs" htmlFor="placeholder">
                           Placeholder (Optional)
                         </Label>
                         <Input
                           id="placeholder"
-                          value={selectedElement.placeholder}
+                          value={fieldElement.placeholder}
                           className="bg-background"
                           onChange={(e) =>
-                            updateElement(selectedElement.id, {
+                            updateNode(fieldElement.id, {
                               placeholder: e.target.value,
                             })
                           }
@@ -161,10 +212,10 @@ export const PropertiesSidebar = ({
                       </Label>
                       <Input
                         id="description"
-                        value={selectedElement.description}
+                        value={fieldElement.description}
                         className="bg-background"
                         onChange={(e) =>
-                          updateElement(selectedElement.id, {
+                          updateNode(fieldElement.id, {
                             description: e.target.value,
                           })
                         }
@@ -175,12 +226,115 @@ export const PropertiesSidebar = ({
                   </div>
                 </SidebarGroupContent>
               </SidebarGroup>
+              {fieldElement.type === "signature" && (
+                <>
+                  <SidebarSeparator className="mx-0" />
+                  <SidebarGroup>
+                    <SidebarGroupLabel>Signature Settings</SidebarGroupLabel>
+                    <SidebarGroupContent className="px-2">
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <Label className="text-xs" htmlFor="signature-height">
+                            Height (px)
+                          </Label>
+                          <Input
+                            id="signature-height"
+                            type="number"
+                            min={80}
+                            value={fieldElement.signatureConfig?.height ?? 160}
+                            className="bg-background"
+                            onChange={(e) =>
+                              updateNode(fieldElement.id, {
+                                signatureConfig: {
+                                  ...fieldElement.signatureConfig,
+                                  height: Number(e.target.value),
+                                },
+                              })
+                            }
+                            autoComplete="off"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-xs" htmlFor="signature-stroke">
+                            Stroke Width
+                          </Label>
+                          <Input
+                            id="signature-stroke"
+                            type="number"
+                            min={1}
+                            value={
+                              fieldElement.signatureConfig?.strokeWidth ?? 2
+                            }
+                            className="bg-background"
+                            onChange={(e) =>
+                              updateNode(fieldElement.id, {
+                                signatureConfig: {
+                                  ...fieldElement.signatureConfig,
+                                  strokeWidth: Number(e.target.value),
+                                },
+                              })
+                            }
+                            autoComplete="off"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-xs" htmlFor="signature-pen">
+                            Pen Color
+                          </Label>
+                          <Input
+                            id="signature-pen"
+                            type="color"
+                            value={
+                              fieldElement.signatureConfig?.penColor ??
+                              "#0f172a"
+                            }
+                            className="bg-background h-9 p-1"
+                            onChange={(e) =>
+                              updateNode(fieldElement.id, {
+                                signatureConfig: {
+                                  ...fieldElement.signatureConfig,
+                                  penColor: e.target.value,
+                                },
+                              })
+                            }
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label
+                            className="text-xs"
+                            htmlFor="signature-background"
+                          >
+                            Background Color
+                          </Label>
+                          <Input
+                            id="signature-background"
+                            type="color"
+                            value={
+                              fieldElement.signatureConfig?.backgroundColor ??
+                              "#ffffff"
+                            }
+                            className="bg-background h-9 p-1"
+                            onChange={(e) =>
+                              updateNode(fieldElement.id, {
+                                signatureConfig: {
+                                  ...fieldElement.signatureConfig,
+                                  backgroundColor: e.target.value,
+                                },
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+                    </SidebarGroupContent>
+                  </SidebarGroup>
+                </>
+              )}
               <SidebarSeparator className="mx-0" />
               <SidebarGroup>
                 <SidebarGroupLabel>Validation</SidebarGroupLabel>
                 <SidebarGroupContent className="px-2">
                   <div className="space-y-4">
-                    {!["input-otp"].includes(selectedElement.type) && (
+                    {!["input-otp"].includes(fieldElement.type) && (
                       <div className="flex items-center justify-between">
                         <div className="space-y-0.5">
                           <Label className="text-xs" htmlFor="required">
@@ -192,9 +346,9 @@ export const PropertiesSidebar = ({
                         </div>
                         <Switch
                           id="required"
-                          checked={selectedElement.required}
+                          checked={fieldElement.required}
                           onCheckedChange={(checked) =>
-                            updateElement(selectedElement.id, {
+                            updateNode(fieldElement.id, {
                               required: checked,
                             })
                           }
@@ -211,7 +365,8 @@ export const PropertiesSidebar = ({
                       "slider",
                       "phone-input",
                       "radio-group",
-                    ].includes(selectedElement.type) && (
+                      "signature",
+                    ].includes(fieldElement.type) && (
                       <>
                         <div className="space-y-2">
                           <Label className="text-xs" htmlFor="min-length">
@@ -221,10 +376,10 @@ export const PropertiesSidebar = ({
                             id="min-length"
                             type="number"
                             min={0}
-                            value={selectedElement.minLength}
+                            value={fieldElement.minLength}
                             className="bg-background"
                             onChange={(e) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 minLength: Number(e.target.value),
                               })
                             }
@@ -240,10 +395,10 @@ export const PropertiesSidebar = ({
                             id="max-length"
                             type="number"
                             min={0}
-                            value={selectedElement.maxLength}
+                            value={fieldElement.maxLength}
                             className="bg-background"
                             onChange={(e) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 maxLength: Number(e.target.value),
                               })
                             }
@@ -264,9 +419,9 @@ export const PropertiesSidebar = ({
                       </div>
                       <Switch
                         id="disabled"
-                        checked={selectedElement.disabled}
+                        checked={fieldElement.disabled}
                         onCheckedChange={(checked) =>
-                          updateElement(selectedElement.id, {
+                          updateNode(fieldElement.id, {
                             disabled: checked,
                           })
                         }
@@ -275,7 +430,7 @@ export const PropertiesSidebar = ({
                   </div>
                 </SidebarGroupContent>
               </SidebarGroup>
-              {selectedElement.type === "input-otp" && (
+              {fieldElement.type === "input-otp" && (
                 <>
                   <SidebarSeparator className="mx-0" />
                   <SidebarGroup>
@@ -292,11 +447,11 @@ export const PropertiesSidebar = ({
                             min={1}
                             max={8}
                             className="bg-background"
-                            value={selectedElement.otpConfig?.length ?? 6}
+                            value={fieldElement.otpConfig?.length ?? 6}
                             onChange={(e) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 otpConfig: {
-                                  ...selectedElement.otpConfig,
+                                  ...fieldElement.otpConfig,
                                   length: Number(e.target.value) || 6,
                                 },
                               })
@@ -311,7 +466,7 @@ export const PropertiesSidebar = ({
                           </Label>
                           <Select
                             value={(() => {
-                              const source = selectedElement.otpConfig?.pattern;
+                              const source = fieldElement.otpConfig?.pattern;
                               if (source === REGEXP_ONLY_CHARS)
                                 return "letters";
                               if (source === REGEXP_ONLY_DIGITS)
@@ -325,9 +480,9 @@ export const PropertiesSidebar = ({
                                   : value === "digits"
                                     ? REGEXP_ONLY_DIGITS
                                     : REGEXP_ONLY_DIGITS_AND_CHARS;
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 otpConfig: {
-                                  ...selectedElement.otpConfig,
+                                  ...fieldElement.otpConfig,
                                   pattern: nextPattern,
                                 },
                               });
@@ -360,7 +515,7 @@ export const PropertiesSidebar = ({
                   </SidebarGroup>
                 </>
               )}
-              {selectedElement.type === "slider" && (
+              {fieldElement.type === "slider" && (
                 <>
                   <SidebarSeparator className="mx-0" />
                   <SidebarGroup>
@@ -376,11 +531,11 @@ export const PropertiesSidebar = ({
                               id="slider-min"
                               type="number"
                               className="bg-background"
-                              value={selectedElement.sliderConfig?.min ?? 0}
+                              value={fieldElement.sliderConfig?.min ?? 0}
                               onChange={(e) =>
-                                updateElement(selectedElement.id, {
+                                updateNode(fieldElement.id, {
                                   sliderConfig: {
-                                    ...selectedElement.sliderConfig,
+                                    ...fieldElement.sliderConfig,
                                     min: Number(e.target.value),
                                   },
                                 })
@@ -397,11 +552,11 @@ export const PropertiesSidebar = ({
                               id="slider-max"
                               type="number"
                               className="bg-background"
-                              value={selectedElement.sliderConfig?.max ?? 100}
+                              value={fieldElement.sliderConfig?.max ?? 100}
                               onChange={(e) =>
-                                updateElement(selectedElement.id, {
+                                updateNode(fieldElement.id, {
                                   sliderConfig: {
-                                    ...selectedElement.sliderConfig,
+                                    ...fieldElement.sliderConfig,
                                     max: Number(e.target.value),
                                   },
                                 })
@@ -420,11 +575,11 @@ export const PropertiesSidebar = ({
                             type="number"
                             min={0.0001}
                             className="bg-background"
-                            value={selectedElement.sliderConfig?.step ?? 1}
+                            value={fieldElement.sliderConfig?.step ?? 1}
                             onChange={(e) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 sliderConfig: {
-                                  ...selectedElement.sliderConfig,
+                                  ...fieldElement.sliderConfig,
                                   step: Number(e.target.value) || 1,
                                 },
                               })
@@ -441,15 +596,15 @@ export const PropertiesSidebar = ({
                             id="slider-default"
                             type="number"
                             className="bg-background"
-                            max={selectedElement.sliderConfig?.max}
-                            min={selectedElement.sliderConfig?.min}
+                            max={fieldElement.sliderConfig?.max}
+                            min={fieldElement.sliderConfig?.min}
                             value={
-                              selectedElement.sliderConfig?.defaultValue ?? 50
+                              fieldElement.sliderConfig?.defaultValue ?? 50
                             }
                             onChange={(e) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 sliderConfig: {
-                                  ...selectedElement.sliderConfig,
+                                  ...fieldElement.sliderConfig,
                                   defaultValue: Number(e.target.value),
                                 },
                               })
@@ -470,13 +625,13 @@ export const PropertiesSidebar = ({
                           </Label>
                           <Select
                             value={
-                              selectedElement.sliderConfig?.orientation ??
+                              fieldElement.sliderConfig?.orientation ??
                               "horizontal"
                             }
                             onValueChange={(value) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 sliderConfig: {
-                                  ...selectedElement.sliderConfig,
+                                  ...fieldElement.sliderConfig,
                                   orientation: value as
                                     | "horizontal"
                                     | "vertical",
@@ -503,7 +658,7 @@ export const PropertiesSidebar = ({
                   </SidebarGroup>
                 </>
               )}
-              {selectedElement.type === "file" && (
+              {fieldElement.type === "file" && (
                 <>
                   <SidebarSeparator className="mx-0" />
                   <SidebarGroup>
@@ -515,11 +670,11 @@ export const PropertiesSidebar = ({
                             Accepted file types
                           </Label>
                           <Select
-                            value={selectedElement.fileConfig?.accept}
+                            value={fieldElement.fileConfig?.accept}
                             onValueChange={(value) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 fileConfig: {
-                                  ...selectedElement.fileConfig,
+                                  ...fieldElement.fileConfig,
                                   accept: value,
                                 },
                               })
@@ -554,15 +709,15 @@ export const PropertiesSidebar = ({
                             min={1}
                             max={1024}
                             value={
-                              selectedElement.fileConfig?.maxSize
-                                ? selectedElement.fileConfig.maxSize /
+                              fieldElement.fileConfig?.maxSize
+                                ? fieldElement.fileConfig.maxSize /
                                   (1024 * 1024)
                                 : 5
                             }
                             onChange={(e) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 fileConfig: {
-                                  ...selectedElement.fileConfig,
+                                  ...fieldElement.fileConfig,
                                   maxSize: Number(e.target.value) * 1024 * 1024,
                                 },
                               })
@@ -577,14 +732,14 @@ export const PropertiesSidebar = ({
                             id="max-files"
                             type="number"
                             className="bg-background"
-                            disabled={!selectedElement.fileConfig?.multiple}
+                            disabled={!fieldElement.fileConfig?.multiple}
                             min={1}
                             max={10}
-                            value={selectedElement.fileConfig?.maxFiles}
+                            value={fieldElement.fileConfig?.maxFiles}
                             onChange={(e) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 fileConfig: {
-                                  ...selectedElement.fileConfig,
+                                  ...fieldElement.fileConfig,
                                   maxFiles: Number(e.target.value),
                                 },
                               })
@@ -596,11 +751,11 @@ export const PropertiesSidebar = ({
                             Preview size
                           </Label>
                           <Select
-                            value={selectedElement.fileConfig?.previewSize}
+                            value={fieldElement.fileConfig?.previewSize}
                             onValueChange={(value) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 fileConfig: {
-                                  ...selectedElement.fileConfig,
+                                  ...fieldElement.fileConfig,
                                   previewSize: value as "sm" | "md" | "lg",
                                 },
                               })
@@ -624,11 +779,11 @@ export const PropertiesSidebar = ({
                             Variant
                           </Label>
                           <Select
-                            value={selectedElement.fileConfig?.variant}
+                            value={fieldElement.fileConfig?.variant}
                             onValueChange={(value) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 fileConfig: {
-                                  ...selectedElement.fileConfig,
+                                  ...fieldElement.fileConfig,
                                   variant: value as
                                     | "default"
                                     | "compact"
@@ -661,11 +816,11 @@ export const PropertiesSidebar = ({
                           </div>
                           <Switch
                             id="multiple"
-                            checked={selectedElement.fileConfig?.multiple}
+                            checked={fieldElement.fileConfig?.multiple}
                             onCheckedChange={(checked) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 fileConfig: {
-                                  ...selectedElement.fileConfig,
+                                  ...fieldElement.fileConfig,
                                   multiple: checked,
                                   maxFiles: 1,
                                 },
@@ -684,11 +839,11 @@ export const PropertiesSidebar = ({
                           </div>
                           <Switch
                             id="show-preview"
-                            checked={selectedElement.fileConfig?.showPreview}
+                            checked={fieldElement.fileConfig?.showPreview}
                             onCheckedChange={(checked) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 fileConfig: {
-                                  ...selectedElement.fileConfig,
+                                  ...fieldElement.fileConfig,
                                   showPreview: checked,
                                 },
                               })
@@ -700,7 +855,7 @@ export const PropertiesSidebar = ({
                   </SidebarGroup>
                 </>
               )}
-              {selectedElement.type === "radio-group" && (
+              {fieldElement.type === "radio-group" && (
                 <>
                   <SidebarSeparator className="mx-0" />
                   <SidebarGroup>
@@ -710,61 +865,64 @@ export const PropertiesSidebar = ({
                         <div className="flex items-center justify-between">
                           <Label className="text-xs">Radio Items</Label>
                           <p className="text-xs text-muted-foreground">
-                            {selectedElement.radioGroupOptions?.items.length}{" "}
-                            Items
+                            {fieldElement.radioGroupOptions?.items.length} Items
                           </p>
                         </div>
                         <div className="space-y-2">
-                          {selectedElement.radioGroupOptions?.items.map(
-                            (item, index) => (
-                              <div key={index}>
-                                <InputGroup>
-                                  <InputGroupInput
-                                    value={item.label}
-                                    className="bg-background"
-                                    autoComplete="off"
-                                    placeholder={`Option ${index + 1}`}
-                                    onChange={(e) => {
-                                      const updatedItems = [
-                                        ...(selectedElement.radioGroupOptions
-                                          ?.items || []),
-                                      ];
+                          {fieldElement.radioGroupOptions?.items.map((item) => (
+                            <div key={item.value}>
+                              <InputGroup>
+                                <InputGroupInput
+                                  value={item.label}
+                                  className="bg-background"
+                                  autoComplete="off"
+                                  placeholder={`Option ${item.label}`}
+                                  onChange={(e) => {
+                                    const updatedItems = [
+                                      ...(fieldElement.radioGroupOptions
+                                        ?.items || []),
+                                    ];
 
-                                      updatedItems[index] = {
-                                        label: e.target.value,
-                                        value: toCamelCase(e.target.value),
-                                      };
+                                    const nextIndex = updatedItems.findIndex(
+                                      (entry) => entry.value === item.value,
+                                    );
 
-                                      updateElement(selectedElement.id, {
+                                    if (nextIndex === -1) return;
+
+                                    updatedItems[nextIndex] = {
+                                      label: e.target.value,
+                                      value: toCamelCase(e.target.value),
+                                    };
+
+                                    updateNode(fieldElement.id, {
+                                      radioGroupOptions: {
+                                        items: updatedItems,
+                                      },
+                                    });
+                                  }}
+                                />
+                                <InputGroupAddon align="inline-end">
+                                  <InputGroupButton
+                                    size="icon-xs"
+                                    onClick={() => {
+                                      const updatedItems =
+                                        fieldElement.radioGroupOptions?.items.filter(
+                                          (entry) => entry.value !== item.value,
+                                        ) || [];
+
+                                      updateNode(fieldElement.id, {
                                         radioGroupOptions: {
                                           items: updatedItems,
                                         },
                                       });
                                     }}
-                                  />
-                                  <InputGroupAddon align="inline-end">
-                                    <InputGroupButton
-                                      size="icon-xs"
-                                      onClick={() => {
-                                        const updatedItems =
-                                          selectedElement.radioGroupOptions?.items.filter(
-                                            (_, i) => i !== index,
-                                          ) || [];
-
-                                        updateElement(selectedElement.id, {
-                                          radioGroupOptions: {
-                                            items: updatedItems,
-                                          },
-                                        });
-                                      }}
-                                    >
-                                      <Trash2Icon />
-                                    </InputGroupButton>
-                                  </InputGroupAddon>
-                                </InputGroup>
-                              </div>
-                            ),
-                          )}
+                                  >
+                                    <Trash2Icon />
+                                  </InputGroupButton>
+                                </InputGroupAddon>
+                              </InputGroup>
+                            </div>
+                          ))}
                         </div>
                         <Button
                           variant="outline"
@@ -772,9 +930,9 @@ export const PropertiesSidebar = ({
                           size="sm"
                           onClick={() => {
                             const currentItems =
-                              selectedElement.radioGroupOptions?.items || [];
+                              fieldElement.radioGroupOptions?.items || [];
 
-                            updateElement(selectedElement.id, {
+                            updateNode(fieldElement.id, {
                               radioGroupOptions: {
                                 items: [
                                   ...currentItems,
@@ -794,7 +952,7 @@ export const PropertiesSidebar = ({
                   </SidebarGroup>
                 </>
               )}
-              {selectedElement.type === "select" && (
+              {fieldElement.type === "select" && (
                 <>
                   <SidebarSeparator className="mx-0" />
                   <SidebarGroup>
@@ -807,14 +965,14 @@ export const PropertiesSidebar = ({
                           </Label>
                           <Input
                             id="select-label"
-                            value={selectedElement.options?.selectLabel}
+                            value={fieldElement.options?.selectLabel}
                             className="bg-background"
                             onChange={(e) =>
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 options: {
                                   selectLabel: e.target.value,
                                   selectItems:
-                                    selectedElement.options?.selectItems || [],
+                                    fieldElement.options?.selectItems || [],
                                 },
                               })
                             }
@@ -826,67 +984,71 @@ export const PropertiesSidebar = ({
                           <div className="flex items-center justify-between">
                             <Label className="text-xs">Select Items</Label>
                             <p className="text-xs text-muted-foreground">
-                              {selectedElement.options?.selectItems.length}{" "}
-                              Items
+                              {fieldElement.options?.selectItems.length} Items
                             </p>
                           </div>
                           <div className="space-y-2">
-                            {selectedElement.options?.selectItems.map(
-                              (item, index) => (
-                                <div key={index}>
-                                  <InputGroup>
-                                    <InputGroupInput
-                                      value={item.label}
-                                      className="bg-background"
-                                      autoComplete="off"
-                                      placeholder={`Option ${index + 1}`}
-                                      onChange={(e) => {
-                                        const updatedItems = [
-                                          ...(selectedElement.options
-                                            ?.selectItems || []),
-                                        ];
+                            {fieldElement.options?.selectItems.map((item) => (
+                              <div key={item.value}>
+                                <InputGroup>
+                                  <InputGroupInput
+                                    value={item.label}
+                                    className="bg-background"
+                                    autoComplete="off"
+                                    placeholder={`Option ${item.label}`}
+                                    onChange={(e) => {
+                                      const updatedItems = [
+                                        ...(fieldElement.options?.selectItems ||
+                                          []),
+                                      ];
 
-                                        updatedItems[index] = {
-                                          label: e.target.value,
-                                          value: toCamelCase(e.target.value),
-                                        };
+                                      const nextIndex = updatedItems.findIndex(
+                                        (entry) => entry.value === item.value,
+                                      );
 
-                                        updateElement(selectedElement.id, {
+                                      if (nextIndex === -1) return;
+
+                                      updatedItems[nextIndex] = {
+                                        label: e.target.value,
+                                        value: toCamelCase(e.target.value),
+                                      };
+
+                                      updateNode(fieldElement.id, {
+                                        options: {
+                                          selectLabel:
+                                            fieldElement.options?.selectLabel ||
+                                            "",
+                                          selectItems: updatedItems,
+                                        },
+                                      });
+                                    }}
+                                  />
+                                  <InputGroupAddon align="inline-end">
+                                    <InputGroupButton
+                                      size="icon-xs"
+                                      onClick={() => {
+                                        const updatedItems =
+                                          fieldElement.options?.selectItems.filter(
+                                            (entry) =>
+                                              entry.value !== item.value,
+                                          ) || [];
+
+                                        updateNode(fieldElement.id, {
                                           options: {
                                             selectLabel:
-                                              selectedElement.options
+                                              fieldElement.options
                                                 ?.selectLabel || "",
                                             selectItems: updatedItems,
                                           },
                                         });
                                       }}
-                                    />
-                                    <InputGroupAddon align="inline-end">
-                                      <InputGroupButton
-                                        size="icon-xs"
-                                        onClick={() => {
-                                          const updatedItems =
-                                            selectedElement.options?.selectItems.filter(
-                                              (_, i) => i !== index,
-                                            ) || [];
-
-                                          updateElement(selectedElement.id, {
-                                            options: {
-                                              selectLabel:
-                                                selectedElement.options
-                                                  ?.selectLabel || "",
-                                              selectItems: updatedItems,
-                                            },
-                                          });
-                                        }}
-                                      >
-                                        <Trash2Icon />
-                                      </InputGroupButton>
-                                    </InputGroupAddon>
-                                  </InputGroup>
-                                </div>
-                              ),
-                            )}
+                                    >
+                                      <Trash2Icon />
+                                    </InputGroupButton>
+                                  </InputGroupAddon>
+                                </InputGroup>
+                              </div>
+                            ))}
                           </div>
                           <Button
                             variant="outline"
@@ -894,12 +1056,12 @@ export const PropertiesSidebar = ({
                             size="sm"
                             onClick={() => {
                               const currentItems =
-                                selectedElement.options?.selectItems || [];
+                                fieldElement.options?.selectItems || [];
 
-                              updateElement(selectedElement.id, {
+                              updateNode(fieldElement.id, {
                                 options: {
                                   selectLabel:
-                                    selectedElement.options?.selectLabel || "",
+                                    fieldElement.options?.selectLabel || "",
                                   selectItems: [
                                     ...currentItems,
                                     {
@@ -929,7 +1091,7 @@ export const PropertiesSidebar = ({
                         Name
                       </Label>
                       <Input
-                        value={selectedElement.name}
+                        value={fieldElement.name}
                         className="bg-background"
                         disabled
                       />
@@ -940,7 +1102,7 @@ export const PropertiesSidebar = ({
                     <div className="space-y-2">
                       <Label className="text-xs">Field ID</Label>
                       <Input
-                        value={selectedElement.id}
+                        value={fieldElement.id}
                         className="bg-background"
                         disabled
                       />
@@ -951,6 +1113,208 @@ export const PropertiesSidebar = ({
                   </div>
                 </SidebarGroupContent>
               </SidebarGroup>
+            </>
+          ) : layoutElement ? (
+            <>
+              <SidebarGroup>
+                <SidebarGroupLabel>Element Type</SidebarGroupLabel>
+                <SidebarGroupContent className="px-2">
+                  <Input
+                    className="bg-background"
+                    value={layoutTypeLabel(layoutElement.type)}
+                    disabled
+                  />
+                </SidebarGroupContent>
+              </SidebarGroup>
+              {layoutElement.type === "separator" && (
+                <>
+                  <SidebarSeparator className="mx-0" />
+                  <SidebarGroup>
+                    <SidebarGroupLabel>Separator Label</SidebarGroupLabel>
+                    <SidebarGroupContent className="px-2">
+                      <div className="space-y-2">
+                        <Label className="text-xs" htmlFor="separator-label">
+                          Label (Optional)
+                        </Label>
+                        <Input
+                          id="separator-label"
+                          value={layoutElement.label ?? ""}
+                          className="bg-background"
+                          onChange={(e) =>
+                            updateNode(layoutElement.id, {
+                              label: e.target.value,
+                            })
+                          }
+                          autoComplete="off"
+                          placeholder="Enter separator label"
+                        />
+                      </div>
+                    </SidebarGroupContent>
+                  </SidebarGroup>
+                </>
+              )}
+              {layoutElement.type === "two-columns" && (
+                <>
+                  <SidebarSeparator className="mx-0" />
+                  <div className="px-4 pt-4">
+                    <div className="rounded-md border border-dashed bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
+                      Assign fields from this form to each column. Each column
+                      holds one field at a time and can be replaced anytime.
+                    </div>
+                  </div>
+                  <SidebarGroup>
+                    <SidebarGroupLabel>Columns</SidebarGroupLabel>
+                    <SidebarGroupContent className="px-2">
+                      <div className="space-y-6">
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <Label className="text-xs">Left Column</Label>
+                            <span className="text-xs text-muted-foreground">
+                              {layoutElement.columns.left.length} items
+                            </span>
+                          </div>
+                          {layoutElement.columns.left.length > 0 ? (
+                            <div className="space-y-2">
+                              {layoutElement.columns.left
+                                .slice(0, 1)
+                                .map((fieldId) => {
+                                  const field = fieldById.get(fieldId);
+                                  const label = field?.label ?? fieldId;
+
+                                  return (
+                                    <InputGroup key={fieldId}>
+                                      <InputGroupInput
+                                        value={label}
+                                        className="bg-background"
+                                        disabled
+                                      />
+                                      <InputGroupAddon align="inline-end">
+                                        <InputGroupButton
+                                          size="icon-xs"
+                                          onClick={() =>
+                                            handleRemoveColumnItem(
+                                              layoutElement,
+                                              "left",
+                                              fieldId,
+                                            )
+                                          }
+                                        >
+                                          <Trash2Icon />
+                                        </InputGroupButton>
+                                      </InputGroupAddon>
+                                    </InputGroup>
+                                  );
+                                })}
+                            </div>
+                          ) : (
+                            <p className="text-xs text-muted-foreground">
+                              No fields assigned yet.
+                            </p>
+                          )}
+                          <Select
+                            value=""
+                            onValueChange={(value) => {
+                              if (!value) return;
+                              handleAddColumnItem(layoutElement, "left", value);
+                            }}
+                          >
+                            <SelectTrigger className="bg-background w-full">
+                              <SelectValue placeholder="Add field to left column" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {availableFieldElements.length === 0 ? (
+                                <SelectItem value="__empty" disabled>
+                                  No available fields
+                                </SelectItem>
+                              ) : (
+                                availableFieldElements.map((field) => (
+                                  <SelectItem key={field.id} value={field.id}>
+                                    {field.label}
+                                  </SelectItem>
+                                ))
+                              )}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <Label className="text-xs">Right Column</Label>
+                            <span className="text-xs text-muted-foreground">
+                              {layoutElement.columns.right.length} items
+                            </span>
+                          </div>
+                          {layoutElement.columns.right.length > 0 ? (
+                            <div className="space-y-2">
+                              {layoutElement.columns.right
+                                .slice(0, 1)
+                                .map((fieldId) => {
+                                  const field = fieldById.get(fieldId);
+                                  const label = field?.label ?? fieldId;
+
+                                  return (
+                                    <InputGroup key={fieldId}>
+                                      <InputGroupInput
+                                        value={label}
+                                        className="bg-background"
+                                        disabled
+                                      />
+                                      <InputGroupAddon align="inline-end">
+                                        <InputGroupButton
+                                          size="icon-xs"
+                                          onClick={() =>
+                                            handleRemoveColumnItem(
+                                              layoutElement,
+                                              "right",
+                                              fieldId,
+                                            )
+                                          }
+                                        >
+                                          <Trash2Icon />
+                                        </InputGroupButton>
+                                      </InputGroupAddon>
+                                    </InputGroup>
+                                  );
+                                })}
+                            </div>
+                          ) : (
+                            <p className="text-xs text-muted-foreground">
+                              No fields assigned yet.
+                            </p>
+                          )}
+                          <Select
+                            value=""
+                            onValueChange={(value) => {
+                              if (!value) return;
+                              handleAddColumnItem(
+                                layoutElement,
+                                "right",
+                                value,
+                              );
+                            }}
+                          >
+                            <SelectTrigger className="bg-background w-full">
+                              <SelectValue placeholder="Add field to right column" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {availableFieldElements.length === 0 ? (
+                                <SelectItem value="__empty" disabled>
+                                  No available fields
+                                </SelectItem>
+                              ) : (
+                                availableFieldElements.map((field) => (
+                                  <SelectItem key={field.id} value={field.id}>
+                                    {field.label}
+                                  </SelectItem>
+                                ))
+                              )}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    </SidebarGroupContent>
+                  </SidebarGroup>
+                </>
+              )}
             </>
           ) : (
             <div className="min-h-[calc(100vh-71px)] flex items-center justify-center">

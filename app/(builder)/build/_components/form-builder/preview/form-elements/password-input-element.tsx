@@ -1,3 +1,8 @@
+import type {
+  ControllerFieldState,
+  ControllerRenderProps,
+  FieldValues,
+} from "react-hook-form";
 import {
   Field,
   FieldDescription,
@@ -5,15 +10,10 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { PasswordInput } from "@/components/ui/password-input";
-import { FormElement } from "@/types/form-builder";
-import {
-  ControllerFieldState,
-  ControllerRenderProps,
-  FieldValues,
-} from "react-hook-form";
+import type { FieldElement } from "@/types/form-builder";
 
 interface PasswordInputElementProps {
-  element: FormElement;
+  element: FieldElement;
   field: ControllerRenderProps<FieldValues, string>;
   fieldState: ControllerFieldState;
 }

@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { AnimatedGridPattern } from "./animated-grid-pattern";
-import { cn } from "@/lib/utils";
 import { SparklesIcon } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { AnimatedGridPattern } from "./animated-grid-pattern";
 
 export const Hero = () => {
   return (
@@ -19,9 +19,11 @@ export const Hero = () => {
         )}
       />
       <div className="relative z-10 text-center max-w-3xl">
-        <Badge variant="secondary" className="border-border px-2 py-1">
-          New form builder design
-          <SparklesIcon />
+        <Badge variant="secondary" className="border-border px-2 py-1" asChild>
+          <Link href="/changelog">
+            New in v1.5.0: Layouts and Signature
+            <SparklesIcon />
+          </Link>
         </Badge>
         <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl lg:text-7xl md:leading-[1.2] font-bold tracking-tighter">
           The Fastest Way to Build Multi Step Forms

@@ -1,7 +1,7 @@
-import { getFormTemplateType } from "@/lib/utils";
-import { Form } from "@/types/form-builder";
-import { SingleFormPreview } from "./preview/single-form-preview";
+import { getFormTemplateType } from "@/lib/builder/utils";
+import type { Form } from "@/types/form-builder";
 import { MultiFormPreview } from "./preview/multi-form-preview";
+import { SingleFormPreview } from "./preview/single-form-preview";
 
 interface PreviewProps {
   forms: Form[];
