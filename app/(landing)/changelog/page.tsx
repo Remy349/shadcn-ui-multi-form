@@ -1,5 +1,3 @@
-import { Badge } from "@/components/ui/badge";
-import type { Metadata } from "next";
 import {
   BugIcon,
   CalendarIcon,
@@ -7,6 +5,8 @@ import {
   RocketIcon,
   ZapIcon,
 } from "lucide-react";
+import type { Metadata } from "next";
+import { Badge } from "@/components/ui/badge";
 
 export const metadata: Metadata = {
   title: "Changelog",
@@ -50,6 +50,45 @@ const changeTypeConfig: Record<
 };
 
 const releases: Release[] = [
+  {
+    id: 7,
+    title: "Layout Builder Expansion & Signature Input v1.5.0",
+    period: "March 5, 2026",
+    description:
+      "This release expands the form builder with layout-aware composition and a new Signature input. It also tightens UX behavior in the builder and introduces dedicated documentation for the Signature component.",
+    changes: [
+      {
+        id: 1,
+        type: "new",
+        text: "New Two Columns and Separator layout elements for structured form composition.",
+      },
+      {
+        id: 2,
+        type: "new",
+        text: "New Signature input with canvas capture and configurable pen/background settings.",
+      },
+      {
+        id: 3,
+        type: "new",
+        text: "New Signature Input documentation page in the Components section.",
+      },
+      {
+        id: 4,
+        type: "improved",
+        text: "Layout-aware rendering and code generation using a shared render plan.",
+      },
+      {
+        id: 5,
+        type: "improved",
+        text: "Builder UX refinements for layout assignment, selection, and new element highlighting.",
+      },
+      {
+        id: 6,
+        type: "fixed",
+        text: "Fixed selection and layout reference issues during insertion and updates.",
+      },
+    ],
+  },
   {
     id: 6,
     title: "Input Flexibility & Configuration UX Enhancements v1.4.0",
