@@ -34,9 +34,9 @@ export default function ComponentsPage() {
             seamless integration, and clean React + TypeScript code generation.
           </p>
         </div>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid border divide-x divide-y *:p-5 md:grid-cols-2 lg:grid-cols-3">
           <Link href="/components/password-input">
-            <Card className="shadow-none border hover:border-dashed hover:border-primary">
+            <Card className="border hover:border-dashed hover:border-primary">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle>Password Input</CardTitle>
@@ -52,7 +52,7 @@ export default function ComponentsPage() {
             </Card>
           </Link>
           <Link href="/components/file-input">
-            <Card className="shadow-none border hover:border-dashed hover:border-primary">
+            <Card className="border hover:border-dashed hover:border-primary">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle>File Input</CardTitle>
@@ -68,7 +68,7 @@ export default function ComponentsPage() {
             </Card>
           </Link>
           <Link href="/components/rich-text-editor">
-            <Card className="shadow-none border hover:border-dashed hover:border-primary">
+            <Card className="border hover:border-dashed hover:border-primary">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle>Rich Text Editor</CardTitle>
@@ -84,7 +84,7 @@ export default function ComponentsPage() {
             </Card>
           </Link>
           <Link href="/components/email-input">
-            <Card className="shadow-none border hover:border-dashed hover:border-primary">
+            <Card className="border hover:border-dashed hover:border-primary">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle>Email Input</CardTitle>
@@ -100,7 +100,7 @@ export default function ComponentsPage() {
             </Card>
           </Link>
           <Link href="/components/date-picker">
-            <Card className="shadow-none border hover:border-dashed hover:border-primary">
+            <Card className="border hover:border-dashed hover:border-primary">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle>Date Picker</CardTitle>
@@ -116,7 +116,7 @@ export default function ComponentsPage() {
             </Card>
           </Link>
           <Link href="/components/phone-input">
-            <Card className="shadow-none border hover:border-dashed hover:border-primary">
+            <Card className="border hover:border-dashed hover:border-primary">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle>Phone Input</CardTitle>
@@ -132,7 +132,7 @@ export default function ComponentsPage() {
             </Card>
           </Link>
           <Link href="/components/signature-input">
-            <Card className="shadow-none border hover:border-dashed hover:border-primary">
+            <Card className="border hover:border-dashed hover:border-primary">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle>Signature Input</CardTitle>
@@ -146,6 +146,32 @@ export default function ComponentsPage() {
               </CardHeader>
             </Card>
           </Link>
+          <div>
+            <Card className="h-full">
+              <CardHeader>
+                <CardTitle className="text-center text-lg">
+                  More Coming Soon!
+                </CardTitle>
+                <CardDescription className="text-center text-foreground/70">
+                  We're actively working on adding more components to our
+                  library.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+          <div>
+            <Card className="h-full">
+              <CardHeader>
+                <CardTitle className="text-center text-lg">
+                  More Coming Soon!
+                </CardTitle>
+                <CardDescription className="text-center text-foreground/70">
+                  We're actively working on adding more components to our
+                  library.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
         </div>
       </div>
     </section>
