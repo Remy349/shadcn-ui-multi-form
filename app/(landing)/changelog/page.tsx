@@ -51,6 +51,40 @@ const changeTypeConfig: Record<
 
 const releases: Release[] = [
   {
+    id: 8,
+    title: "Modern UI Refresh & New Combobox Inputs v1.6.0",
+    period: "March 13, 2026",
+    description:
+      "This release delivers a cleaner, more modern interface across the builder and marketing pages, while adding flexible Combobox inputs for faster selection workflows.",
+    changes: [
+      {
+        id: 1,
+        type: "new",
+        text: "New Combobox input for searchable single selections.",
+      },
+      {
+        id: 2,
+        type: "new",
+        text: "New Multi Select input powered by combobox chips for multi-value selections.",
+      },
+      {
+        id: 3,
+        type: "improved",
+        text: "Refreshed UI design with a modern, minimal aesthetic that preserves the product identity.",
+      },
+      {
+        id: 4,
+        type: "improved",
+        text: "Enhanced Components page layout and presentation for better discovery.",
+      },
+      {
+        id: 5,
+        type: "improved",
+        text: "Subtle motion refinements on buttons and inputs for a more polished experience.",
+      },
+    ],
+  },
+  {
     id: 7,
     title: "Layout Builder Expansion & Signature Input v1.5.0",
     period: "March 5, 2026",

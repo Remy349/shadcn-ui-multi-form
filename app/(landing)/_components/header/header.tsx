@@ -23,7 +23,7 @@ export const Header = async () => {
             <span className="font-bold text-sm">MultiForm</span>
           </Link>
           <Badge variant="secondary" className="font-semibold">
-            v1.5.0
+            v1.6.0
           </Badge>
         </div>
         <DesktopMenu />
