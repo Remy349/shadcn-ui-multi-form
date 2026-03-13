@@ -60,7 +60,9 @@ export const FormBuilder = () => {
                 setSelectedElementId={setSelectedElementId}
               />
             ) : (
-              <Preview forms={forms} />
+              <div className="border p-4">
+                <Preview forms={forms} />
+              </div>
             )}
           </div>
         </ScrollArea>

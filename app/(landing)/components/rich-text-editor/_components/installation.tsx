@@ -189,7 +189,7 @@ export const Installation = () => {
               {index < steps.length - 1 && (
                 <div className="absolute left-4 top-10 h-[calc(100%-10px)] w-px bg-border" />
               )}
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-sm font-medium text-accent-foreground">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center bg-accent text-sm font-medium text-accent-foreground">
                 {step.step}
               </div>
               <div className="flex-1 space-y-3 pb-6">
@@ -199,7 +199,7 @@ export const Installation = () => {
                     {step.description}
                   </p>
                 </div>
-                <div className="overflow-hidden rounded-lg border border-border bg-card">
+                <div className="overflow-hidden border border-border bg-card">
                   <div className="flex items-center justify-between bg-secondary/50 px-3 py-2">
                     <span className="text-xs text-muted-foreground">
                       {step.step === 1

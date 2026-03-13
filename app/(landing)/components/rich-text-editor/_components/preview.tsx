@@ -52,7 +52,7 @@ export const Preview = () => {
       <h2 className="tracking-tighter text-xl font-bold text-foreground">
         Preview
       </h2>
-      <div className="overflow-hidden rounded-xl border border-border bg-card">
+      <div className="overflow-hidden border border-border bg-card">
         <Tabs defaultValue="preview">
           <div className="flex items-center justify-between border-b border-border bg-secondary/50 p-2">
             <TabsList className="h-12 bg-transparent">

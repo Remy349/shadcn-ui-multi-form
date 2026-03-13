@@ -17,13 +17,13 @@ export const Header = async () => {
       <nav className="px-6 mx-auto flex items-center justify-between h-16 max-w-5xl">
         <div className="flex items-center space-x-2">
           <Link href="/" className="flex items-center space-x-2">
-            <div className="rounded-md bg-muted p-2 border border-dashed">
+            <div className="bg-muted p-1.5 border border-dashed">
               <LayersIcon className="size-4 text-primary/80" />
             </div>
             <span className="font-bold text-sm">MultiForm</span>
           </Link>
           <Badge variant="secondary" className="font-semibold">
-            v1.5.0
+            v1.6.0
           </Badge>
         </div>
         <DesktopMenu />

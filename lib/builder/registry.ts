@@ -219,6 +219,82 @@ export const fieldRegistry: Record<FieldElementType, FieldRegistryItem> = {
       return { schema: fieldSchema, defaultValue };
     },
   },
+  combobox: {
+    type: "combobox",
+    label: "Combobox",
+    isNew: true,
+    icon: ChevronDownIcon,
+    createDefault: (id) =>
+      buildBaseField("combobox", "Combobox Field", {
+        id,
+        placeholder: "Search and select",
+        comboboxOptions: {
+          items: [
+            { label: "Option 1", value: "option1" },
+            { label: "Option 2", value: "option2" },
+          ],
+        },
+      }),
+    buildSchema: (element) => {
+      let fieldSchema = z.string();
+      const defaultValue = "";
+      const values =
+        element.comboboxOptions?.items.map((item) => item.value) || [];
+      const isOptional = !element.required;
+
+      if (element.required) {
+        fieldSchema = fieldSchema.min(1, `${element.label} is required`);
+      }
+
+      if (values.length > 0) {
+        fieldSchema = fieldSchema.refine(
+          (val) => (isOptional && val === "") || values.includes(val),
+          `${element.label} must be a valid option`,
+        );
+      }
+
+      return { schema: fieldSchema, defaultValue };
+    },
+  },
+  "multi-select": {
+    type: "multi-select",
+    label: "Multi Select",
+    isNew: true,
+    icon: CheckboxIcon,
+    createDefault: (id) =>
+      buildBaseField("multi-select", "Multi Select Field", {
+        id,
+        placeholder: "Select options",
+        multiSelectOptions: {
+          items: [
+            { label: "Option 1", value: "option1" },
+            { label: "Option 2", value: "option2" },
+          ],
+        },
+      }),
+    buildSchema: (element) => {
+      let fieldSchema = z.array(z.string());
+      const defaultValue: string[] = [];
+      const values =
+        element.multiSelectOptions?.items.map((item) => item.value) || [];
+
+      if (element.required) {
+        fieldSchema = fieldSchema.refine(
+          (val) => val.length > 0,
+          `${element.label} is required`,
+        );
+      }
+
+      if (values.length > 0) {
+        fieldSchema = fieldSchema.refine(
+          (val) => val.every((entry) => values.includes(entry)),
+          `${element.label} must be valid options`,
+        );
+      }
+
+      return { schema: fieldSchema, defaultValue };
+    },
+  },
   file: {
     type: "file",
     label: "File",

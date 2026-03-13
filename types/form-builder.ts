@@ -6,6 +6,8 @@ export type FieldElementType =
   | "switch"
   | "password"
   | "select"
+  | "combobox"
+  | "multi-select"
   | "file"
   | "rich-text-editor"
   | "date-picker"
@@ -57,6 +59,18 @@ export interface FieldElement extends BuilderElementBase {
     orientation?: "horizontal" | "vertical";
   };
   radioGroupOptions?: {
+    items: {
+      label: string;
+      value: string;
+    }[];
+  };
+  comboboxOptions?: {
+    items: {
+      label: string;
+      value: string;
+    }[];
+  };
+  multiSelectOptions?: {
     items: {
       label: string;
       value: string;

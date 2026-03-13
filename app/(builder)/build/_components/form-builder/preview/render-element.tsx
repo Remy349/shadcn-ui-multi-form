@@ -6,10 +6,12 @@ import type {
 import { getFieldRegistryItem } from "@/lib/builder/registry";
 import type { FieldElement } from "@/types/form-builder";
 import { CheckboxInputElement } from "./form-elements/checkbox-input-element";
+import { ComboboxInputElement } from "./form-elements/combobox-input-element";
 import { DatePickerInputElement } from "./form-elements/date-picker-input-element";
 import { EmailInputElement } from "./form-elements/email-input-element";
 import { FileInputElement } from "./form-elements/file-input-element";
 import { InputOTPInputElement } from "./form-elements/input-otp-input-element";
+import { MultiSelectInputElement } from "./form-elements/multi-select-input-element";
 import { PasswordInputElement } from "./form-elements/password-input-element";
 import { PhoneInputElement } from "./form-elements/phone-input-element";
 import { RadioGroupInputElement } from "./form-elements/radio-group-input-element";
@@ -68,6 +70,20 @@ const fieldPreviewRenderers = {
   ),
   select: (element, field, fieldState) => (
     <SelectInputElement
+      element={element}
+      field={field}
+      fieldState={fieldState}
+    />
+  ),
+  combobox: (element, field, fieldState) => (
+    <ComboboxInputElement
+      element={element}
+      field={field}
+      fieldState={fieldState}
+    />
+  ),
+  "multi-select": (element, field, fieldState) => (
+    <MultiSelectInputElement
       element={element}
       field={field}
       fieldState={fieldState}

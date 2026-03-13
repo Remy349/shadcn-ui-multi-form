@@ -47,14 +47,14 @@ export const Canvas = ({
       <button
         type="button"
         className={cn(
-          "border rounded-md p-3 cursor-pointer hover:border-primary w-full text-left",
+          "border p-3 hover:border-primary w-full text-left",
           isSelected && "border-primary bg-accent/30",
         )}
         key={element.id}
         onClick={() => setSelectedElementId(element.id)}
       >
         <div className="flex items-center space-x-2">
-          <div className="border border-dashed bg-background/50 p-1 rounded-sm">
+          <div className="border border-dashed bg-background/50 p-1">
             <IconElement className="size-4" />
           </div>
           <span className="font-medium text-sm">{element.label}</span>
@@ -76,7 +76,7 @@ export const Canvas = ({
   };
 
   return (
-    <div className="rounded-md min-h-[calc(100vh-9rem)] border-2 border-dashed bg-sidebar">
+    <div className="min-h-[calc(100vh-9rem)] border-2 border-dashed bg-sidebar">
       {currentForm.elements.length === 0 ? (
         <Empty className="h-[calc(100vh-9rem)]">
           <EmptyHeader>
@@ -127,7 +127,7 @@ export const Canvas = ({
                       <div
                         key={element.id}
                         className={cn(
-                          "border rounded-md p-3 cursor-pointer space-y-4",
+                          "border p-3 space-y-4 hover:border-primary",
                           isSelected && "border-primary bg-accent/30",
                         )}
                       >
@@ -137,7 +137,7 @@ export const Canvas = ({
                           onClick={() => setSelectedElementId(element.id)}
                         >
                           <div className="flex items-center space-x-2">
-                            <div className="border border-dashed bg-background/50 p-1 rounded-sm">
+                            <div className="border border-dashed bg-background/50 p-1">
                               <IconElement className="size-4" />
                             </div>
                             <span className="font-medium text-sm">{label}</span>
@@ -164,7 +164,7 @@ export const Canvas = ({
                                 </div>
                               ))
                             ) : (
-                              <div className="border border-dashed rounded-md p-3 text-xs text-muted-foreground">
+                              <div className="border border-dashed p-3 text-xs text-muted-foreground">
                                 Left column is empty
                               </div>
                             )}
@@ -177,7 +177,7 @@ export const Canvas = ({
                                 </div>
                               ))
                             ) : (
-                              <div className="border border-dashed rounded-md p-3 text-xs text-muted-foreground">
+                              <div className="border border-dashed p-3 text-xs text-muted-foreground">
                                 Right column is empty
                               </div>
                             )}
@@ -191,14 +191,14 @@ export const Canvas = ({
                     <button
                       type="button"
                       className={cn(
-                        "border rounded-md p-3 cursor-pointer hover:border-primary w-full text-left",
+                        "border p-3 hover:border-primary w-full text-left",
                         isSelected && "border-primary bg-accent/30",
                       )}
                       key={element.id}
                       onClick={() => setSelectedElementId(element.id)}
                     >
                       <div className="flex items-center space-x-2">
-                        <div className="border border-dashed bg-background/50 p-1 rounded-sm">
+                        <div className="border border-dashed bg-background/50 p-1">
                           <IconElement className="size-4" />
                         </div>
                         <span className="font-medium text-sm">{label}</span>

@@ -17,7 +17,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { EditForm } from "./edit-form";
-import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { CodePreview } from "../code/code-preview";
@@ -66,10 +65,6 @@ export const Toolbar = ({
             <Button variant="secondary" size="icon-sm" onClick={addForm}>
               <PlusIcon />
             </Button>
-            <Separator
-              orientation="vertical"
-              className="data-[orientation=vertical]:h-4"
-            />
             <Select value={currentForm.title} onValueChange={handleSelectForm}>
               <SelectTrigger>
                 <SelectValue placeholder="Select a form" />
@@ -111,10 +106,6 @@ export const Toolbar = ({
           >
             {isPreviewMode ? <EyeOffIcon /> : <EyeIcon />}
           </Button>
-          <Separator
-            orientation="vertical"
-            className="data-[orientation=vertical]:h-4"
-          />
           <Button
             variant="secondary"
             size="sm"

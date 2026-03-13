@@ -1,9 +1,10 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { nunitoSans } from "@/lib/fonts";
+import { outfit } from "@/lib/fonts";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: {
@@ -31,8 +32,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${nunitoSans.className} antialiased`}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn("font-sans antialiased", outfit.className)}
+    >
+      <body>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
