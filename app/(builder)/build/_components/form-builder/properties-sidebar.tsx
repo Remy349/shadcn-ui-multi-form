@@ -76,6 +76,35 @@ export const PropertiesSidebar = ({
     return getLayoutRegistryItem(type).label;
   };
 
+  const getUniqueOptionValue = (
+    baseValue: string,
+    items: { value: string }[],
+    currentValue?: string,
+  ) => {
+    const normalized = baseValue.trim();
+    if (!normalized) return "";
+
+    if (currentValue === normalized) return normalized;
+
+    const existingValues = new Set(
+      items
+        .filter((item) => item.value !== currentValue)
+        .map((item) => item.value),
+    );
+
+    if (!existingValues.has(normalized)) return normalized;
+
+    let suffix = 2;
+    let nextValue = `${normalized}${suffix}`;
+
+    while (existingValues.has(nextValue)) {
+      suffix += 1;
+      nextValue = `${normalized}${suffix}`;
+    }
+
+    return nextValue;
+  };
+
   const fieldElements = elements.filter(isFieldElement);
   const layoutElements = elements.filter(isLayoutElement);
   const fieldById = new Map(
@@ -357,6 +386,8 @@ export const PropertiesSidebar = ({
                     )}
                     {![
                       "select",
+                      "combobox",
+                      "multi-select",
                       "checkbox",
                       "switch",
                       "file",
@@ -510,6 +541,228 @@ export const PropertiesSidebar = ({
                             Controls which characters are allowed in the OTP.
                           </p>
                         </div>
+                      </div>
+                    </SidebarGroupContent>
+                  </SidebarGroup>
+                </>
+              )}
+              {fieldElement.type === "combobox" && (
+                <>
+                  <SidebarSeparator className="mx-0" />
+                  <SidebarGroup>
+                    <SidebarGroupLabel>Combobox Options</SidebarGroupLabel>
+                    <SidebarGroupContent className="px-2">
+                      <div className="grid space-y-2">
+                        <div className="flex items-center justify-between">
+                          <Label className="text-xs">Combobox Items</Label>
+                          <p className="text-xs text-muted-foreground">
+                            {fieldElement.comboboxOptions?.items.length} Items
+                          </p>
+                        </div>
+                        <div className="space-y-2">
+                          {fieldElement.comboboxOptions?.items.map((item) => (
+                            <div key={item.value}>
+                              <InputGroup>
+                                <InputGroupInput
+                                  value={item.label}
+                                  className="bg-background"
+                                  autoComplete="off"
+                                  placeholder={`Option ${item.label}`}
+                                  onChange={(e) => {
+                                    const updatedItems = [
+                                      ...(fieldElement.comboboxOptions?.items ||
+                                        []),
+                                    ];
+
+                                    const nextIndex = updatedItems.findIndex(
+                                      (entry) => entry.value === item.value,
+                                    );
+
+                                    if (nextIndex === -1) return;
+
+                                    const nextLabel = e.target.value;
+                                    const nextValue = getUniqueOptionValue(
+                                      toCamelCase(nextLabel),
+                                      updatedItems,
+                                      item.value,
+                                    );
+
+                                    updatedItems[nextIndex] = {
+                                      label: nextLabel,
+                                      value: nextValue,
+                                    };
+
+                                    updateNode(fieldElement.id, {
+                                      comboboxOptions: {
+                                        items: updatedItems,
+                                      },
+                                    });
+                                  }}
+                                />
+                                <InputGroupAddon align="inline-end">
+                                  <InputGroupButton
+                                    size="icon-xs"
+                                    onClick={() => {
+                                      const updatedItems =
+                                        fieldElement.comboboxOptions?.items.filter(
+                                          (entry) => entry.value !== item.value,
+                                        ) || [];
+
+                                      updateNode(fieldElement.id, {
+                                        comboboxOptions: {
+                                          items: updatedItems,
+                                        },
+                                      });
+                                    }}
+                                  >
+                                    <Trash2Icon />
+                                  </InputGroupButton>
+                                </InputGroupAddon>
+                              </InputGroup>
+                            </div>
+                          ))}
+                        </div>
+                        <Button
+                          variant="outline"
+                          className="border-dashed"
+                          size="sm"
+                          onClick={() => {
+                            const currentItems =
+                              fieldElement.comboboxOptions?.items || [];
+                            const nextLabel = `Option ${currentItems.length + 1}`;
+                            const nextValue = getUniqueOptionValue(
+                              toCamelCase(nextLabel),
+                              currentItems,
+                            );
+
+                            updateNode(fieldElement.id, {
+                              comboboxOptions: {
+                                items: [
+                                  ...currentItems,
+                                  {
+                                    label: nextLabel,
+                                    value: nextValue,
+                                  },
+                                ],
+                              },
+                            });
+                          }}
+                        >
+                          <PlusIcon />
+                        </Button>
+                      </div>
+                    </SidebarGroupContent>
+                  </SidebarGroup>
+                </>
+              )}
+              {fieldElement.type === "multi-select" && (
+                <>
+                  <SidebarSeparator className="mx-0" />
+                  <SidebarGroup>
+                    <SidebarGroupLabel>Multi Select Options</SidebarGroupLabel>
+                    <SidebarGroupContent className="px-2">
+                      <div className="grid space-y-2">
+                        <div className="flex items-center justify-between">
+                          <Label className="text-xs">Multi Select Items</Label>
+                          <p className="text-xs text-muted-foreground">
+                            {fieldElement.multiSelectOptions?.items.length}{" "}
+                            Items
+                          </p>
+                        </div>
+                        <div className="space-y-2">
+                          {fieldElement.multiSelectOptions?.items.map(
+                            (item) => (
+                              <div key={item.value}>
+                                <InputGroup>
+                                  <InputGroupInput
+                                    value={item.label}
+                                    className="bg-background"
+                                    autoComplete="off"
+                                    placeholder={`Option ${item.label}`}
+                                    onChange={(e) => {
+                                      const updatedItems = [
+                                        ...(fieldElement.multiSelectOptions
+                                          ?.items || []),
+                                      ];
+
+                                      const nextIndex = updatedItems.findIndex(
+                                        (entry) => entry.value === item.value,
+                                      );
+
+                                      if (nextIndex === -1) return;
+
+                                      const nextLabel = e.target.value;
+                                      const nextValue = getUniqueOptionValue(
+                                        toCamelCase(nextLabel),
+                                        updatedItems,
+                                        item.value,
+                                      );
+
+                                      updatedItems[nextIndex] = {
+                                        label: nextLabel,
+                                        value: nextValue,
+                                      };
+
+                                      updateNode(fieldElement.id, {
+                                        multiSelectOptions: {
+                                          items: updatedItems,
+                                        },
+                                      });
+                                    }}
+                                  />
+                                  <InputGroupAddon align="inline-end">
+                                    <InputGroupButton
+                                      size="icon-xs"
+                                      onClick={() => {
+                                        const updatedItems =
+                                          fieldElement.multiSelectOptions?.items.filter(
+                                            (entry) =>
+                                              entry.value !== item.value,
+                                          ) || [];
+
+                                        updateNode(fieldElement.id, {
+                                          multiSelectOptions: {
+                                            items: updatedItems,
+                                          },
+                                        });
+                                      }}
+                                    >
+                                      <Trash2Icon />
+                                    </InputGroupButton>
+                                  </InputGroupAddon>
+                                </InputGroup>
+                              </div>
+                            ),
+                          )}
+                        </div>
+                        <Button
+                          variant="outline"
+                          className="border-dashed"
+                          size="sm"
+                          onClick={() => {
+                            const currentItems =
+                              fieldElement.multiSelectOptions?.items || [];
+                            const nextLabel = `Option ${currentItems.length + 1}`;
+                            const nextValue = getUniqueOptionValue(
+                              toCamelCase(nextLabel),
+                              currentItems,
+                            );
+
+                            updateNode(fieldElement.id, {
+                              multiSelectOptions: {
+                                items: [
+                                  ...currentItems,
+                                  {
+                                    label: nextLabel,
+                                    value: nextValue,
+                                  },
+                                ],
+                              },
+                            });
+                          }}
+                        >
+                          <PlusIcon />
+                        </Button>
                       </div>
                     </SidebarGroupContent>
                   </SidebarGroup>

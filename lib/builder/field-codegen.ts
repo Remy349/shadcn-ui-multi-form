@@ -246,7 +246,106 @@ const elementRenderers: Record<
     )
   }}
  />
- `,
+  `,
+  combobox: (element) => `
+<Controller
+  name="${element.name}"
+  control={form.control}
+  render={({ field, fieldState }) => {
+    const options = ${JSON.stringify(element.comboboxOptions?.items)};
+    const itemsValues = options.map((item) => item.value);
+    const labelByValue = new Map(options.map((item) => [item.value, item.label]));
+
+    return (
+      <Field data-invalid={fieldState.invalid}>
+        ${getFieldLabel(element.name, element.label)}
+        <Combobox
+          items={itemsValues}
+          value={field.value}
+          onValueChange={field.onChange}
+          disabled={${element.disabled}}
+        >
+          <ComboboxInput
+            id="${element.name}"
+            placeholder="${element.placeholder}"
+            aria-invalid={fieldState.invalid}
+            autoComplete="off"
+            showClear
+          />
+          <ComboboxContent>
+            <ComboboxEmpty>No items found.</ComboboxEmpty>
+            <ComboboxList>
+              {(item) => (
+                <ComboboxItem key={item} value={item}>
+                  {labelByValue.get(item) ?? item}
+                </ComboboxItem>
+              )}
+            </ComboboxList>
+          </ComboboxContent>
+        </Combobox>
+        ${getFieldDescription(element.description)}
+        {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+      </Field>
+    )
+  }}
+ />
+  `,
+  "multi-select": (element) => `
+<Controller
+  name="${element.name}"
+  control={form.control}
+  render={({ field, fieldState }) => {
+    const options = ${JSON.stringify(element.multiSelectOptions?.items)};
+    const itemsValues = options.map((item) => item.value);
+    const labelByValue = new Map(options.map((item) => [item.value, item.label]));
+    const anchor = useComboboxAnchor();
+
+    return (
+      <Field data-invalid={fieldState.invalid}>
+        ${getFieldLabel(element.name, element.label)}
+        <Combobox
+          multiple
+          autoHighlight
+          items={itemsValues}
+          value={field.value}
+          onValueChange={field.onChange}
+          disabled={${element.disabled}}
+        >
+          <ComboboxChips ref={anchor} className="w-full">
+            <ComboboxValue>
+              {(values) => (
+                <>
+                  {values.map((value: string) => (
+                    <ComboboxChip key={value}>
+                      {labelByValue.get(value) ?? value}
+                    </ComboboxChip>
+                  ))}
+                  <ComboboxChipsInput
+                    placeholder="${element.placeholder}"
+                    aria-invalid={fieldState.invalid}
+                  />
+                </>
+              )}
+            </ComboboxValue>
+          </ComboboxChips>
+          <ComboboxContent anchor={anchor}>
+            <ComboboxEmpty>No items found.</ComboboxEmpty>
+            <ComboboxList>
+              {(item) => (
+                <ComboboxItem key={item} value={item}>
+                  {labelByValue.get(item) ?? item}
+                </ComboboxItem>
+              )}
+            </ComboboxList>
+          </ComboboxContent>
+        </Combobox>
+        ${getFieldDescription(element.description)}
+        {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+      </Field>
+    )
+  }}
+ />
+  `,
   "rich-text-editor": (element) => `
 <Controller
   name="${element.name}"
@@ -527,6 +626,40 @@ const schemaRenderers: Record<
 
     return fieldSchema;
   },
+  combobox: (element) => {
+    let fieldSchema = "z.string()";
+
+    const values =
+      element.comboboxOptions?.items.map((item) => item.value) || [];
+
+    if (element.required) {
+      fieldSchema += `.min(1, "${element.label} is required")`;
+    }
+
+    if (values.length > 0) {
+      const valuesArray = JSON.stringify(values);
+      fieldSchema += `.refine((val) => ${valuesArray}.includes(val), "${element.label} must be a valid option")`;
+    }
+
+    return fieldSchema;
+  },
+  "multi-select": (element) => {
+    let fieldSchema = "z.array(z.string())";
+
+    const values =
+      element.multiSelectOptions?.items.map((item) => item.value) || [];
+
+    if (element.required) {
+      fieldSchema += `.refine((val) => val.length > 0, "${element.label} is required")`;
+    }
+
+    if (values.length > 0) {
+      const valuesArray = JSON.stringify(values);
+      fieldSchema += `.refine((val) => val.every((entry) => ${valuesArray}.includes(entry)), "${element.label} must be valid options")`;
+    }
+
+    return fieldSchema;
+  },
   checkbox: (element) => {
     let fieldSchema = "z.boolean()";
 
@@ -646,6 +779,12 @@ const importRegistry: Record<FieldElementType, string[]> = {
   textarea: ['import { Textarea } from "@/components/ui/textarea"'],
   select: [
     'import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"',
+  ],
+  combobox: [
+    'import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, ComboboxList } from "@/components/ui/combobox"',
+  ],
+  "multi-select": [
+    'import { Combobox, ComboboxChip, ComboboxChips, ComboboxChipsInput, ComboboxContent, ComboboxEmpty, ComboboxItem, ComboboxList, ComboboxValue, useComboboxAnchor } from "@/components/ui/combobox"',
   ],
   password: ['import { PasswordInput } from "@/components/ui/password-input"'],
   file: ['import { FileInput } from "@/components/ui/file-input"'],
