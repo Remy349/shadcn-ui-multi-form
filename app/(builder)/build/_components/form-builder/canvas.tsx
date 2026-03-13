@@ -47,7 +47,7 @@ export const Canvas = ({
       <button
         type="button"
         className={cn(
-          "border rounded-md p-3 cursor-pointer hover:border-primary w-full text-left",
+          "border rounded-md p-3 hover:border-primary w-full text-left",
           isSelected && "border-primary bg-accent/30",
         )}
         key={element.id}
@@ -127,7 +127,7 @@ export const Canvas = ({
                       <div
                         key={element.id}
                         className={cn(
-                          "border rounded-md p-3 cursor-pointer space-y-4",
+                          "border rounded-md p-3 space-y-4 hover:border-primary",
                           isSelected && "border-primary bg-accent/30",
                         )}
                       >
@@ -191,7 +191,7 @@ export const Canvas = ({
                     <button
                       type="button"
                       className={cn(
-                        "border rounded-md p-3 cursor-pointer hover:border-primary w-full text-left",
+                        "border rounded-md p-3 hover:border-primary w-full text-left",
                         isSelected && "border-primary bg-accent/30",
                       )}
                       key={element.id}
