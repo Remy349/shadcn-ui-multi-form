@@ -4,10 +4,7 @@ import { outfit } from "@/lib/fonts";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
-import { Inter, Outfit } from "next/font/google";
 import { cn } from "@/lib/utils";
-
-const outfit = Outfit({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
   title: {
@@ -38,9 +35,9 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("font-sans", outfit.variable)}
+      className={cn("font-sans antialiased", outfit.className)}
     >
-      <body className={`${outfit.className} antialiased`}>
+      <body>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

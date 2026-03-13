@@ -55,19 +55,19 @@ export const FAQs = () => {
           <Accordion
             type="single"
             collapsible
-            className="bg-muted dark:bg-muted/50 w-full rounded-2xl p-1"
+            className="bg-muted dark:bg-muted/50 w-full p-1"
           >
             {faqItems.map((item) => (
               <div className="group" key={item.id}>
                 <AccordionItem
                   value={item.id}
-                  className="data-[state=open]:bg-card dark:data-[state=open]:bg-muted peer rounded-xl border-none px-7 py-1 data-[state=open]:border-none data-[state=open]:shadow-sm"
+                  className="data-[state=open]:bg-card dark:data-[state=open]:bg-muted peer border-none px-7 py-1 data-[state=open]:border-none data-[state=open]:shadow-sm"
                 >
                   <AccordionTrigger className="cursor-pointer text-base hover:no-underline">
                     {item.question}
                   </AccordionTrigger>
                   <AccordionContent>
-                    <p className="text-base text-foreground/70">
+                    <p className="text-sm text-foreground/70">
                       {item.answer}
                     </p>
                   </AccordionContent>

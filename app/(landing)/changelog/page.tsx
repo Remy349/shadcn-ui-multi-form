@@ -402,7 +402,7 @@ export default function ChangelogPage() {
             <div className="absolute left-0 top-4 bottom-0 border-l-2" />
             {releases.map((release) => (
               <div key={release.id} className="relative pl-8 pb-12 last:pb-0">
-                <div className="absolute h-2 w-2 -translate-x-1/2 left-px top-3 rounded-full border-2 border-primary bg-primary" />
+                <div className="absolute h-2 w-2 -translate-x-1/2 left-px top-3 border-2 border-primary bg-primary" />
                 <div className="space-y-3">
                   <div>
                     <h3 className="text-xl font-semibold tracking-tighter">
@@ -413,7 +413,7 @@ export default function ChangelogPage() {
                       <span>{release.period}</span>
                     </div>
                   </div>
-                  <p className="text-sm text-foreground/70 bg-foreground/5 rounded-md py-2 px-4 text-pretty">
+                  <p className="text-sm text-foreground/70 bg-foreground/5 py-2 px-4 text-pretty">
                     {release.description}
                   </p>
                   <div className="flex flex-wrap gap-2">

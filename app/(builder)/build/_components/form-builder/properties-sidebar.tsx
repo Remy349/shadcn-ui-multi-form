@@ -1157,7 +1157,7 @@ export const PropertiesSidebar = ({
                 <>
                   <SidebarSeparator className="mx-0" />
                   <div className="px-4 pt-4">
-                    <div className="rounded-md border border-dashed bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
+                    <div className="border border-dashed bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
                       Assign fields from this form to each column. Each column
                       holds one field at a time and can be replaced anytime.
                     </div>

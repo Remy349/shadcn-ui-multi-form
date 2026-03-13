@@ -76,7 +76,7 @@ export const ElementsSidebar = ({ insertNode }: ElementsSidebarProps) => {
                         <SidebarMenuButton
                           onClick={() => handleAddLayout(layout.type)}
                         >
-                          <div className="border-dashed rounded-sm border p-1 bg-background/50">
+                          <div className="border-dashed border p-1 bg-background/50">
                             <IconComponent />
                           </div>
                           <span className="font-medium">{layout.label}</span>
@@ -109,7 +109,7 @@ export const ElementsSidebar = ({ insertNode }: ElementsSidebarProps) => {
                         <SidebarMenuButton
                           onClick={() => handleAddElement(element.type)}
                         >
-                          <div className="border-dashed rounded-sm border p-1 bg-background/50">
+                          <div className="border-dashed border p-1 bg-background/50">
                             <IconComponent />
                           </div>
                           <span className="font-medium">{element.label}</span>
@@ -135,7 +135,7 @@ export const ElementsSidebar = ({ insertNode }: ElementsSidebarProps) => {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-muted border border-dashed">
+                <div className="flex aspect-square size-8 items-center justify-center bg-muted border border-dashed">
                   <LayersIcon className="size-4 text-primary/80" />
                 </div>
                 <div className="flex flex-col leading-tight">

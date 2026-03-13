@@ -64,7 +64,7 @@ export const PropsTable = () => {
       <h2 className="tracking-tighter text-xl font-bold text-foreground">
         Props
       </h2>
-      <div className="overflow-hidden rounded-xl border border-border bg-card">
+      <div className="overflow-hidden border border-border bg-card">
         <Table>
           <TableHeader>
             <TableRow>

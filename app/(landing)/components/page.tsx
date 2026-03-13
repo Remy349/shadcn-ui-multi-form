@@ -36,11 +36,11 @@ export default function ComponentsPage() {
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <Link href="/components/password-input">
-            <Card className="shadow-none border border-dashed hover:border-primary">
+            <Card className="shadow-none border hover:border-dashed hover:border-primary">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle>Password Input</CardTitle>
-                  <div className="bg-muted rounded-md p-1.5 border">
+                  <div className="bg-muted p-1.5 border">
                     <LockClosedIcon className="size-4" />
                   </div>
                 </div>
@@ -52,11 +52,11 @@ export default function ComponentsPage() {
             </Card>
           </Link>
           <Link href="/components/file-input">
-            <Card className="shadow-none border border-dashed hover:border-primary">
+            <Card className="shadow-none border hover:border-dashed hover:border-primary">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle>File Input</CardTitle>
-                  <div className="bg-muted rounded-md p-1.5 border">
+                  <div className="bg-muted p-1.5 border">
                     <UploadIcon className="size-4" />
                   </div>
                 </div>
@@ -68,11 +68,11 @@ export default function ComponentsPage() {
             </Card>
           </Link>
           <Link href="/components/rich-text-editor">
-            <Card className="shadow-none border border-dashed hover:border-primary">
+            <Card className="shadow-none border hover:border-dashed hover:border-primary">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle>Rich Text Editor</CardTitle>
-                  <div className="bg-muted rounded-md p-1.5 border">
+                  <div className="bg-muted p-1.5 border">
                     <TextAlignLeftIcon className="size-4" />
                   </div>
                 </div>
@@ -84,11 +84,11 @@ export default function ComponentsPage() {
             </Card>
           </Link>
           <Link href="/components/email-input">
-            <Card className="shadow-none border border-dashed hover:border-primary">
+            <Card className="shadow-none border hover:border-dashed hover:border-primary">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle>Email Input</CardTitle>
-                  <div className="bg-muted rounded-md p-1.5 border">
+                  <div className="bg-muted p-1.5 border">
                     <EnvelopeClosedIcon className="size-4" />
                   </div>
                 </div>
@@ -100,11 +100,11 @@ export default function ComponentsPage() {
             </Card>
           </Link>
           <Link href="/components/date-picker">
-            <Card className="shadow-none border border-dashed hover:border-primary">
+            <Card className="shadow-none border hover:border-dashed hover:border-primary">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle>Date Picker</CardTitle>
-                  <div className="bg-muted rounded-md p-1.5 border">
+                  <div className="bg-muted p-1.5 border">
                     <CalendarIcon className="size-4" />
                   </div>
                 </div>
@@ -116,11 +116,11 @@ export default function ComponentsPage() {
             </Card>
           </Link>
           <Link href="/components/phone-input">
-            <Card className="shadow-none border border-dashed hover:border-primary">
+            <Card className="shadow-none border hover:border-dashed hover:border-primary">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle>Phone Input</CardTitle>
-                  <div className="bg-muted rounded-md p-1.5 border">
+                  <div className="bg-muted p-1.5 border">
                     <FrameIcon className="size-4" />
                   </div>
                 </div>
@@ -132,11 +132,11 @@ export default function ComponentsPage() {
             </Card>
           </Link>
           <Link href="/components/signature-input">
-            <Card className="shadow-none border border-dashed hover:border-primary">
+            <Card className="shadow-none border hover:border-dashed hover:border-primary">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle>Signature Input</CardTitle>
-                  <div className="bg-muted rounded-md p-1.5 border">
+                  <div className="bg-muted p-1.5 border">
                     <Pencil2Icon className="size-4" />
                   </div>
                 </div>
