@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const metadata: Metadata = {
   title: {
@@ -43,7 +44,7 @@ export default function RootLayout({
           defaultTheme="light"
           disableTransitionOnChange
         >
-          {children}
+          <TooltipProvider>{children}</TooltipProvider>
           <Toaster position="bottom-right" richColors />
         </ThemeProvider>
         <Analytics mode="production" />
