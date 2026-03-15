@@ -1,62 +1,93 @@
 # Shadcn UI Multi Form
 
-Shadcn UI Multi Form is a modern, open source form building tool that lets you create dynamic single and multi-step forms using Shadcn UI, React Hook Form, and Zod. Built for developers who want clean, scalable, and production ready form code without complex setup or constraints. No signup, no paywalls, fully open and designed to help you ship faster.
+Shadcn UI Multi Form is a modern, visual form builder for React that lets you craft single and multi-step flows with **shadcn/ui**, **React Hook Form**, and **Zod**. Build fast, preview instantly, and export clean, production-ready TypeScript code.
 
-## Features
+## Highlights
 
-- Build single or multi-step forms with automatic detection.
-- Live preview while designing your form.
-- Dynamic code generation in React + TypeScript.
-- Built-in Zod validation generator.
-- Uses modern Shadcn UI components.
-- Export clean, reusable, production-ready form code.
+- Visual builder for single and multi-step forms
+- Real-time preview with React Hook Form + Zod validation
+- Code generator with clean, reusable React + TypeScript output
+- Layout elements: Two Columns and Separator
+- Rich input library including Combobox, Multi Select, Signature, Phone, Date Picker, Slider, and more
+- Modern, minimal UI with polished interactions
 
-## Technologies Used
+## Why Shadcn UI Multi Form
 
-- Next.js
-- TypeScript
-- Shadcn UI
-- React Hook Form
-- Zod
-- Tailwind CSS
-- Zustand
-- Lucide Icons
-- Vercel
+- **Faster form delivery**: drag, configure, preview, export
+- **Developer-first output**: TypeScript code you can own and extend
+- **Consistent UI**: built on shadcn/ui components
 
-## Contributing
+## Quick Start
 
-Contributions are welcome and highly appreciated. To contribute:
-
-- Fork the repository.
-- Create a new branch using a clear name:
+1. Install dependencies
 
 ```bash
-git checkout -b <branch-name>
-
-# Examples:
-feature/add-new-input-type
-fix/validation-bug
-
-git commit -m "Describe your changes here"
-git push origin <branch-name>
+pnpm install
 ```
 
-- Make your changes following project standards (code style, folder structure, etc.).
-- Commit using descriptive messages.
-- Submit a pull request, detailing:
-    - What you improved or added
-    - Reason for the change
-    - Any relevant context
+2. Run the dev server
 
-Before submitting, ensure:
-- The project builds without errors.
-- Your code follows TypeScript and ESLint rules.
-- UI components follow Shadcn UI patterns.
+```bash
+pnpm dev
+```
+
+3. Open the app
+
+```text
+http://localhost:3000
+```
+
+## Key Features
+
+- **Form Builder**: Build and configure fields with a clean properties panel
+- **Layouts**: Two Columns and Separator for structured layouts
+- **Inputs**: Text, Email, Password, Textarea, Select, Combobox, Multi Select, Checkbox, Switch, Date Picker, Input OTP, Slider, Phone, Signature, File, and Rich Text
+- **Validation**: Required, min/max length, and input-specific rules backed by Zod
+- **Codegen**: Generate ready-to-use React + TypeScript form code
+
+## Builder Inputs Snapshot
+
+- Combobox (searchable single select)
+- Multi Select (chips)
+- Signature (canvas capture)
+- Radio Group, Select, Slider, Date Picker
+- File Upload, Phone Input, OTP, Rich Text
+
+## Project Structure
+
+- `app/(builder)` - Form builder experience
+- `app/(landing)` - Marketing site and docs
+- `lib/builder` - Registry, schema, and codegen
+- `components/ui` - shadcn/ui components and custom inputs
+
+## Tech Stack
+
+- **Next.js**
+- **React**
+- **TypeScript**
+- **shadcn/ui**
+- **Tailwind CSS**
+- **Zustand**
+- **React Hook Form**
+- **Zod**
+
+## Roadmap (Next)
+
+- Advanced builder UX: duplicate, copy/paste, keyboard shortcuts, undo/redo
+- Conditional logic and field arrays
+- More layout presets (tabs, sections, repeaters)
 
 ## Issues and Roadmap
 
-If you encounter bugs, have feature suggestions, or want improvements, feel free to open an issue.
-All upcoming major enhancements are documented in the Changelog page and Project Roadmap.
+If you find bugs, have feature ideas, or want improvements, please open an issue.
+All upcoming major enhancements are tracked in the Changelog and Project Roadmap.
+
+## Links
+
+- Live app: https://shadcn-ui-multi-form.vercel.app
+- Builder: https://shadcn-ui-multi-form.vercel.app/build
+- Components: https://shadcn-ui-multi-form.vercel.app/components
+- Changelog: https://shadcn-ui-multi-form.vercel.app/changelog
 
 ## License
 
