@@ -222,7 +222,6 @@ export const fieldRegistry: Record<FieldElementType, FieldRegistryItem> = {
   combobox: {
     type: "combobox",
     label: "Combobox",
-    isNew: true,
     icon: ChevronDownIcon,
     createDefault: (id) =>
       buildBaseField("combobox", "Combobox Field", {
@@ -259,7 +258,6 @@ export const fieldRegistry: Record<FieldElementType, FieldRegistryItem> = {
   "multi-select": {
     type: "multi-select",
     label: "Multi Select",
-    isNew: true,
     icon: CheckboxIcon,
     createDefault: (id) =>
       buildBaseField("multi-select", "Multi Select Field", {
@@ -523,7 +521,6 @@ export const fieldRegistry: Record<FieldElementType, FieldRegistryItem> = {
 
       return { schema: fieldSchema, defaultValue };
     },
-    isNew: true,
   },
 } as const;
 

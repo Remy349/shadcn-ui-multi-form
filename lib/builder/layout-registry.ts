@@ -44,14 +44,12 @@ export const layoutRegistry: Record<LayoutElementType, LayoutRegistryItem> = {
     label: "Two Columns",
     icon: ViewVerticalIcon,
     createDefault: createTwoColumnsLayout,
-    isNew: true,
   },
   separator: {
     type: "separator",
     label: "Separator",
     icon: DividerHorizontalIcon,
     createDefault: createSeparatorLayout,
-    isNew: true,
   },
 } as const;
 

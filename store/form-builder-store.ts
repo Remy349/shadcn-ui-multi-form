@@ -42,6 +42,7 @@ interface State {
 interface Actions {
   setSelectedElementId: (elementId: string | null) => void;
   insertNode: (element: BuilderElement) => void;
+  reorderRootNodes: (activeId: string, overId: string) => void;
   updateNode: (elementId: string, updatedElement: UpdateFormElement) => void;
   removeNode: (elementId: string) => void;
   setCurrentFormIndex: (index: number) => void;
@@ -77,35 +78,123 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
 
     set({ forms: updatedForms, selectedElementId: null });
   },
+  reorderRootNodes: (activeId, overId) => {
+    if (activeId === overId) return;
+
+    const { forms, currentFormIndex } = get();
+    const updatedForms = forms.map((form, index) => {
+      if (index !== currentFormIndex) return form;
+
+      const referencedFieldIds = new Set<string>();
+      const elementById = new Map(
+        form.elements.map((element) => [element.id, element] as const),
+      );
+
+      for (const element of form.elements) {
+        if (isLayoutElement(element) && element.type === "two-columns") {
+          for (const id of element.columns.left) {
+            referencedFieldIds.add(id);
+          }
+          for (const id of element.columns.right) {
+            referencedFieldIds.add(id);
+          }
+        }
+      }
+
+      const roots = form.elements.filter(
+        (element) => !referencedFieldIds.has(element.id),
+      );
+
+      const activeIndex = roots.findIndex((element) => element.id === activeId);
+      const overIndex = roots.findIndex((element) => element.id === overId);
+
+      if (activeIndex === -1 || overIndex === -1) {
+        return form;
+      }
+
+      const reorderedRoots = [...roots];
+      const [movedRoot] = reorderedRoots.splice(activeIndex, 1);
+
+      if (!movedRoot) {
+        return form;
+      }
+
+      reorderedRoots.splice(overIndex, 0, movedRoot);
+
+      const attachedFieldIds = new Set<string>();
+      const rebuiltElements: BuilderElement[] = [];
+
+      for (const root of reorderedRoots) {
+        rebuiltElements.push(root);
+
+        if (!isLayoutElement(root) || root.type !== "two-columns") {
+          continue;
+        }
+
+        for (const fieldId of [...root.columns.left, ...root.columns.right]) {
+          if (attachedFieldIds.has(fieldId)) {
+            continue;
+          }
+
+          const fieldElement = elementById.get(fieldId);
+
+          if (!fieldElement || !isFieldElement(fieldElement)) {
+            continue;
+          }
+
+          rebuiltElements.push(fieldElement);
+          attachedFieldIds.add(fieldId);
+        }
+      }
+
+      const rebuiltIds = new Set(rebuiltElements.map((element) => element.id));
+
+      for (const element of form.elements) {
+        if (rebuiltIds.has(element.id)) {
+          continue;
+        }
+
+        rebuiltElements.push(element);
+        rebuiltIds.add(element.id);
+      }
+
+      return {
+        ...form,
+        elements: rebuiltElements,
+      };
+    });
+
+    set({ forms: updatedForms });
+  },
   updateNode: (elementId, updatedElement) => {
     const { forms, currentFormIndex, selectedElementId } = get();
     const updatedForms = forms.map((form, index) =>
       index === currentFormIndex
         ? {
-            ...form,
-            elements: (() => {
-              const nextElements = form.elements.map((element) =>
-                element.id === elementId
-                  ? ({
-                      ...element,
-                      ...updatedElement,
-                      kind: element.kind,
-                      type: element.type,
-                    } as BuilderElement)
-                  : element,
-              );
+          ...form,
+          elements: (() => {
+            const nextElements = form.elements.map((element) =>
+              element.id === elementId
+                ? ({
+                  ...element,
+                  ...updatedElement,
+                  kind: element.kind,
+                  type: element.type,
+                } as BuilderElement)
+                : element,
+            );
 
-              const fieldIds = new Set(
-                nextElements
-                  .filter(isFieldElement)
-                  .map((element) => element.id),
-              );
+            const fieldIds = new Set(
+              nextElements
+                .filter(isFieldElement)
+                .map((element) => element.id),
+            );
 
-              return nextElements.map((element) =>
-                sanitizeLayoutColumns(element, fieldIds),
-              );
-            })(),
-          }
+            return nextElements.map((element) =>
+              sanitizeLayoutColumns(element, fieldIds),
+            );
+          })(),
+        }
         : form,
     );
 
@@ -120,21 +209,21 @@ export const useFormBuilderStore = create<State & Actions>((set, get) => ({
     const updatedForms = forms.map((form, index) =>
       index === currentFormIndex
         ? {
-            ...form,
-            elements: (() => {
-              const filtered = form.elements.filter(
-                (element) => element.id !== elementId,
-              );
+          ...form,
+          elements: (() => {
+            const filtered = form.elements.filter(
+              (element) => element.id !== elementId,
+            );
 
-              const fieldIds = new Set(
-                filtered.filter(isFieldElement).map((element) => element.id),
-              );
+            const fieldIds = new Set(
+              filtered.filter(isFieldElement).map((element) => element.id),
+            );
 
-              return filtered.map((element) =>
-                sanitizeLayoutColumns(element, fieldIds),
-              );
-            })(),
-          }
+            return filtered.map((element) =>
+              sanitizeLayoutColumns(element, fieldIds),
+            );
+          })(),
+        }
         : form,
     );
 
