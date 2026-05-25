@@ -21,7 +21,7 @@ export const Hero = () => {
       <div className="relative z-10 text-center max-w-3xl">
         <Badge variant="secondary" className="border-border px-2 py-1" asChild>
           <Link href="/changelog">
-            New in v1.6.0: Combobox and Multi-Select
+            New in v1.7.0: Drag & Drop + Duplicate
             <SparklesIcon />
           </Link>
         </Badge>

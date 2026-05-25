@@ -1,13 +1,13 @@
+import { LayersIcon } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { DesktopMenu } from "./desktop-menu";
-import { MobileMenu } from "./mobile-menu";
-import { ToggleDarkMode } from "./toggle-dark-mode";
 import { BsTwitterX } from "react-icons/bs";
 import { FaGithub } from "react-icons/fa";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { getGitHubRepoStars } from "@/lib/github";
-import { LayersIcon } from "lucide-react";
+import { DesktopMenu } from "./desktop-menu";
+import { MobileMenu } from "./mobile-menu";
+import { ToggleDarkMode } from "./toggle-dark-mode";
 
 export const Header = async () => {
   const stars = await getGitHubRepoStars();
@@ -23,7 +23,7 @@ export const Header = async () => {
             <span className="font-bold text-sm">MultiForm</span>
           </Link>
           <Badge variant="secondary" className="font-semibold">
-            v1.6.0
+            v1.7.0
           </Badge>
         </div>
         <DesktopMenu />

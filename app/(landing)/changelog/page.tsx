@@ -51,6 +51,40 @@ const changeTypeConfig: Record<
 
 const releases: Release[] = [
   {
+    id: 9,
+    title: "Builder Workflow Upgrades & Safer Actions v1.7.0",
+    period: "May 23, 2026",
+    description:
+      "This release upgrades the builder workflow with smoother drag-and-drop interactions, safer destructive actions, persistent local drafts, and faster element duplication.",
+    changes: [
+      {
+        id: 1,
+        type: "new",
+        text: "New drag-and-drop flow from sidebar to canvas with root-level reordering support.",
+      },
+      {
+        id: 2,
+        type: "new",
+        text: "New duplicate element action directly on selected canvas items for faster authoring.",
+      },
+      {
+        id: 3,
+        type: "improved",
+        text: "Builder state now auto-persists in local storage for forms and current step recovery.",
+      },
+      {
+        id: 4,
+        type: "improved",
+        text: "Added confirmation dialogs for Delete Step and Clear actions to prevent accidental data loss.",
+      },
+      {
+        id: 5,
+        type: "fixed",
+        text: "Fixed generated Select markup so SelectContent is rendered in the correct structure.",
+      },
+    ],
+  },
+  {
     id: 8,
     title: "Modern UI Refresh & New Combobox Inputs v1.6.0",
     period: "March 13, 2026",

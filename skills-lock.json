@@ -4,6 +4,7 @@
     "interface-design": {
       "source": "dammyjay93/interface-design",
       "sourceType": "github",
+      "skillPath": ".claude/skills/interface-design/SKILL.md",
       "computedHash": "d004c5e5e2e7132e1d64e9c2a339db7f7aaa69053a5c19cddc210dd35dd6fff5"
     },
     "shadcn": {
@@ -14,7 +15,8 @@
     "vercel-react-best-practices": {
       "source": "vercel-labs/agent-skills",
       "sourceType": "github",
-      "computedHash": "4365be772fd3b41994a72ad478472c6d680678e7f3859860ab010e9c46e48ee0"
+      "skillPath": "skills/react-best-practices/SKILL.md",
+      "computedHash": "ca7b0c0c6e5f2750043f7f0cd72d16ac4e2abc48f9b5500d047a4b77a2506212"
     }
   }
 }
