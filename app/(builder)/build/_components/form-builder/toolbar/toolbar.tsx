@@ -1,12 +1,25 @@
-import { Button } from "@/components/ui/button";
-import { Form, UpdateForm } from "@/types/form-builder";
 import {
+  CheckIcon,
   EyeIcon,
   EyeOffIcon,
   PlusIcon,
   RotateCcwIcon,
   Trash2Icon,
 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogMedia,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -16,10 +29,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { EditForm } from "./edit-form";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import type { Form, UpdateForm } from "@/types/form-builder";
 import { CodePreview } from "../code/code-preview";
+import { EditForm } from "./edit-form";
 
 interface ToolbarProps {
   forms: Form[];
@@ -45,7 +58,7 @@ export const Toolbar = ({
   togglePreviewMode,
 }: ToolbarProps) => {
   const handleSelectForm = (value: string) => {
-    const index = forms.findIndex((form) => form.title === value);
+    const index = forms.findIndex((form) => form.id === value);
 
     if (index !== -1) {
       setCurrentFormIndex(index);
@@ -61,11 +74,11 @@ export const Toolbar = ({
         )}
       >
         {!isPreviewMode ? (
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-2">
             <Button variant="secondary" size="icon-sm" onClick={addForm}>
               <PlusIcon />
             </Button>
-            <Select value={currentForm.title} onValueChange={handleSelectForm}>
+            <Select value={currentForm.id} onValueChange={handleSelectForm}>
               <SelectTrigger>
                 <SelectValue placeholder="Select a form" />
               </SelectTrigger>
@@ -73,31 +86,64 @@ export const Toolbar = ({
                 <SelectGroup>
                   <SelectLabel>Forms</SelectLabel>
                   {forms.map((form) => (
-                    <SelectItem key={form.id} value={form.title}>
+                    <SelectItem key={form.id} value={form.id}>
                       {form.title}
                     </SelectItem>
                   ))}
                 </SelectGroup>
               </SelectContent>
             </Select>
-            <div className="flex items-center space-x-1.5">
+            <div className="flex items-center gap-1.5">
               <EditForm currentForm={currentForm} updateForm={updateForm} />
               {forms.length > 1 && (
-                <Button
-                  variant="secondary"
-                  size="icon-sm"
-                  className="text-destructive hover:text-destructive bg-destructive/10 hover:bg-destructive/10"
-                  onClick={() => deleteForm(currentForm.id)}
-                >
-                  <Trash2Icon />
-                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      variant="secondary"
+                      size="icon-sm"
+                      className="bg-destructive/10 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                    >
+                      <Trash2Icon />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent size="sm">
+                    <AlertDialogHeader>
+                      <AlertDialogMedia>
+                        <Trash2Icon />
+                      </AlertDialogMedia>
+                      <AlertDialogTitle>
+                        Delete step "{currentForm.title}"?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This will permanently remove this step and all of its
+                        fields.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        variant="destructive"
+                        onClick={() => deleteForm(currentForm.id)}
+                      >
+                        Delete step
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               )}
             </div>
           </div>
         ) : (
           <Badge variant="secondary">Preview Mode</Badge>
         )}
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center gap-2">
+          <Badge
+            variant="secondary"
+            className="gap-1 text-muted-foreground hidden sm:inline-flex"
+          >
+            <CheckIcon data-icon="inline-start" />
+            Auto-saved
+          </Badge>
           <CodePreview />
           <Button
             size="icon-sm"
@@ -106,15 +152,36 @@ export const Toolbar = ({
           >
             {isPreviewMode ? <EyeOffIcon /> : <EyeIcon />}
           </Button>
-          <Button
-            variant="secondary"
-            size="sm"
-            className="text-destructive hover:text-destructive hover:bg-destructive/10 bg-destructive/10"
-            onClick={clearAll}
-          >
-            <RotateCcwIcon />
-            Clear
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant="secondary"
+                size="sm"
+                className="bg-destructive/10 text-destructive hover:bg-destructive/10 hover:text-destructive"
+              >
+                <RotateCcwIcon />
+                Clear
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent size="sm">
+              <AlertDialogHeader>
+                <AlertDialogMedia>
+                  <RotateCcwIcon />
+                </AlertDialogMedia>
+                <AlertDialogTitle>Reset the builder?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This will remove every step and field from the current form
+                  builder session.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction variant="destructive" onClick={clearAll}>
+                  Clear everything
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
     </header>

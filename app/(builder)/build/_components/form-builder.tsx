@@ -46,6 +46,7 @@ export const FormBuilder = () => {
   const {
     forms,
     insertNode,
+    duplicateNode,
     reorderRootNodes,
     currentFormIndex,
     updateNode,
@@ -230,6 +231,7 @@ export const FormBuilder = () => {
               {!isPreviewMode ? (
                 <Canvas
                   currentForm={currentForm}
+                  duplicateNode={duplicateNode}
                   removeNode={removeNode}
                   selectedElementId={selectedElementId}
                   setSelectedElementId={setSelectedElementId}

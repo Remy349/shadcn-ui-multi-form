@@ -5,7 +5,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripIcon, GripVerticalIcon, Trash2Icon } from "lucide-react";
+import { CopyIcon, GripIcon, GripVerticalIcon, Trash2Icon } from "lucide-react";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,6 +32,7 @@ import { isFieldElement, isLayoutElement } from "@/types/form-builder";
 
 interface CanvasProps {
   currentForm: Form;
+  duplicateNode: (elementId: string) => void;
   removeNode: (elementId: string) => void;
   setSelectedElementId: (elementId: string | null) => void;
   selectedElementId: string | null;
@@ -90,6 +91,7 @@ const SortableRootItem = ({ elementId, children }: SortableRootItemProps) => {
 
 export const Canvas = ({
   currentForm,
+  duplicateNode,
   removeNode,
   setSelectedElementId,
   selectedElementId,
@@ -132,16 +134,28 @@ export const Canvas = ({
           </div>
           <span className="font-medium text-sm">{element.label}</span>
           {isSelected && (
-            <Button
-              size="icon-sm"
-              className="ml-auto bg-destructive/20 text-destructive hover:bg-destructive/20"
-              onClick={(event) => {
-                event.stopPropagation();
-                removeNode(element.id);
-              }}
-            >
-              <Trash2Icon />
-            </Button>
+            <div className="ml-auto flex items-center gap-1">
+              <Button
+                size="icon-sm"
+                variant="secondary"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  duplicateNode(element.id);
+                }}
+              >
+                <CopyIcon />
+              </Button>
+              <Button
+                size="icon-sm"
+                className="bg-destructive/20 text-destructive hover:bg-destructive/20"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  removeNode(element.id);
+                }}
+              >
+                <Trash2Icon />
+              </Button>
+            </div>
           )}
         </div>
       </button>
@@ -247,16 +261,28 @@ export const Canvas = ({
                                     {label}
                                   </span>
                                   {isSelected && (
-                                    <Button
-                                      size="icon-sm"
-                                      className="ml-auto bg-destructive/20 text-destructive hover:bg-destructive/20"
-                                      onClick={(event) => {
-                                        event.stopPropagation();
-                                        removeNode(element.id);
-                                      }}
-                                    >
-                                      <Trash2Icon />
-                                    </Button>
+                                    <div className="ml-auto flex items-center gap-1">
+                                      <Button
+                                        size="icon-sm"
+                                        variant="secondary"
+                                        onClick={(event) => {
+                                          event.stopPropagation();
+                                          duplicateNode(element.id);
+                                        }}
+                                      >
+                                        <CopyIcon />
+                                      </Button>
+                                      <Button
+                                        size="icon-sm"
+                                        className="bg-destructive/20 text-destructive hover:bg-destructive/20"
+                                        onClick={(event) => {
+                                          event.stopPropagation();
+                                          removeNode(element.id);
+                                        }}
+                                      >
+                                        <Trash2Icon />
+                                      </Button>
+                                    </div>
                                   )}
                                 </div>
                               </button>
@@ -315,16 +341,28 @@ export const Canvas = ({
                                 {label}
                               </span>
                               {isSelected && (
-                                <Button
-                                  size="icon-sm"
-                                  className="ml-auto bg-destructive/20 text-destructive hover:bg-destructive/20"
-                                  onClick={(event) => {
-                                    event.stopPropagation();
-                                    removeNode(element.id);
-                                  }}
-                                >
-                                  <Trash2Icon />
-                                </Button>
+                                <div className="ml-auto flex items-center gap-1">
+                                  <Button
+                                    size="icon-sm"
+                                    variant="secondary"
+                                    onClick={(event) => {
+                                      event.stopPropagation();
+                                      duplicateNode(element.id);
+                                    }}
+                                  >
+                                    <CopyIcon />
+                                  </Button>
+                                  <Button
+                                    size="icon-sm"
+                                    className="bg-destructive/20 text-destructive hover:bg-destructive/20"
+                                    onClick={(event) => {
+                                      event.stopPropagation();
+                                      removeNode(element.id);
+                                    }}
+                                  >
+                                    <Trash2Icon />
+                                  </Button>
+                                </div>
                               )}
                             </div>
                           </button>

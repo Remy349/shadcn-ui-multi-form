@@ -228,17 +228,17 @@ const elementRenderers: Record<
         >
           <SelectTrigger id="${element.name}" aria-invalid={fieldState.invalid}>
             <SelectValue placeholder="${element.placeholder}" />
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>${element.options?.selectLabel}</SelectLabel>
-                {options.map((item) => (
-                  <SelectItem key={item.value} value={item.value}>
-                    {item.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
           </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>${element.options?.selectLabel}</SelectLabel>
+              {options.map((item) => (
+                <SelectItem key={item.value} value={item.value}>
+                  {item.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
         </Select>
         ${getFieldDescription(element.description)}
         {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
